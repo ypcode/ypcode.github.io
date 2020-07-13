@@ -84,9 +84,11 @@
 
 
     <script>
+        var initialSiteContentHeight = null;
         function toggleMenu() {
-            var menu =document.querySelector(".menu");
-            if (menu) {
+            var menu = document.querySelector(".menu");
+            var siteContent = document.querySelector(".site-content");
+            if (menu && siteContent) {
                 if (menu.classList.contains("visible")) {
                     menu.classList.remove("visible");
                 } else {
