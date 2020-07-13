@@ -1,0 +1,270 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YPcode</title>
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:8080/posts/2020/05/working-with-office365-cli-json-parameters" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+     <meta name="generator" content="PVX WebContentGenerator" />
+   
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
+</noscript>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-172372458-1');
+</script>
+
+<style>
+.social-links {
+    display: inline-flex;
+    width: 60%;
+    margin:auto;
+    justify-content: center;
+    color: #807070;
+}
+
+.social-links a {
+    margin-right: 15px;
+}
+
+.social-links a:hover {
+    color: #9e1e28;
+}
+
+    .social-links svg {
+        fill: currentColor;
+        height: 18px;
+    }
+</style>
+        <meta property="og:site_name" content="YPcode" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Working with Office365 CLI and JSON parameters" />
+        <meta property="og:url" content="http://localhost:8080/posts/2020/05/working-with-office365-cli-json-parameters" />
+        <meta property="og:image" content="http://localhost:8080/images/2020/05/o365cli-json.png" />
+        <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
+        <meta property="article:published_time" content="2020-05-18 05:00:13Z" />
+        <meta property="article:modified_time" content="2020-05-18 05:00:13Z" />
+                <meta property="article:tag" content="JSON" />
+                <meta property="article:tag" content="Microsoft 365" />
+                <meta property="article:tag" content="Office 365" />
+                <meta property="article:tag" content="Office365 CLI" />
+        <meta name="twitter:title" content="Working with Office365 CLI and JSON parameters" />
+        <meta name="twitter:url" content="http://localhost:8080/posts/2020/05/working-with-office365-cli-json-parameters" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="http://localhost:8080/images/2020/05/o365cli-json.png" />
+            <meta name="twitter:label2" content="Filed under" />
+            <meta name="twitter:data2" content="JSON, Microsoft 365, Office 365, Office365 CLI" />
+        <meta name="twitter:site" content="@yp_code" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="http://localhost:8080/feed" />
+
+</head>
+<body>
+    <div class="sidebar">
+        <a href="http://localhost:8080/">
+            <h1 class="main-site-title">YPcode</h1>
+            <hr class="sep main-site-title-sep"/>
+            <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
+        </a>
+        <nav class="navigation">
+    <ul>
+<li class="nav-item">
+    <span class="link-icon icon-home" ></span><a class="nav-link" href="/" >Home</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/about-me/" >About me</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/projects-contrib/" >Projects &amp; Contributions</a>
+</li>    </ul>
+</nav>
+        
+            <div class="main-site-author">
+                    <img class="main-site-author-picture" src="/images/me.png" />
+                    <h3 class="main-site-author-name">
+                        Yannick Plenevaux
+                    </h3>
+                        <h3 class="main-site-author-description">
+                                <span class="main-site-author-description-line">Microsoft 365 Solutions Architect</span>
+                                <span class="main-site-author-description-line">Office Development MVP</span>
+                        </h3>
+            </div>
+
+        <p class="social-links">
+
+    <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
+        title="Microsoft MVP" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <defs>
+                <style>
+                    .a {
+                        fill: currentColor;
+                    }
+
+                    .b {
+                        fill: #1d1d1d;
+                    }
+                </style>
+            </defs>
+            <rect class="a" width="50" height="50"></rect>
+            <path class="b"
+                d="M17.42,26.16a15.14,15.14,0,0,0-.22,1.59l-.07.48h0a14.16,14.16,0,0,0-.33-2l-1.82-7.89h-3.5v13h2.07V24.43c0-1.18,0-2.39-.09-3.61h.08l.35,2.3,2,8.19h2.28L20,23c.18-.9.31-1.63.39-2.18h.05q-.09,2-.09,2.94v7.55h2.14v-13H19.13Zm18.36.72h1a3.81,3.81,0,0,0,3-1.24,4.54,4.54,0,0,0,1.14-3.17,4.23,4.23,0,0,0-1-3.08A3.81,3.81,0,0,0,37,18.34H33.29v13h2.49Zm0-6.37h.83a1.62,1.62,0,0,1,1.25.52,2.25,2.25,0,0,1,.48,1.57c0,1.42-.57,2.13-1.7,2.13h-.86Zm-9.24,10.8h2.67l3.31-13H30l-1.8,8.5c-.09.47-.15.92-.19,1.34l-.05.35h-.06a12,12,0,0,0-.2-1.65l-1.8-8.54H23.32ZM25.26,46.75,3.75,25.24,25.24,3.75,46.75,25.26Z"
+                transform="translate(-0.25 -0.25)"></path>
+        </svg>
+        </a>
+
+    <a href="https://twitter.com/yp_code" target="_blank" title="Twitter" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+                d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://github.com/ypcode" target="_blank" title="GitHub" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path
+                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/yannickplenevaux" target="_blank" title="LinkedIn" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
+            </path>
+        </svg>
+    </a>
+
+
+</p>
+    </div>
+   
+    <div class="site-content">
+        <main role="main" class="pb-3">
+            <div class="content-item post">
+    
+    <div class="content-item-title">
+        <span class="post-publishing-date">May 18, 2020</span>
+        <h1>
+            Working with Office365 CLI and JSON parameters
+            <hr/>
+        </h1>
+    </div>
+
+        <div class="content-item-featured-image-container">
+            <img class="content-item-featured-image" src="http://localhost:8080/images/2020/05/o365cli-json.png" alt="code image" />
+        </div>
+   
+    <div class="content">
+        <p>Hi Microsoft 365 fellows, In this post, I will give you some tips to work with Office 365 CLI commands that need some JSON as parameters.</p>
+<h2 id="the-office-365-cli">The Office 365 CLI</h2>
+<p>If you happened to be following just a bit what's going on in the SharePoint and Microsoft 365 community, you probably already know what the Office 365 CLI is !</p>
+<h3 id="if-you-dont">If you don't</h3>
+<p>The Office 365 CLI is a cross platform CLI tool running on NodeJS that allows you to perform tons of administrative (and more) tasks on your Office 365 tenant. It is an open-source and community contributed tool under the PnP umbrella. It is somehow similar to PnP PowerShell except it is cross-platform (PnP PowerShell is still not really supported cross-platform due to some underlying technical reasons...) Initially created by <a href="https://blog.mastykarz.nl/">Waldek Mastykarz</a> more than 2 years ago, it had then only a couple commands to achieve tasks not available on non-Windows OSes. More and more people started contributing to it (myself included for only a few commands) and the tool has now hundreds of commands ! The community really rocks !</p>
+<h2 id="commands-and-json">Commands and JSON</h2>
+<p>Basically all of the commands of the CLI that return an output can return it in JSON format using the <strong><em>--output json</em></strong> parameter. It is really handy if you need to write a script that processes the result and might have conditional logic. PowerShell has the tool ConvertTo-JSON and ConvertFrom-JSON. If you are working on Linux or Mac OSX, <strong>jq</strong> can be handy as well, it allows you to manipulate JSON data. Its syntax is still a bit obscure to me but well, I'm more of a PowerShell guy... But some of the commands require JSON as the value of a parameter, And THAT might make you banging your head against the wall ! Why ?  Mainly because of double quotes mandatory in JSON that have also their own meaning in the host script language (either PowerShell or Bash). You then need to escape them for the scripting language, but hey... the value still need to be the actual JSON for the CLI to process it properly !</p>
+<h2 id="commands-that-need-json-as-parameter-value">Commands that need JSON as parameter value</h2>
+<p>I can think of at least 3 commands that require JSON as arguments:</p>
+<pre><code class="language-bash">$ o365 spo page clientsidewebpart add $ o365 spo sitescript add $ o365 graph schemaextension add
+</code></pre>
+<p>There might be other commands as well, but I particularly know these ones (I contributed two of them :D) If you don't properly escape the quotes, you will probably get an error like :</p>
+<pre><code class="language-bash">Specified webPartProperties is not a valid JSON string. Input: {. Error: SyntaxError: Unexpected end of JSON input
+</code></pre>
+<p>Because at the first double quote, the scripting host will consider it as the end of the argument value, and in a JSON payload, there is typically a &quot; after the first { ...</p>
+<h2 id="tips-to-prepare-json-value-parameters">Tips to prepare JSON value parameters</h2>
+<p>Let's focus on the command to add a WebPart on a modern page (<strong><em>spo page clientsidewebpart add</em></strong>). The same tips will apply for other commands as well ! Let's say we want to deploy a WebPart and configure two of its properties from our script, a field <strong><em>myChoices</em></strong> which takes an array of strings as value, and a field <strong><em>description</em></strong> which takes a string as value. Keep in mind that we want these values might come from processed values or returned from previous commands outputs, we will hard code them here, but consider their value will only be known at execution time!</p>
+<h3 id="in-powershell">In PowerShell</h3>
+<p>We'll use a hashtable that we can easily convert to JSON format. The key thing after that is to escape properly the double quotes in the JSON and in the values themselves. Because otherwise, they would interfere with the double-quotes processing of PowerShell...</p>
+<pre><code class="language-powershell">$site = &quot;https://contoso.sharepoint.com/sites/site1&quot;
+$pageName = &quot;AModernPage.aspx&quot;
+$webPartId = &quot;af660fc1-c09b-4c15-b093-2b74b047286b&quot;
+
+$choice1 = &quot;Choice 1&quot;
+$choice2 = &quot;Choice 2&quot;
+
+# Put all the WebPart properties in a PowerShell hashtable
+$webPartProps = @{
+    myChoices              = @($choice1, $choice2);
+    description            = 'My &quot;Awesome&quot; WebPart';
+};
+
+# Build JSON string from PowerShell hashtable object
+$webPartPropsJson = $webPartProps | ConvertTo-Json -Compress
+# Make sure to add the backticks, double the JSON double-quotes and escape double quotes in properties'values
+$webPartPropsJson = '`&quot;{0}&quot;`' -f $webPartPropsJson.Replace('\','\\').Replace('&quot;', '&quot;&quot;')     
+
+o365 spo page clientsidewebpart add -u $site -n $pageName --webPartId $webPartId --webPartProperties $webPartPropsJson
+</code></pre>
+<h3 id="in-bash">In Bash</h3>
+<p>We basically have to address the same concern in Bash, however, as far as I know, we don't have such a convenient capability as PowerShell hashtable coupled with ConvertTo-JSON. We have to somehow build the JSON &quot;manually&quot; making sure we are still escaping the double quotes properly. In this case we will use the standard unix printf (It reminds me awesome memories of my first steps in &quot;real&quot; programming with C language :) ).</p>
+<pre><code class="language-bash">#!/bin/bash
+site=https://contoso.sharepoint.com/sites/site1
+pageName=AModernPage.aspx
+webPartId=af660fc1-c09b-4c15-b093-2b74b047286b
+
+choice1='Choice X'
+choice2='Choice Z'
+description='My &quot;Super Awesome&quot; WebPart';
+# Build the JSON including your dynamic values with printf
+# For each argument that might be dynamic, we escape the double quotes &quot; with \&quot;
+# Make sure not to ommit the surrounding back ticks and surrounding double quotes for each arguments
+printf -v webPartPropsJson '`{&quot;myChoices&quot;:[&quot;%s&quot;,&quot;%s&quot;], &quot;description&quot;:&quot;%s&quot;}`' &quot;${choice1//\&quot;/\\\&quot;}&quot; &quot;${choice2//\&quot;/\\\&quot;}&quot; &quot;${description//\&quot;/\\\&quot;}&quot;
+
+o365 spo page clientsidewebpart add -u $site -n $pageName --webPartId $webPartId --webPartProperties $webPartPropsJson
+</code></pre>
+<h2 id="thats-it">That's it !</h2>
+<p>Yes it looks very simple ! But I can promise that if you don't know exactly how to format  and escape properly these values you might go crazy trying all sorts of combinations with quotes, double quotes, triple quotes, Backticks and so on... Now you probably know how you need to format :) Hope you will find it useful ! Cheers Yannick</p>
+
+    </div>
+</div>
+        </main>
+
+        <footer class="border-top footer">
+                &copy; Copyrights 2020 - YPcode - Yannick Plenevaux
+        </footer>
+    </div>
+
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
+
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-aspnet.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-csharp.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-css-extras.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-scss.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+
+
+
+</body>
+</html>

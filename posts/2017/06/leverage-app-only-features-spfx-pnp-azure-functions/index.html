@@ -1,0 +1,315 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YPcode</title>
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:8080/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+     <meta name="generator" content="PVX WebContentGenerator" />
+   
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
+</noscript>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-172372458-1');
+</script>
+
+<style>
+.social-links {
+    display: inline-flex;
+    width: 60%;
+    margin:auto;
+    justify-content: center;
+    color: #807070;
+}
+
+.social-links a {
+    margin-right: 15px;
+}
+
+.social-links a:hover {
+    color: #9e1e28;
+}
+
+    .social-links svg {
+        fill: currentColor;
+        height: 18px;
+    }
+</style>
+        <meta property="og:site_name" content="YPcode" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Leverage app-only features with SPFx, PnP and Azure Functions" />
+        <meta property="og:url" content="http://localhost:8080/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions" />
+        <meta property="og:image" content="http://localhost:8080/images/code.jpg" />
+        <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
+        <meta property="article:published_time" content="2017-06-29 22:45:40Z" />
+        <meta property="article:modified_time" content="2017-06-29 22:45:40Z" />
+                <meta property="article:tag" content="App Only" />
+                <meta property="article:tag" content="App Permissions" />
+                <meta property="article:tag" content="App Principal" />
+                <meta property="article:tag" content="Azure Functions" />
+                <meta property="article:tag" content="JavaScript" />
+                <meta property="article:tag" content="JS" />
+                <meta property="article:tag" content="Node.js" />
+                <meta property="article:tag" content="PnP" />
+                <meta property="article:tag" content="PowerShell" />
+                <meta property="article:tag" content="Remote Provisionning" />
+                <meta property="article:tag" content="SharePoint" />
+                <meta property="article:tag" content="SharePoint Online" />
+                <meta property="article:tag" content="TypeScript" />
+                <meta property="article:tag" content="Uncategorized" />
+                <meta property="article:tag" content="User Permissions" />
+        <meta name="twitter:title" content="Leverage app-only features with SPFx, PnP and Azure Functions" />
+        <meta name="twitter:url" content="http://localhost:8080/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="http://localhost:8080/images/code.jpg" />
+            <meta name="twitter:label2" content="Filed under" />
+            <meta name="twitter:data2" content="App Only, App Permissions, App Principal, Azure Functions, JavaScript, JS, Node.js, PnP, PowerShell, Remote Provisionning, SharePoint, SharePoint Online, TypeScript, Uncategorized, User Permissions" />
+        <meta name="twitter:site" content="@yp_code" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="http://localhost:8080/feed" />
+
+</head>
+<body>
+    <div class="sidebar">
+        <a href="http://localhost:8080/">
+            <h1 class="main-site-title">YPcode</h1>
+            <hr class="sep main-site-title-sep"/>
+            <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
+        </a>
+        <nav class="navigation">
+    <ul>
+<li class="nav-item">
+    <span class="link-icon icon-home" ></span><a class="nav-link" href="/" >Home</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/about-me/" >About me</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/projects-contrib/" >Projects &amp; Contributions</a>
+</li>    </ul>
+</nav>
+        
+            <div class="main-site-author">
+                    <img class="main-site-author-picture" src="/images/me.png" />
+                    <h3 class="main-site-author-name">
+                        Yannick Plenevaux
+                    </h3>
+                        <h3 class="main-site-author-description">
+                                <span class="main-site-author-description-line">Microsoft 365 Solutions Architect</span>
+                                <span class="main-site-author-description-line">Office Development MVP</span>
+                        </h3>
+            </div>
+
+        <p class="social-links">
+
+    <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
+        title="Microsoft MVP" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <defs>
+                <style>
+                    .a {
+                        fill: currentColor;
+                    }
+
+                    .b {
+                        fill: #1d1d1d;
+                    }
+                </style>
+            </defs>
+            <rect class="a" width="50" height="50"></rect>
+            <path class="b"
+                d="M17.42,26.16a15.14,15.14,0,0,0-.22,1.59l-.07.48h0a14.16,14.16,0,0,0-.33-2l-1.82-7.89h-3.5v13h2.07V24.43c0-1.18,0-2.39-.09-3.61h.08l.35,2.3,2,8.19h2.28L20,23c.18-.9.31-1.63.39-2.18h.05q-.09,2-.09,2.94v7.55h2.14v-13H19.13Zm18.36.72h1a3.81,3.81,0,0,0,3-1.24,4.54,4.54,0,0,0,1.14-3.17,4.23,4.23,0,0,0-1-3.08A3.81,3.81,0,0,0,37,18.34H33.29v13h2.49Zm0-6.37h.83a1.62,1.62,0,0,1,1.25.52,2.25,2.25,0,0,1,.48,1.57c0,1.42-.57,2.13-1.7,2.13h-.86Zm-9.24,10.8h2.67l3.31-13H30l-1.8,8.5c-.09.47-.15.92-.19,1.34l-.05.35h-.06a12,12,0,0,0-.2-1.65l-1.8-8.54H23.32ZM25.26,46.75,3.75,25.24,25.24,3.75,46.75,25.26Z"
+                transform="translate(-0.25 -0.25)"></path>
+        </svg>
+        </a>
+
+    <a href="https://twitter.com/yp_code" target="_blank" title="Twitter" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+                d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://github.com/ypcode" target="_blank" title="GitHub" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path
+                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/yannickplenevaux" target="_blank" title="LinkedIn" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
+            </path>
+        </svg>
+    </a>
+
+
+</p>
+    </div>
+   
+    <div class="site-content">
+        <main role="main" class="pb-3">
+            <div class="content-item post">
+    
+    <div class="content-item-title">
+        <span class="post-publishing-date">Jun 29, 2017</span>
+        <h1>
+            Leverage app-only features with SPFx, PnP and Azure Functions
+            <hr/>
+        </h1>
+    </div>
+
+        <div class="content-item-featured-image-container">
+            <img class="content-item-featured-image" src="http://localhost:8080/images/code.jpg" alt="code image" />
+        </div>
+   
+    <div class="content">
+        <p>Hello SharePoint guys, Today, my post is about something I find super interesting &quot;How can we perform elevated tasks with a SharePoint Framework solution&quot;. You might have read my previous post talking about the <a href="https://ypcode.wordpress.com/2017/06/05/sharepoint-javascript-and-user-permissions-context-devs-and-admins-concerns/">user permissions context and JavaScript in SharePoint</a>. In that post, I mentioned it is not possible to perform tasks that require more permissions that the current user has. However, in a SharePoint customization, we might need a WebPart to actually do more than what the current user is allowed to on his own. <img src="https://ypcode.files.wordpress.com/2017/06/azure-function.png" alt="azure-function.png" />To achieve this, we must delegate the required permission to an actor we can trust. A remote party that we, as developers, have full control on. In this post, I will show an Azure Function could totally be this actor. The solution does not require a lot a configuration and specific coding but some points are really important and must be understood. We will also see that with our <em>super SharePoint PnP tool belt</em>, we are fully equiped to face all the aspects of a SharePoint solution implementation.</p>
+<h2 id="requirements-and-design">Requirements and Design</h2>
+<p>Let's start with the requirements of our study case :</p>
+<ul>
+<li>We want a list dedicated to store the hardware requests from our users</li>
+<li>The regular users have read-only access to the requests list</li>
+<li>Though a custom SPFx Webpart, the users will be able to submit a new hardware request</li>
+</ul>
+<p>The implementation and the technical considerations :</p>
+<ul>
+<li>We will provision the list using a PnP PowerShell script.</li>
+<li>We will implement a Client-Side WebPart using the SharePoint Framework. You will need a properly installed SPFx environment.</li>
+<li>We will use an Azure Function to act as a proxy for elevated-permissions tasks</li>
+<li>We will register a SharePoint app principal with enough permissions that will be used by the Azure Function</li>
+<li>The Azure Function will be used securely using Azure AD authentication</li>
+<li>The Azure Function must be within the Azure subscription related to the Office 365 tenant</li>
+<li>This solution is valid only with SharePoint Online (currently).</li>
+</ul>
+<h2 id="provision-the-list">Provision the List</h2>
+<p>The Hardware Requests list will be a simple SharePoint List with the following fields:</p>
+<ul>
+<li>a Type choice field that allows to select the type of requested hardware</li>
+<li>a Quantity number field</li>
+<li>a Remark text field</li>
+<li>an Approved flag field (will not really be used in this post)</li>
+<li>a Rejected Reason text field (will not really be used in this post)</li>
+</ul>
+<p>Let's write a small PowerShell script using PnP Powershell that will provision this list <a href="https://gist.github.com/ypcode/19ec1b2247ede25fdf4949f2bea33b97">https://gist.github.com/ypcode/19ec1b2247ede25fdf4949f2bea33b97</a> Go to the List Settings interface, and remove all permissions from the lists. Now set read permissions for every users (and maybe higher permissions for your admin account if your are not site collection admin).</p>
+<h2 id="the-spfx-webpart">The SPFx WebPart</h2>
+<p>Let's create a new WebPart project with SharePoint Framework. Create a new folder for your project and type the classical <strong>yo @microsoft/sharepoint</strong> and select React as the JS framework <a href="https://gist.github.com/ypcode/fca192dd1fee70f32e1cbd79e3d96088">https://gist.github.com/ypcode/fca192dd1fee70f32e1cbd79e3d96088</a> Go for a coffee, and in a few minutes come back and start implement our project. First of all, we will need to install the dependencies, the only one we need is actually the PnP JS Core library. In the terminal (still in your project folder), type <em><strong>npm install sp-pnp-js --save</strong></em> Under the <strong>src/</strong> folder, create a new folder named <strong>model</strong> and create a new file <strong>IHardwareRequest.ts</strong> in it with the following content <a href="https://gist.github.com/ypcode/ed64d4ae25905aa09a777deb90e22625">https://gist.github.com/ypcode/ed64d4ae25905aa09a777deb90e22625</a> Under the <strong>src/</strong> folder, create a new folder named <strong>services</strong> and create a new file <strong>HardwareRequestService.ts</strong> in it with the following content. <a href="https://gist.github.com/ypcode/38de7847d369a700d5a12eb7d9f491e4">https://gist.github.com/ypcode/38de7847d369a700d5a12eb7d9f491e4</a> In the class above, we actually create a method that will work in both client and server side. Just to make sure it actually works, we will test the service without the Azure Function directly in our WebPart. Let's go to the main WebPart class to configure the PnP library, in the <strong>HardwareRequestFormWebPart.ts</strong> file, add the following import and method: <a href="https://gist.github.com/ypcode/34588175d4445fd3b9d2d25c2bbfcbc8">https://gist.github.com/ypcode/34588175d4445fd3b9d2d25c2bbfcbc8</a> Now let's implement the React component used by the WebPart, in the <strong>src/webparts/hardwareRequestForm/components</strong>/ folder, edit the <strong>HardwareRequestForm.tsx</strong> source file and put the following content <a href="https://gist.github.com/ypcode/6e972168b708f3b3c6197d193f751627">https://gist.github.com/ypcode/6e972168b708f3b3c6197d193f751627</a> At this step, the WebPart works properly if the user has enough permissions on the list. It performs the action directly from the browser JavaScript code. You can test it with your admin account (or any other privileged user). <img src="https://ypcode.files.wordpress.com/2017/06/first-sample-wo-af.png" alt="first-sample-wo-af.png" /> Fill in the fields, click <strong>Submit request</strong> and go check the list contains now your item <img src="https://ypcode.files.wordpress.com/2017/06/first-sample-wo-af2-list.png" alt="first-sample-wo-af2-list.png" /> <img src="https://ypcode.files.wordpress.com/2017/06/error_forbidden1.png" alt="error_forbidden" /> If you try to test the WebPart with a user that has read-only access instead, it won't do anything and display an error message in the console.</p>
+<h2 id="leverage-app-only">Leverage App-Only</h2>
+<p>As you probably understood now, we will create an Azure Function that will perform the task in App-Only mode. To achieve that, we obviously need to register a new app on our SharePoint Online. Go to <em><strong>https://<yourtenant>.sharepoint.com/<yoursite>/_layouts/15/appregnew.aspx</strong></em> <img src="https://ypcode.files.wordpress.com/2017/06/appreg.png" alt="appreg.png" /></p>
+<ol>
+<li>Generate the Client Id</li>
+<li>Generate the Client Secret</li>
+<li>Enter the title</li>
+<li>Enter a domain</li>
+<li>Enter a Redirect URI</li>
+<li>Click <strong>Create</strong></li>
+</ol>
+<p>Actually, the values for title, domain and redirect URI don't really matter but they are required for the app principal to be created. <strong>Keep the Client Id and Client Secret in a safe location, we will need them later on</strong> <img src="https://ypcode.files.wordpress.com/2017/06/appreg2.png" alt="appreg2.png" /> Now that our SharePoint app principal is created, we need to give it the required permissions to perform the task. Go to <strong>https://_<yourtenant>.sharepoint.com/<yoursite>/__layouts/15/appinv.aspx</strong> <img src="https://ypcode.files.wordpress.com/2017/06/appinv.png" alt="appinv.png" /></p>
+<ol>
+<li>Copy/Paste your newly created app Client Id</li>
+<li>Click &quot;Lookup&quot;</li>
+<li>Copy/Paste the following XML in the <strong>Permission Request XML</strong> field</li>
+</ol>
+<p><a href="https://gist.github.com/ypcode/38152687593a5cc16c2133476448db19">https://gist.github.com/ypcode/38152687593a5cc16c2133476448db19</a> <img src="https://ypcode.files.wordpress.com/2017/06/trustapp.png" alt="trustapp.png" /> Select our <strong>Hardware Requests</strong> list and click <strong>Trust it</strong></p>
+<h2 id="lets-create-the-azure-function">Let's create the Azure Function</h2>
+<p>Go to <strong><a href="https://portal.azure.com">https://portal.azure.com</a></strong> and log in with your tenant admin account. Create a new Function App, select your subscription and location preferences. <img src="https://ypcode.files.wordpress.com/2017/06/search-function-app.png" alt="search-function-app" /> When done, go to your new Function App. We can already configure our Function App for authentication and CORS settings</p>
+<h3 id="configure-authentication">Configure authentication</h3>
+<p><img src="https://ypcode.files.wordpress.com/2017/06/azure-function-config-auth1.png" alt="azure-function-config-auth1.png" /> <img src="https://ypcode.files.wordpress.com/2017/06/azure-function-config-auth2.png" alt="azure-function-config-auth2.png" /> Choose the Express configuration and create the App registration automatically, click <strong>OK</strong> <img src="https://ypcode.files.wordpress.com/2017/06/azure-function-config-auth3.png" alt="azure-function-config-auth3.png" /> Click the CORS link in settings <img src="https://ypcode.files.wordpress.com/2017/06/corslink.png" alt="CORSLink.png" />and add your tenant address as an allowed origin <img src="https://ypcode.files.wordpress.com/2017/06/cors_allow_origin.png" alt="cors_allow_origin.png" /> Now that the Function App is properly configured, let's create our Function <img src="https://ypcode.files.wordpress.com/2017/06/azure-function-addnew1.png" alt="azure-function-addnew1.png" /><img src="https://ypcode.files.wordpress.com/2017/06/azure-function-addnew2.png" alt="azure-function-addnew2.png" /><img src="https://ypcode.files.wordpress.com/2017/06/azure-function-addnew3.png" alt="azure-function-addnew3.png" /> Select a name and &quot;Anonymous&quot; as the Authorization level. The code of our Azure Function will make use of the service class we wrote earlier. This service class depends on the PnP JS Core library, so we need to install this dependency in the Azure Function. To do this, there is a small procedure to follow :</p>
+<ol>
+<li><p>Somewhere on your computer,  create a file named <strong>package.json</strong> containing the following:</p>
+<p>{</p>
+<p>&quot;dependencies&quot;: {</p>
+<p>&quot;sp-pnp-js&quot;: &quot;^2.0.6&quot;,</p>
+<p>&quot;node-fetch&quot;:&quot;1.7.1&quot;</p>
+<p>}</p>
+<p>}</p>
+</li>
+<li><p>Go to <strong>https://.scm.azurewebsites.net</strong></p>
+</li>
+<li><p>On <strong>Debug console</strong> in the top bar, select <strong>CMD</strong></p>
+</li>
+<li><p>navigate to D:\home\site\wwwroot</p>
+</li>
+<li><p>Drag and drop the package.json file in the file explorer table</p>
+</li>
+<li><p>Type <strong>npm install</strong> in the Kudu console</p>
+</li>
+</ol>
+<p>We are now ready to implement our Azure Function. Switch back to the Function editor window and replace the content by : <a href="https://gist.github.com/ypcode/8e702e2f368b0200115cfbe3db0b7442">https://gist.github.com/ypcode/8e702e2f368b0200115cfbe3db0b7442</a> Adapt your own SharePoint Url and App credentials. We also need to use the service class we created earlier. Unfortunatly, Azure Function do not support TypeScript yet. Don't worry, there is an easy way to get our class code, in your SPFx solution, go to <strong>lib/services</strong> folder, you will see the <strong>HardwareRequestService.js</strong> file which is the transpiled version of your class in plain Javascript, copy the lines from 3 to 30 (the other ones are useless) and paste them before the code of our Azure Function. Click the <strong>Save</strong> button.</p>
+<h2 id="call-our-proxy-from-the-spfx-webpart">Call our Proxy from the SPFx WebPart</h2>
+<p>Now that our Azure Function is implemented, we need to call it from our WebPart. To do that, we will create a new service class that will issue a simple HTTP call the the Azure Function. In the <strong>services/</strong> folder, create a new file named <strong>HardwareRequestProxyService.ts</strong> and copy the following content in it <a href="https://gist.github.com/ypcode/d943851248b734403f0eda045f732aa5">https://gist.github.com/ypcode/d943851248b734403f0eda045f732aa5</a> We have now a class that will issue a HTTP POST Request to our Azure Function with a Hardware request object as the body, it is configured to include the credentials, which means that it will use the SharePoint Online authentication cookie to authenticate against Azure AD. Since the regular AAD application authentication flow uses a login page that redirect afterwards to your application, it is not really suitable with a WebPart scenario. We have then to work this around. Thanks to Vesa Juvonen and Waldek Mastykarz <a href="https://www.youtube.com/watch?v=SDjKRfHA1nw">PnP Webcast here</a>, we know there is a handy way to achieve this using a hidden Iframe. Let's adapt our component. First we need to give it a new property that will be the SPFx Http Client it will pass to the service object. Go to the <strong>IHardwareRequestFormProps.ts</strong> file and change the content to <a href="https://gist.github.com/ypcode/16990b3b36546fb949a0a9f45c7e5772">https://gist.github.com/ypcode/16990b3b36546fb949a0a9f45c7e5772</a> You will then have to adapt the code of the main WebPart class <strong>HardwareRequestFormWebPart.ts</strong>, replace the declaration of the const element by <a href="https://gist.github.com/ypcode/b233081395376457e12fb91eb398117a">https://gist.github.com/ypcode/b233081395376457e12fb91eb398117a</a> Last but not least, we have now to adapt the React component to call our service but also handle the AAD authentication using that hidden IFrame in the <strong>HardwareRequestForm.tsx</strong>, add the following import <a href="https://gist.github.com/ypcode/0a080cdb475a39a771f70dccb4b85c2e">https://gist.github.com/ypcode/0a080cdb475a39a771f70dccb4b85c2e</a> replace the submitRequest() method by <a href="https://gist.github.com/ypcode/ba786ab990007c7bbeeb5e8bb4fa3bdc">https://gist.github.com/ypcode/ba786ab990007c7bbeeb5e8bb4fa3bdc</a> This will ensure the &quot;authenticated&quot; flag is set before calling the Azure Function In the render method, add the iframe somewhere in the render result. <a href="https://gist.github.com/ypcode/d02c5a8a49b2d6c70cee95f48966ecda">https://gist.github.com/ypcode/d02c5a8a49b2d6c70cee95f48966ecda</a> Make sure the onLoad event handler is present, it is very important.</p>
+<h3 id="the-azure-ad-application-user-consent">The Azure AD Application user consent</h3>
+<p>In a typical Azure Active Directory application, the user has to consent certain privileges to the application. In our case, we use a registered AD application only as an authentication mechanism. We don't really care about the granted permissions. Moreover, we use a hidden WebPart with the SharePoint Online authentication cookie, The user will never even see the page. But, by default, The user will never be redirected to our Azure Function without having given his consent. We than need to force this consent, Only an administrator can do that ! If you are not the AD tenant administrator, It's time to become his best friend or just ask him kindly to click on the Accept button of a given URL. To achieve this, go to your Azure Function URL with an account that has not already consented the permissions rights. You should be redirected to this kind of page (sorry for the french): <img src="https://ypcode.files.wordpress.com/2017/06/aad-permissions2.png" alt="aad-permissions2" /> In your browser address bar, append the following to the current URL : <strong>&amp;prompt=admin_consent</strong> and reach this new URL (or give it to the AD admin), you will now see a page slightly different <img src="https://ypcode.files.wordpress.com/2017/06/aad-permissions2_admin_consent.png" alt="aad-permissions2_admin_consent.png" /> This time the page reads (in French) &quot;You are logged in as you@tenant.onmicrosoft.com (<strong>Administrator</strong>)&quot; and a few lines below, something like &quot;<strong>The user will not be prompted</strong>&quot;. That way, the administrator can consent the permissions for every users. In our case, since the user is authenticated on SharePoint Online, he will be directly redirected to our Azure Function.</p>
+<blockquote>
+<h4 id="special-thanks-to-waldek-mastykarz-and-his-article-herefor-helping-me-to-solve-this-challenge">Special Thanks to Waldek Mastykarz and his article <a href="https://blog.mastykarz.nl/implementing-admin-consent-multitenant-office-365-applications-implicit-oauth-flow/">here</a> for helping me to solve this challenge.</h4>
+</blockquote>
+<h3 id="and-were-done">And we're done!</h3>
+<p>Here you go, you can test your WebPart with a user who doesn't have write access on the list to make sure your solution works properly.</p>
+<h3 id="however-i-still-encounter-anissuei-hope-i-could-solve-some-day">However, I still encounter an issue I hope I could solve some day.</h3>
+<ol>
+<li> Even if the Azure Function returns a 200 status code and it works properly. It seems that the headers are not properly sent and the SPFx HttpClient is not happy with it. The HTTP call is then considered as failed.</li>
+</ol>
+<h2 id="leverage-an-azure-function-with-app-only-to-enhance-spfx-capabilities">Leverage an Azure Function with App-Only to enhance SPFx capabilities</h2>
+<p>In this post, we then have seen how we can leverage App-Only mode from Azure Functions to perform tasks a user is not allowed to.. We also have seen how to securely call an Azure Function from SPFx You can find the complete project solution on my GitHub repo here in two branches :</p>
+<ul>
+<li><a href="https://github.com/ypcode/spfx-apponly/tree/without-azure-function">The branch without the Azure Function implementation</a></li>
+<li><a href="https://github.com/ypcode/spfx-apponly/tree/with-azure-function">The branch with the Azure Function implementation</a></li>
+</ul>
+<p>Hope you liked this post and see you soon ! Yannick</p>
+
+    </div>
+</div>
+        </main>
+
+        <footer class="border-top footer">
+                &copy; Copyrights 2020 - YPcode - Yannick Plenevaux
+        </footer>
+    </div>
+
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
+
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-aspnet.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-csharp.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-css-extras.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-scss.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+
+
+
+</body>
+</html>

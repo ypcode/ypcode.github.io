@@ -1,0 +1,277 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YPcode</title>
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="http://localhost:8080/posts/2017/01/get-familiar-nodejs-part3" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css" />
+     <meta name="generator" content="PVX WebContentGenerator" />
+   
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
+</noscript>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-172372458-1');
+</script>
+
+<style>
+.social-links {
+    display: inline-flex;
+    width: 60%;
+    margin:auto;
+    justify-content: center;
+    color: #807070;
+}
+
+.social-links a {
+    margin-right: 15px;
+}
+
+.social-links a:hover {
+    color: #9e1e28;
+}
+
+    .social-links svg {
+        fill: currentColor;
+        height: 18px;
+    }
+</style>
+        <meta property="og:site_name" content="YPcode" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Get familar with Node.js - Part 3: Express.js" />
+        <meta property="og:url" content="http://localhost:8080/posts/2017/01/get-familiar-nodejs-part3" />
+        <meta property="og:image" content="http://localhost:8080/images/code.jpg" />
+        <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
+        <meta property="article:published_time" content="2017-01-05 15:50:02Z" />
+        <meta property="article:modified_time" content="2017-01-05 15:50:02Z" />
+                <meta property="article:tag" content="Express.js" />
+                <meta property="article:tag" content="JavaScript" />
+                <meta property="article:tag" content="JS" />
+                <meta property="article:tag" content="Node.js" />
+                <meta property="article:tag" content="Web Development" />
+        <meta name="twitter:title" content="Get familar with Node.js - Part 3: Express.js" />
+        <meta name="twitter:url" content="http://localhost:8080/posts/2017/01/get-familiar-nodejs-part3" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="http://localhost:8080/images/code.jpg" />
+            <meta name="twitter:label2" content="Filed under" />
+            <meta name="twitter:data2" content="Express.js, JavaScript, JS, Node.js, Web Development" />
+        <meta name="twitter:site" content="@yp_code" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="http://localhost:8080/feed" />
+
+</head>
+<body>
+    <div class="sidebar">
+        <a href="http://localhost:8080/">
+            <h1 class="main-site-title">YPcode</h1>
+            <hr class="sep main-site-title-sep"/>
+            <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
+        </a>
+        <nav class="navigation">
+    <ul>
+<li class="nav-item">
+    <span class="link-icon icon-home" ></span><a class="nav-link" href="/" >Home</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/about-me/" >About me</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/projects-contrib/" >Projects &amp; Contributions</a>
+</li>    </ul>
+</nav>
+        
+            <div class="main-site-author">
+                    <img class="main-site-author-picture" src="/images/me.png" />
+                    <h3 class="main-site-author-name">
+                        Yannick Plenevaux
+                    </h3>
+                        <h3 class="main-site-author-description">
+                                <span class="main-site-author-description-line">Microsoft 365 Solutions Architect</span>
+                                <span class="main-site-author-description-line">Office Development MVP</span>
+                        </h3>
+            </div>
+
+        <p class="social-links">
+
+    <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
+        title="Microsoft MVP" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <defs>
+                <style>
+                    .a {
+                        fill: currentColor;
+                    }
+
+                    .b {
+                        fill: #1d1d1d;
+                    }
+                </style>
+            </defs>
+            <rect class="a" width="50" height="50"></rect>
+            <path class="b"
+                d="M17.42,26.16a15.14,15.14,0,0,0-.22,1.59l-.07.48h0a14.16,14.16,0,0,0-.33-2l-1.82-7.89h-3.5v13h2.07V24.43c0-1.18,0-2.39-.09-3.61h.08l.35,2.3,2,8.19h2.28L20,23c.18-.9.31-1.63.39-2.18h.05q-.09,2-.09,2.94v7.55h2.14v-13H19.13Zm18.36.72h1a3.81,3.81,0,0,0,3-1.24,4.54,4.54,0,0,0,1.14-3.17,4.23,4.23,0,0,0-1-3.08A3.81,3.81,0,0,0,37,18.34H33.29v13h2.49Zm0-6.37h.83a1.62,1.62,0,0,1,1.25.52,2.25,2.25,0,0,1,.48,1.57c0,1.42-.57,2.13-1.7,2.13h-.86Zm-9.24,10.8h2.67l3.31-13H30l-1.8,8.5c-.09.47-.15.92-.19,1.34l-.05.35h-.06a12,12,0,0,0-.2-1.65l-1.8-8.54H23.32ZM25.26,46.75,3.75,25.24,25.24,3.75,46.75,25.26Z"
+                transform="translate(-0.25 -0.25)"></path>
+        </svg>
+        </a>
+
+    <a href="https://twitter.com/yp_code" target="_blank" title="Twitter" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+                d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://github.com/ypcode" target="_blank" title="GitHub" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path
+                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/yannickplenevaux" target="_blank" title="LinkedIn" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
+            </path>
+        </svg>
+    </a>
+
+
+</p>
+    </div>
+   
+    <div class="site-content">
+        <main role="main" class="pb-3">
+            <div class="content-item post">
+    
+    <div class="content-item-title">
+        <span class="post-publishing-date">Jan 05, 2017</span>
+        <h1>
+            Get familar with Node.js - Part 3: Express.js
+            <hr/>
+        </h1>
+    </div>
+
+        <div class="content-item-featured-image-container">
+            <img class="content-item-featured-image" src="http://localhost:8080/images/code.jpg" alt="code image" />
+        </div>
+   
+    <div class="content">
+        <p>Hi Devs, This post is part of a series of articles introducing Node.js.</p>
+<ul>
+<li><a href="https://ypcode.wordpress.com/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1 : the basics</a></li>
+<li><a href="https://ypcode.wordpress.com/2017/01/02/get-familar-with-node-js-part-2-npm/">Part 2 : NPM</a></li>
+<li>Part 3 : Express.js (This tutorial)</li>
+<li><a href="https://ypcode.wordpress.com/2017/01/06/get-familiar-with-node-js-part-4-productivity-tools/">Part 4 : Productivity Tools</a></li>
+</ul>
+<p>In this post, we will see how to easily build a ready-to-use web application using Node.js and the Express framework.</p>
+<h2 id="what-is-express.js">What is Express.js ?</h2>
+<p>Express.js is a framework that take care of much of the boilerplate of web application development. It also leverages the concept of <strong>middleware</strong>. With this framework, you can easily handle some common tasks like <strong>serving static files</strong> or <strong>handling routing logic</strong>. It also rules, via the <strong>express-generator</strong>, a structure for your project.</p>
+<h2 id="a-simple-express-application">A simple Express application</h2>
+<p>We have first to install Express within our project like any other NPM package. Create a new folder for your project and type the following commands : <strong>&gt; cd .\myexpressapp01</strong> <strong>&gt; npm init --yes</strong> <strong>&gt; npm install express --save</strong> <img src="https://ypcode.files.wordpress.com/2017/01/myexpressapp01_struct01.png" alt="myexpressapp01_struct01" />This will prepare your Node project and install express and all its dependencies. If you take a look in the node_modules folder, you will see a lot of external modules have been installed.</p>
+<p>in a index.js file, copy/paste the following code snippet: [code language=&quot;javascript&quot;] // Using the Express Framework const express = require('express'); // Instantiate an Express app let app = express(); // Define the (only) HTTP request handler app.get('/', (req, res, next) =&gt; { res.send(&quot;Hello World!&quot;); }); // The HTTP server listens on port 3000 const port = 3000; app.listen(port, () =&gt; { // A callback function executed when the server IS actually listening console.log(&quot;Now listening on port &quot; + port); }); [/code] <img src="https://ypcode.files.wordpress.com/2016/12/nodefirstserverresult.png" alt="nodefirstserverresult" />The code above runs a simple HTTP server listening on port 3000, basically the same thing as the server sample in my previous post <a href="https://ypcode.wordpress.com/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1: the basics</a>. However, there is a slight difference when you try to reach any URL under localhost:3000 other than the root.</p>
+<p>Basic Node App</p>
+<p>Express App</p>
+<p><img src="https://ypcode.files.wordpress.com/2017/01/node_miscpath.png" alt="node_miscpath" /></p>
+<p><img src="https://ypcode.files.wordpress.com/2017/01/express_miscpath.png" alt="express_miscpath.png" /></p>
+<p class="..">You probably noticed in the code above that we specified the path of the HTTP handler [code language=&quot;javascript&quot;] ... app.get('/', (req, res, next) =&gt; ); ... [/code] It is actually the basic routing capability of Express, you can easily specify at which route your handlers should respond.</p>
+<h2 id="routing-with-express">Routing with Express</h2>
+<p>Routing needs can be met very easily with Express with a simple construct rule : [code language=&quot;javascript&quot;] app.get('/my/route', (req, res) =&gt; { // Process the request and send a response }); [/code] where</p>
+<ul>
+<li><strong>app</strong> is an instance of the Express application</li>
+<li>**get **is the HTTP verb, it can be replaced by the standard HTTP verbs ( get, post, put, patch, delete, ...)</li>
+<li>**'/my/route' **is the route (the path) at which the handler will be called. The route value can be a regex for more flexible routes. Express can also extract variable parts of the route as arguments.</li>
+<li><strong>(req, res) =&gt; </strong> is the callback function to process the request and send the response (note: here written as a ES2015 arrow function aka lambda statement in TypeScript or C#, it could have been written <em>** function(req,res) **</em>).</li>
+</ul>
+<p pwd="" address="" username="">Here is an example of a server that handle get and post requests for a (very very) basic login mechanism based on IP Address [code language=&quot;javascript&quot;] // Using the Express Framework const express = require('express'); // Instantiate an Express app let app = express(); let loginRegistry = ; const credentialsDatabase = { &quot;YPCode&quot;: &quot;password&quot;, &quot;Foo&quot;: &quot;bar&quot; }; // Define the (only) HTTP request handler app.get('/', (req, res) =&gt; { res.send(&quot;Home page&quot;); }); app.get('/members', (req, res) =&gt; { let address = req.connection.remoteAddress; console.log(&quot;Trying to access members zone from &quot; + address); if (!loginRegistry[address]) { res.send(&quot;You are not logged in&quot;); } else { let loggedInAs = loginRegistry[address]; res.send(`Welcome <span class="math" username="">\({loggedInAs} !\`); } }); app.post('/login', (req, res) =&amp;gt; { // Will be called only with a HTTP Post let address = req.connection.remoteAddress; // Check credentials let username = req.headers\[&quot;x-ypc-username&quot;\]; let pwd = req.headers\[&quot;x-ypc-password&quot;\]; console.log(\`Username=\)</span> Password=$`); if (!credentialsDatabase[username] || credentialsDatabase[username] !== pwd) { // Return forbidden if credentials are not correct res.sendStatus(403); return; } console.log(`Login from $ as $`); loginRegistry[address] = username; res.sendStatus(200); }); // The HTTP server listens on port 3000 const port = 3000; app.listen(port, () =&gt; { // A callback function executed when the server IS actually listening console.log(&quot;Now listening on port &quot; + port); }); [/code]</p>
+<p>Call to /members before Login</p>
+<p>Call to /members after login</p>
+<p><img src="https://ypcode.files.wordpress.com/2017/01/express_members_notlogged.png" alt="express_members_notlogged" /></p>
+<p><img src="https://ypcode.files.wordpress.com/2017/01/express_members_logged2.png" alt="express_members_logged" /></p>
+<p>The login is handled by a POST HTTP request (here sent with Postman) <img src="https://ypcode.files.wordpress.com/2017/01/postman_postrequestlogin1.png" alt="postman_postrequestlogin" /></p>
+<p><em>Note: the above implementation SHOULD NOT be used for production applications over the Internet, with IP translation and rerouting when going through network boundaries. An IP Address cannot be used to identify a unique user.</em></p>
+<h3 id="modular-routing"> Modular routing</h3>
+<p>With a larger application, you will probably not want to have all the handlers and routes in the same source file. Express offers an handy way to handle routes within dedicated modules using the <strong>Router</strong> object. Add a new file to your project and name it <strong>myroutes</strong>**.js**. Paste the following snippet in it. [code language=&quot;javascript&quot;] const express = require('express'); let router = express.Router(); router.get('/', (req, res) =&gt; { console.log(&quot;spot 1&quot;); res.send(&quot;You reached the spot 1&quot;); }); router.get('/sub', (req, res) =&gt; { console.log(&quot;spot 2&quot;); res.send(&quot;You reached the spot 2&quot;); }); router.get('/sub/sub2', (req, res) =&gt; { console.log(&quot;spot 3&quot;); res.send(&quot;You reached the spot 3&quot;); }); exports.myroute = router; [/code] In the code above, we defined a module with a set of relative routes, in our index.js file, we will now reference this module and tell the application that we want to use this module only under a certain path. [code language=&quot;javascript&quot;] // Using the Express Framework const express = require('express'); // Instantiate an Express app let app = express(); // References our module var myroutes = require('./myroutes'); // Use this module under the path /my app.use('/my', myroutes.myroute); // The HTTP server listens on port 3000 const port = 3000; app.listen(port, () =&gt; { // A callback function executed when the server IS actually listening console.log(&quot;Now listening on port &quot; + port); }); [/code] If you are familiar with ASP.NET development and IIS, we are basically implementing a virtual path (or Area in ASP.NET MVC) We will be able to reach the handlers through the routes :</p>
+<ul>
+<li>/my</li>
+<li>/my/sub</li>
+<li>/my/sub/sub2</li>
+</ul>
+<h2 id="serving-static-files">Serving static files</h2>
+<p>All the things we saw so far can be really interesting when we want to develop our custom API endpoints or some routing logic. However, in many cases, we would want our web server to simply serve files and we don't want to rewrite the code to handle such a common task. Obviously, Express.js will help us here with a single line of code. <img src="https://ypcode.files.wordpress.com/2017/01/serving_static_files.png" alt="serving_static_files" />First we need to create the folder that contains the files to serve. Create, for instance, a folder named <strong>public</strong> (the name doesn't really matter) and put whatever content in it. In your index.js file, add the following line after the first occurence of _app.use(... _:  <strong>app.use(express.static('public');</strong>   We can then try to get the files under the localhost root : <img src="https://ypcode.files.wordpress.com/2017/01/server_staticfiles.png" alt="server_staticfiles.png" /> We can also make it a kind of IIS virtual directory using the following instruction instead : <strong>app.use('/content', express.static('public'));</strong> The full index.js file looks like : [code language=&quot;javascript&quot;] // Using the Express Framework const express = require('express'); // Instantiate an Express app let app = express(); var myroutes = require('./myroutes'); app.use('/my', myroutes.myroute); app.use('/content', express.static('public')); // The HTTP server listens on port 3000 const port = 3000; app.listen(port, () =&gt; { // A callback function executed when the server IS actually listening console.log(&quot;Now listening on port &quot; + port); }); [/code]</p>
+<h2 id="middleware">Middleware</h2>
+<p>In the 2 sections above, you propably noticed a syntax that we used : <em>app.use(...);</em> It is actually how we can tell Express to &quot;use a middleware&quot;. Basically, it means adding a step to the HTTP request processing flow. As its name imply, a middleware is a piece of software occuring in the middle of a process flow. The middleware can prepare, massage, compute or aggregate (...) data from the HTTP request in order to meet the functional needs and send the appropriate HTTP response. Each middleware, according to their purpose, might extend the request data, prepare or add data to the response, and decide to actually flush out the response. If you are familiar with ASP.NET development, it is quite similar the <strong>HTTP Modules and HTTP Handlers</strong> or <strong>ASP.NET MVC Filters.</strong> <img src="https://ypcode.files.wordpress.com/2017/01/nodejs-middleware-diagram.png" alt="nodejs-middleware-diagram" /> As you might have understood, the order in which we specify the middleware DOES MATTER, because, we might need at some point an information a previous middleware has computed. At the end of the flow, if no middleware has flushed the response, the HTTP request will remain unresponded until a timeout (issued by the request sender) occurs. In the previous examples, we used a middleware that handles the routing logic, or the static file serving capabilities. In some cases, we might want to write our custom middleware. Imagine, we want to check all incoming requests for a specific header responsible for the authentication Before the very first <em>app.use(...)</em>, add the following lines [code language=&quot;javascript&quot;] app.use((req, res, next) =&gt; { if (req.headers[&quot;x-auth-token&quot;] == &quot;foobar&quot;) { next(); return; } // The auth token is not found, respond with forbidden res.sendStatus(403); }); [/code] This code will be executed before anything else at each incoming HTTP request. Let's try it with Postman [caption id=&quot;attachment_1220&quot; align=&quot;alignnone&quot; width=&quot;760&quot;]<img src="https://ypcode.files.wordpress.com/2017/01/middleware_auth.png" alt="middleware_auth" /> Try with an invalid value for the Auth token header[/caption] [caption id=&quot;attachment_1223&quot; align=&quot;alignnone&quot; width=&quot;804&quot;]<img src="https://ypcode.files.wordpress.com/2017/01/middleware_auth2.png" alt="middleware_auth2" /> Try with a proper value for the auth token header[/caption] If the header <em>x-auth-token</em> matches the value &quot;foobar&quot;, then the next step of the processing flow is called (executing the <em>next()</em> callback), if the value of the header doesn't match, a <em>403 Forbidden HTTP code</em> is returned. It is also a good habit to always have a catch-all middleware that will be responsible for responding to all HTTP requests that has not been responded by any of the previous middleware. After all the other <em>app.use()</em> instructions, add the following lines: [code language=&quot;javascript&quot;] app.use((req, res) =&gt; { // Catch all res.send(&quot;THIS IS THE CATCH ALL PAGE&quot;); }); [/code] This middleware will simply respond with a dummy message, but the logic here could be implemented as a redirection to a 404 Not found page.</p>
+<h2 id="astructured-project-with-express-generator">A structured project with Express Generator</h2>
+<p>Express.js can make our work even simpler by generating a well structured project and also proposes to give the request processing to a view engine to generate views with dynamic data. The first thing to do is to install the express generator through NPM: <strong>&gt; npm install express-generator -g</strong> (Note: the -g switch will install the NPM package globally (in your user software directory) Once installed, you can use this tool with the following command-line [code language=&quot;console&quot;] C:\Workspace\node\blog&gt;express expressapp warning: the default view engine will not be jade in future releases warning: use <code>--view=jade' or </code>--help' for additional options create : expressapp create : expressapp/package.json create : expressapp/app.js create : expressapp/public create : expressapp/routes create : expressapp/routes/index.js create : expressapp/routes/users.js create : expressapp/public/javascripts create : expressapp/views create : expressapp/views/index.jade create : expressapp/views/layout.jade create : expressapp/views/error.jade create : expressapp/public/images create : expressapp/public/stylesheets create : expressapp/public/stylesheets/style.css create : expressapp/bin create : expressapp/bin/www install dependencies: &gt; cd expressapp &amp;&amp; npm install run the app: &gt; SET DEBUG=expressapp:* &amp; npm start C:\Workspace\node\blog&gt; [/code] <img src="https://ypcode.files.wordpress.com/2017/01/express-generated-app.png" alt="express-generated-app" /> a directory named &quot;expressapp&quot; has been created with all the boilerplate code source, dependency references and project structure. To install the dependencies, type the following commands: <strong>&gt; cd expressapp</strong> <strong>&gt; npm install</strong> Your project has now the following structure :</p>
+<ul>
+<li><strong>public</strong>: a folder that contains all the files to serve ( typically, CSS, JS, images and so on...)</li>
+<li><strong>node_modules</strong>: like any Node project, it has a directory for the installed modules</li>
+<li><strong>routes</strong>: a folder dedicated to contain the JS files for each main route.</li>
+<li><strong>views</strong>: a folder dedicated to contain the view files (HTML or other view format like <em>jade</em>).</li>
+<li><strong>app.js</strong> is the main source code file of our app and contains already generated code that handles static file serving, some predefined routes (to be customized) and references some utility like body parser, cookie parser, a logger,...</li>
+<li><strong>bin</strong>: is the folder that contains the startup point of the application (it comes from the Unix world). it contains a single <strong>www</strong> file which is actually a javascript file that will be executed by the node runtime. It actually handles some environment configuration. (really useful when multiple runtime environments (Dev, Test, Prod,...)</li>
+<li><strong>package.json</strong> the package.json file of our project (<a href="https://ypcode.wordpress.com/2017/01/02/get-familar-with-node-js-part-2-npm/">cf Part 2</a>)  preconfigured with a start command <img src="https://ypcode.files.wordpress.com/2017/01/expressapp-packagejson.png" alt="expressapp-packagejson" /></li>
+</ul>
+<p>This application is ready-to-use and can already be executed: <strong>&gt; npm start</strong> Try to access <a href="http://localhost:3000">http://localhost:3000</a> from your browser, and you will see some HTTP logging in the terminal. <img src="https://ypcode.files.wordpress.com/2017/01/expressapp-firstuse.png" alt="expressapp-firstuse.png" /></p>
+<h3 id="a-quick-word-about-jade">A quick word about Jade</h3>
+<p>Express.js allow efficient view rendering through view engines, different engines exist with each their own syntax:</p>
+<ul>
+<li>Jade (the latest version has been renamed to <strong>pug</strong>) : Space-sensitive easy HTML rendering engine. It is the default engine in Express.</li>
+<li>Mustache : Allows to enrich static HTML with dynamic data through the Mustache syntax . { }</li>
+<li>EJS : Alike ASP.NET MVC Razor with JavaScript</li>
+</ul>
+<p message="" email="">To test the view engine in Express, we will use the default Jade. In the <em>routes</em> folder, copy the <strong>index.js</strong> file to a new file named <strong>contact.js</strong> and replace the router.get... line by the following: [code language=&quot;javascript&quot;] ... router.get('/', function(req, res, next) { res.render('contact', { title: 'Contact', message:'Do not hesitate to contact us!', email:'contact AT ike DOT lu' }); }); ... [/code] Notice here above, that we call the render() function instead of the send() function we saw earlier. We render the 'contact' view with the data passed as the second argument. In the <em>views</em> folder, create a <em>contact.jade</em> file and put the following content in it: [code language=&quot;jade&quot;] // Use the layout.jade template as the layout page extends layout // Put the current page content within the block (placeholder) named 'content' block content // Add a H1 element containing the value of the title variable h1= title // Add a H2 element with a inner text containing the value of the message variable h2 Hey, # // Add a DIV element with some text div You can contact us via // Add a A element within the parent DIV element a(href=&quot;mailto:#&quot;) this address [/code] To handle the contact route, we need to modifiy the <em>app.js</em> file. At line 10, insert the line [code language=&quot;javascript&quot;] // Reference our contact route module var contact = require('./routes/contact'); [/code] and insert the following at line 28 [code language=&quot;javascript&quot;] // Use our contact route module at main route /contact app.use('/contact', contact); [/code] <img src="https://ypcode.files.wordpress.com/2017/01/jade-sample.png" alt="jade-sample" /> You can execute <strong>npm start</strong> and try to reach the url <a href="http://localhost:3000/contact">http://localhost:3000/contact</a> in your browser         For a reference documentation about Jade syntax, please <a href="https://naltatis.github.io/jade-syntax-docs/">refer to here</a>   Here we go for Express.js, I hope it will give you a good overview of what can be achieved with this great framework. Leave your comments and feedback !</p>
+
+    </div>
+</div>
+        </main>
+
+        <footer class="border-top footer">
+                &copy; Copyrights 2020 - YPcode - Yannick Plenevaux
+        </footer>
+    </div>
+
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
+
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-aspnet.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-csharp.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-css-extras.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-scss.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+
+
+
+</body>
+</html>
