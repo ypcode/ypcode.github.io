@@ -97,7 +97,7 @@ body {
   background-size: cover;
 }
 
-.sidebar {
+.menu {
   position: fixed;
   top: 0;
   left: 0;
@@ -110,7 +110,14 @@ body {
   z-index: 2000;
 }
 
-.sidebar .sep {
+.menu .menu-hamburger-icon {
+  display: none;
+  margin: 10px;
+  position: absolute;
+  right: 10px;
+}
+
+.menu .sep {
   border: 0;
   border-top: 1px solid #EEEEEE;
   width: 80%;
@@ -118,24 +125,24 @@ body {
   margin-bottom: 3px;
 }
 
-.sidebar .sep.main-site-title-sep {
+.menu .sep.main-site-title-sep {
 border-color: #444444;
 }
 
-.sidebar .main-site-description {
+.menu .main-site-description {
   font-size: 18px;
   text-align: center;
   margin-bottom: 50px;
   color: #807070;
 }
 
-.sidebar .main-site-title {
+.menu .main-site-title {
   margin-top: 80px;
   font-size: 32px;
   text-align: center;
 }
 
-.sidebar .navigation {
+.menu .navigation {
   width: 80%;
   margin: auto;
   margin-top: 150px;
@@ -147,12 +154,12 @@ border-color: #444444;
   border-bottom: 1px solid #EEEEEE;
 }
 
-.sidebar a, .sidebar a:hover {
+.menu a, .menu a:hover {
   color: white;
   text-decoration: none;
 }
 
-.sidebar .nav-link, .sidebar .nav-link:hover {
+.menu .nav-link, .menu .nav-link:hover {
   font-size: 18px;
   color: white;
   position: relative;
@@ -160,7 +167,7 @@ border-color: #444444;
   display: inline-block;
 }
 
-.sidebar .nav-link::before {
+.menu .nav-link::before {
   content: "";
   position: absolute;
   width: 96%;
@@ -173,31 +180,31 @@ border-color: #444444;
   transition: all 0.3s ease-in-out 0s;
 }
 
-.sidebar .nav-link:hover::before {
+.menu .nav-link:hover::before {
   visibility: visible;
   transform: scaleX(1);
 }
 
-.sidebar .main-site-author {
+.menu .main-site-author {
   margin-top: 150px;
 }
 
-.sidebar .main-site-author .main-site-author-name {
+.menu .main-site-author .main-site-author-name {
   font-size: 18px;
   margin-top: 16px;
 }
 
-.sidebar .main-site-author .main-site-author-description {
+.menu .main-site-author .main-site-author-description {
   font-size: 14px;
   margin-top: 6px;
   color: #807070;
 }
 
-.sidebar .main-site-author .main-site-author-description .main-site-author-description-line {
+.menu .main-site-author .main-site-author-description .main-site-author-description-line {
   display: block;
 }
 
-.sidebar .main-site-author .main-site-author-picture {
+.menu .main-site-author .main-site-author-picture {
   width: 96px;
   height: auto;
   display: inline-block;
@@ -205,14 +212,14 @@ border-color: #444444;
   border-radius: 50%;
 }
 
-.sidebar nav.navigation ul {
+.menu nav.navigation ul {
   display: flexbox;
   justify-content: center;
   align-items: center;
   padding: 0;
 }
 
-.sidebar nav.navigation ul li {
+.menu nav.navigation ul li {
   list-style-type: none;
   padding: 0;
 }
@@ -323,4 +330,69 @@ border-color: #444444;
   margin: auto;
   margin-top: 30px;
   margin-bottom: 30px;
+}
+
+@media (max-width: 768px) {
+  .menu {
+    height: 50px;
+    width: 100%;
+  }
+
+  .menu .main-site-title {
+    margin: 10px;
+    font-size: 24px;
+    position: absolute;
+    left: 10px;
+  }
+
+  .menu .menu-hamburger-icon {
+    display: inline-block;
+  }
+
+  .menu .sep, .menu .main-site-description, .menu .navigation, .menu .menu-social-links, .menu .main-site-author {
+    display: none;
+  }
+
+  .site-content {
+    margin-left: 0;
+    padding: 15px;
+  } 
+
+  .content-item-title h1 {
+    margin-top: 45px;
+    font-size: 28px;
+  }
+
+  .content-item-featured-image-container {
+    text-align: center;
+    margin: auto;
+    margin-top: 0px;
+  }
+
+  .content-item-featured-image-container .content-item-featured-image {
+    max-width: 90vw;
+    object-fit: contain;
+    box-shadow: none;
+  }
+
+  .menu.visible {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .menu.visible .sep, .menu.visible .main-site-description, .menu.visible .navigation, 
+  .menu.visible .menu-social-links, .menu.visible .main-site-author {
+    display: block;
+  }
+
+  .menu.visible .main-site-title {
+    position: relative;
+    margin-top: 80px;
+    font-size: 32px;
+    text-align: center;
+  }
+
 }

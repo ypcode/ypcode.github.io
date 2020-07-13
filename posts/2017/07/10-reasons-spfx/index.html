@@ -9,7 +9,7 @@
     <link rel="canonical" href="https://ypcode.github.io/posts/2017/07/10-reasons-spfx" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="/css/site.css" />
-     <meta name="generator" content="PVX WebContentGenerator" />
+    <meta name="generator" content="PVX WebContentGenerator" />
    
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
@@ -83,9 +83,33 @@
         <meta name="twitter:site" content="@yp_code" />
     <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.github.io/feed" />
 
+
+    <script>
+        function toggleMenu() {
+            var menu =document.querySelector(".menu");
+            if (menu) {
+                if (menu.classList.contains("visible")) {
+                    menu.classList.remove("visible");
+                } else {
+                    menu.classList.add("visible");
+                }
+            }
+        }
+    </script>
 </head>
 <body>
-    <div class="sidebar">
+    <div class="menu">
+        <span class="menu-hamburger-icon" onclick="toggleMenu();">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                x="0px" 
+                y="0px"
+                width="30" 
+                height="30"
+                viewBox="0 0 172 172"
+                style=" fill:#000000;">
+                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M0,25.8v17.2h172v-17.2zM0,77.4v17.2h172v-17.2zM0,129v17.2h172v-17.2z"></path></g></g>
+            </svg>
+        </span>
         <a href="https://ypcode.github.io/">
             <h1 class="main-site-title">YPcode</h1>
             <hr class="sep main-site-title-sep"/>
@@ -113,7 +137,8 @@
                         </h3>
             </div>
 
-        <p class="social-links">
+        <div class="menu-social-links">
+            <p class="social-links">
 
     <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
         title="Microsoft MVP" rel="noopener">
@@ -162,6 +187,7 @@
 
 
 </p>
+        </div>
     </div>
    
     <div class="site-content">
