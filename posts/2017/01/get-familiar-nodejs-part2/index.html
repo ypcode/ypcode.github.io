@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Get familar with Node.js - Part 2: NPM" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/01/get-familiar-nodejs-part2" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+        <meta property="og:image" content="/images/2016/12/mycustommodule.png?r=202007151244" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-01-02 21:46:50Z" />
         <meta property="article:modified_time" content="2017-01-02 21:46:50Z" />
@@ -70,7 +70,7 @@
         <meta name="twitter:title" content="Get familar with Node.js - Part 2: NPM" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/01/get-familiar-nodejs-part2" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+            <meta name="twitter:image" content="/images/2016/12/mycustommodule.png?r=202007151244" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JS, Node.js" />
         <meta name="twitter:site" content="@yp_code" />
@@ -198,29 +198,48 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151154" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2016/12/mycustommodule.png?r=202007151244" alt="Get familar with Node.js - Part 2: NPM" />
         </div>
    
     <div class="content">
-        <p>Hi guys, This post is part of a series of articles introducing Node.js.</p>
+        <p>Hi guys,</p>
+<p>This post is part of a series of articles introducing Node.js.</p>
 <ul>
-<li><a href="https://ypcode.wordpress.com/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1 : the basics</a></li>
+<li><a href="/posts/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1 : the basics</a></li>
 <li>Part 2 : NPM (this tutorial)</li>
-<li><a href="https://ypcode.wordpress.com/2017/01/05/get-familar-with-node-js-part-3-express-js/">Part 3 : Express.js</a></li>
-<li><a href="https://ypcode.wordpress.com/2017/01/06/get-familiar-with-node-js-part-4-productivity-tools/">Part 4 : Productivity Tools</a></li>
+<li><a href="/posts/2017/01/05/get-familar-with-node-js-part-3-express-js/">Part 3 : Express.js</a></li>
+<li><a href="/posts/2017/01/06/get-familiar-with-node-js-part-4-productivity-tools/">Part 4 : Productivity Tools</a></li>
 </ul>
 <p>If you read my previous post about the basics of Node.js, you probably realized the strengths it has due to its low level. But you probably foresee as well the huge lack of productivity there would be if you had to build complex and large applications from scratch. Don't worry, if Node.js is so popular, there must be a reason. There are actually several reasons. In this article, we will mention two big ones of them: NPM &amp; Express.js. This post focuses <strong>NPM</strong>, the upcoming post will focus Express.js.</p>
 <h1 id="npm-node-package-manager">NPM : Node Package Manager</h1>
 <p>If you are a .NET Developer, you are probably familiar with Nuget in Visual Studio that allows you to install packages and dependencies into your projects. NPM is actually the &quot;Nuget for Node&quot;. NPM allows to easily manage the external dependencies of your Node solution. You can choose to install a package locally (in your solution directory) or globally (in your user directory). In your Node code, you can then reference the libraries through the require() &quot;directive&quot;. NPM is also a repository that hosts more than 350 000 packages of all kinds of frameworks, libraries and other building blocks...</p>
 <h2 id="using-or-require-a-module-in-node">Using or &quot;Require&quot; a module in Node</h2>
-<p>Node implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS Modules specification</a>. To summary, a module (or a part of a module) can be referenced by assigning the return of the require() function to a variable in your source code. The module exposes its components with the exports variable. <img src="/images/2016/12/mycustommodule.png" alt="mycustommodule" />   I set  the functions of my module as members of the <strong>exports</strong> object</p>
-<p>I <img src="/images/2016/12/requirecustommodule.png" alt="requirecustommodule" />require my module, notice the argument is <strong>./myModule</strong>; the relative path to my JS file without the .js extension. My module is then referenced by the variable <strong>myModule</strong>, I can then use its members</p>
+<p>Node implements the <a href="http://www.commonjs.org/specs/modules/1.0/">CommonJS Modules specification</a>.
+To summary, a module (or a part of a module) can be referenced by assigning the return of the require() function to a variable in your source code. The module exposes its components with the exports variable.</p>
+<p><img src="/images/2016/12/mycustommodule.png" alt="mycustommodule" />  </p>
+<p>I set  the functions of my module as members of the <strong>exports</strong> object</p>
+<p><img src="/images/2016/12/requirecustommodule.png" alt="requirecustommodule" /></p>
+<p>I require my module, notice the argument is <strong>./myModule</strong>; the relative path to my JS file without the .js extension. My module is then referenced by the variable <strong>myModule</strong>, I can then use its members</p>
 <h2 id="install-a-third-party-module-in-my-project">Install a third-party module in my project</h2>
 <p>Let's say I want to use the popular helper library <em>underscore</em>.</p>
 <h4 id="install-the-last-available-version">Install the last available version</h4>
-<p>In a terminal (within your project folder), type <strong>&gt; npm install underscore<img src="/images/2016/12/npm_installunderscore01.png" alt="npm_installunderscore01" /></strong> For now, don't worry about the warning messages. <img src="/images/2016/12/npm_installunderscore02.png" alt="npm_installunderscore02" />You can see in your working directory that a <strong>node_modules</strong> (1) subdirectory has been created, this new directory contains a directory named <strong>underscore</strong> (2). That one, in turn, contains the files of the underscore module we have just installed. <strong>CAUTION</strong>: The modules from NPM are JavaScript and most likely Open Source. However, you should take the habit of <strong>never modifying the source code directly within the node_modules folder</strong>. The simple reason is, the node_modules folder contains the modules managed by NPM, it means, if you update the module to a different version, your changes will be lost. You'd rather want to fork the open-source project or create your own node module containing your modified source files. I can then use the underscore module<img src="/images/2016/12/use_underscore_module.png" alt="use_underscore_module" /> Notice here the argument of require() is not a relative path. In this case, Node will fetch the module either in globally or locally installed node modules.</p>
+<p>In a terminal (within your project folder), type</p>
+<pre><code class="language-bash">npm install underscore
+</code></pre>
+<p><img src="/images/2016/12/npm_installunderscore01.png" alt="npm_installunderscore01" /></p>
+<p>For now, don't worry about the warning messages.</p>
+<p><img src="/images/2016/12/npm_installunderscore02.png" alt="npm_installunderscore02" /></p>
+<p>You can see in your working directory that a <strong>node_modules</strong> (1) subdirectory has been created, this new directory contains a directory named <strong>underscore</strong> (2).
+That one, in turn, contains the files of the underscore module we have just installed.</p>
+<p><strong>CAUTION</strong>: The modules from NPM are JavaScript and most likely Open Source.
+However, you should take the habit of <strong>never modifying the source code directly within the node_modules folder</strong>. The simple reason is, the node_modules folder contains the modules managed by NPM, it means, if you update the module to a different version, your changes will be lost. You'd rather want to fork the open-source project or create your own node module containing your modified source files.</p>
+<p>I can then use the underscore module</p>
+<p><img src="/images/2016/12/use_underscore_module.png" alt="use_underscore_module" /></p>
+<p>Notice here the argument of require() is not a relative path. In this case, Node will fetch the module either in globally or locally installed node modules.</p>
 <h4 id="install-a-specific-version-of-a-module">Install a specific version of a module</h4>
-<p>If, for some reasons, you need a specific version of a module, you can specify it by appending @<version> to the name of the package e.g. If you need to use the version 1.6 of underscore instead of the latest version, you must type in the console (still within your project folder): <strong>&gt; npm install underscore@1.6</strong></p>
+<p>If, for some reasons, you need a specific version of a module, you can specify it by appending @<version> to the name of the package. e.g. If you need to use the version 1.6 of underscore instead of the latest version, you must type in the console (still within your project folder):</p>
+<pre><code class="language-bash">npm install underscore@1.6
+</code></pre>
 <h2 id="modules-in-larger-projects">Modules in larger projects</h2>
 <p>So far, we only installed a couple of modules. In bigger projects, we usually use many more modules, it would be really cumbersome to install them one by one with the command. Fortunately, there is a simpler way to handle this : <strong>package.json</strong> It is a file that contains the properties of the project (the package).</p>
 <ul>
@@ -229,7 +248,17 @@
 <li>dependencies</li>
 <li>...</li>
 </ul>
-<p>It is totally acceptable to create this file from scratch, however, I think it is easier (especially in your first steps) to run a command : <strong>npm init</strong> You will be asked to give the properties of the project. When done, you will see that the <strong>package.json</strong> file has been created. To go quicker, you can also run : <strong>npm init --yes</strong> This will generate a package.json file with default values and the current directory's name as the name of the package. To specify the dependencies of the package, a property &quot;dependencies&quot; should be added in the <strong>package.json</strong> file (Note: If you already have installed some modules with the <strong>npm install</strong> command, they will already be included in the generated package.json file) [code language=&quot;javascript&quot;] &quot;dependencies&quot;: { &quot;underscore&quot;: &quot;^1.8.3&quot; }, [/code] the <strong>dependencies</strong> property is a JS Object which as name of the dependencies as members' names and the version selector as the value. The selector could be :</p>
+<p>It is totally acceptable to create this file from scratch, however, I think it is easier (especially in your first steps) to run a command : <strong>npm init</strong></p>
+<p>You will be asked to give the properties of the project. When done, you will see that the <strong>package.json</strong> file has been created.
+To go quicker, you can also run : <strong>npm init --yes</strong>
+This will generate a package.json file with default values and the current directory's name as the name of the package.
+To specify the dependencies of the package, a property &quot;dependencies&quot; should be added in the <strong>package.json</strong> file
+(Note: If you already have installed some modules with the <strong>npm install</strong> command, they will already be included in the generated package.json file)</p>
+<pre><code class="language-json">...
+ &quot;dependencies&quot;: { &quot;underscore&quot;: &quot;^1.8.3&quot; },
+...
+</code></pre>
+<p>the <strong>dependencies</strong> property is a JS Object which as name of the dependencies as members' names and the version selector as the value. The selector could be :</p>
 <ul>
 <li>* or &quot;&quot; // any version</li>
 <li>2.3.x // versions 2.3.0, 2.3.1, ..., 2.3.n but not 2.4</li>
@@ -241,7 +270,24 @@
 <li>&lt;2.3.7 // less than to 2.3.7</li>
 <li>2.3 - 2.4 // equivalent to &quot;&gt;=2.3 &lt;=2.4&quot; or &quot;2.3.x&quot;</li>
 </ul>
-<p>The list above is not exhaustive, please refer to <a href="https://docs.npmjs.com/misc/semver#versions">node package versions documentation</a> for more complete information. We can then specify all the required modules in the package.json file [code language=&quot;javascript&quot;] &quot;dependencies&quot;: { &quot;underscore&quot;:&quot;<em>&quot;, &quot;morgan&quot;:&quot;</em>&quot;, &quot;jsonwebtoken&quot;:&quot;*&quot; }, [/code] To install all the modules in a single command, type in the terminal: <strong>&gt; npm install</strong> All your specified modules and their dependencies will be installed in your projects. The package.json file has a lot of other properties. I really encourage you to check out <a href="https://docs.npmjs.com/files/package.json">this page</a> for official documentation. NPM is a package and dependencies manager but it is so popular that it really rules the development techniques, tooling and conventions in Node projects. There is a lot more to learn about NPM, I really encourage you to see more on the <a href="https://www.npmjs.com/">NPM official website</a> In the next post, we will focus on Express.js to develop a real-world application. Leave your comments and feedback</p>
+<p>The list above is not exhaustive, please refer to <a href="https://docs.npmjs.com/misc/semver#versions">node package versions documentation</a> for more complete information.
+We can then specify all the required modules in the package.json file</p>
+<pre><code class="language-json">...
+&quot;dependencies&quot;: { 
+  &quot;underscore&quot;:&quot;*&quot;, 
+  &quot;morgan&quot;:&quot;*&quot;, 
+  &quot;jsonwebtoken&quot;:&quot;*&quot; 
+  },
+...
+</code></pre>
+<p>To install all the modules in a single command, type in the terminal:</p>
+<pre><code class="language-bash"> npm install
+</code></pre>
+<p>All your specified modules and their dependencies will be installed in your projects. The package.json file has a lot of other properties. I really encourage you to check out <a href="https://docs.npmjs.com/files/package.json">this page</a> for official documentation. NPM is a package and dependencies manager but it is so popular that it really rules the development techniques, tooling and conventions in Node projects.
+There is a lot more to learn about NPM, I really encourage you to see more on the <a href="https://www.npmjs.com/">NPM official website</a></p>
+<p>In the next post, we will focus on Express.js to develop a real-world application.</p>
+<p>Leave your comments and feedback</p>
+<p>Yannick</p>
 
     </div>
 </div>

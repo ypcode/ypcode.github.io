@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SharePoint Online - Issues when adding Site Mailbox" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2016/12/spo-issues-adding-site-mailbox" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+        <meta property="og:image" content="/images/2016/12/sitemailboxappicon.png?r=202007151244" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2016-12-02 18:00:15Z" />
         <meta property="article:modified_time" content="2016-12-02 18:00:15Z" />
@@ -69,7 +69,7 @@
         <meta name="twitter:title" content="SharePoint Online - Issues when adding Site Mailbox" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2016/12/spo-issues-adding-site-mailbox" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+            <meta name="twitter:image" content="/images/2016/12/sitemailboxappicon.png?r=202007151244" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="SharePoint Online, Site Mailbox" />
         <meta name="twitter:site" content="@yp_code" />
@@ -197,15 +197,39 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151154" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2016/12/sitemailboxappicon.png?r=202007151244" alt="SharePoint Online - Issues when adding Site Mailbox" />
         </div>
    
     <div class="content">
-        <p>Hello everyone, <img src="/images/2016/12/sitemailboxappicon.png" alt="sitemailboxappicon" />Recently I had to add a site Mailbox to my SharePoint Online site. Something I never had the opportunity to do. As often, when doing things for the first time, something went wrong. When I click the icon in the &quot;Add an app&quot; page, I am redirected to the Office 365 app that gives me an error message The error message said :</p>
+        <p>Hello everyone,</p>
+<p>Recently I had to add a site Mailbox to my SharePoint Online site. Something I never had the opportunity to do. As often, when doing things for the first time, something went wrong. When I click the icon in the &quot;Add an app&quot; page, I am redirected to the Office 365 app that gives me an error message The error message said :</p>
 <blockquote>
 <p>the site mailbox couldn't be provisioned  - String syntax failed validation</p>
 </blockquote>
-<p Owner="" group="" Add="" your="" name="">As any developer would do, I google this message and click the first link I get <a href="https://support.microsoft.com/en-us/kb/2934900">https://support.microsoft.com/en-us/kb/2934900</a> The Microsoft support mentions something about leading or trailing spaces in the title. Not exactly relevant for my case, but then I realize my SharePoint Online Developer tenant was set up with my default language in French (my mother tongue) and my default site collection was provisionned in French as well. The site title is then&quot;Site d'équipe&quot; with those ugly accents and single quotes that URLs don't like. I then simply rename my site as &quot;Team Site&quot; and retry <img src="/images/2016/12/sitemailbox_success.png" alt="sitemailbox_success" /> Looks good! Let's go to our created Site Mailbox! Redirected to Outlook again, I have to configure my Outlook tenant (not done until then) [caption id=&quot;attachment_163&quot; align=&quot;alignnone&quot; width=&quot;485&quot;]<img src="/images/2016/12/outlooksetup.png" alt="outlooksetup" /> Outlook setup first page (sorry for the french)[/caption] It asks me to select the language and timezone and go ahead ! But then, I get this not so clear message [caption id=&quot;attachment_167&quot; align=&quot;alignnone&quot; width=&quot;1119&quot;]<img src="/images/2016/12/outlook365_sitemailbox_error.png" alt="outlook365_sitemailbox_error" /> An error message (I guess...) (sorry for the french again)[/caption] <img src="/images/2016/12/errorpagetitle.png" alt="errorpagetitle" />Showing more details and taking a look on a page title confirm there is actually an error Googling that again, I reach this page from Microsoft Support <a href="https://support.microsoft.com/fr-fr/kb/3069134">https://support.microsoft.com/fr-fr/kb/3069134</a> It seems that, even if, hopefully, I am a Site Collection Administrator of my own tenant, I need to be explicitly added to either the <strong>Owners</strong> or <strong>Members</strong> site group. Let's do that (Site Settings &gt; Site Permissions &gt;  &gt; New  &gt;  <img src="/images/2016/12/inownersgroup.png" alt="inownersgroup" /> When I reopen the Site Mailbox, I still encounter the same issue, but maybe you noticed (if you speak french) that the unclear error message above said something about retrying after 15 minutes. Let's take a long coffee :D ... (~ 15 minutes later...) ... I reopen the Site Mailbox and then [caption id=&quot;attachment_200&quot; align=&quot;alignnone&quot; width=&quot;1316&quot;]<img src="/images/2016/12/sitemailboxcreated.png" alt="sitemailboxcreated" /> The site Mailbox is created[/caption]   Here we go, I hope it will help some of you See you soon !</p>
+<p>As any developer would do, I google this message and click the first link I get <a href="https://support.microsoft.com/en-us/kb/2934900">https://support.microsoft.com/en-us/kb/2934900</a>.</p>
+<p>The Microsoft support mentions something about leading or trailing spaces in the title. Not exactly relevant for my case, but then I realize my SharePoint Online Developer tenant was set up with my default language in French (my mother tongue) and my default site collection was provisionned in French as well. The site title is then&quot;Site d'équipe&quot; with those ugly accents and single quotes that URLs don't like.</p>
+<p>I then simply rename my site as &quot;Team Site&quot; and retry</p>
+<p><img src="/images/2016/12/sitemailbox_success.png" alt="sitemailbox_success" /></p>
+<p>Looks good! Let's go to our created Site Mailbox!
+Redirected to Outlook again, I have to configure my Outlook tenant (not done until then)</p>
+<p><img src="/images/2016/12/outlooksetup.png" alt="Outlook setup first page (sorry for the french)" /></p>
+<p>It asks me to select the language and timezone and go ahead ! But then, I get this not so clear message</p>
+<p><img src="/images/2016/12/outlook365_sitemailbox_error.png" alt="An error message (I guess...) (sorry for the french again)" /></p>
+<p><img src="/images/2016/12/errorpagetitle.png" alt="errorpagetitle" /></p>
+<p>Showing more details and taking a look on a page title confirm there is actually an error Googling that again, I reach this page from Microsoft Support <a href="https://support.microsoft.com/fr-fr/kb/3069134">https://support.microsoft.com/fr-fr/kb/3069134</a></p>
+<p Owner="" group="" Add="" your="" name="">It seems that, even if, hopefully, I am a Site Collection Administrator of my own tenant, I need to be explicitly added to either the <strong>Owners</strong> or <strong>Members</strong> site group.
+Let's do that (Site Settings &gt; Site Permissions &gt;  &gt; New  &gt; </p>
+<p><img src="/images/2016/12/inownersgroup.png" alt="inownersgroup" /></p>
+<p>When I reopen the Site Mailbox, I still encounter the same issue, but maybe you noticed (if you speak french) that the unclear error message above said something about retrying after 15 minutes. Let's take a long coffee :D</p>
+<p>...
+(~ 15 minutes later...)
+...</p>
+<p>I reopen the Site Mailbox and then:</p>
+<p><img src="/images/2016/12/sitemailboxcreated.png" alt="sitemailboxcreated" /></p>
+<p>The site Mailbox is created
+Here we go, I hope it will help some of you</p>
+<p>See you soon !</p>
+<p>Yannick</p>
 
     </div>
 </div>

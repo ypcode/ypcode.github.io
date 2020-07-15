@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Cross SharePoint platform Maintenance Tools using PnP PowerShell" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+        <meta property="og:image" content="/images/2016/12/powershell.jpg?r=202007151244" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2016-12-08 15:48:37Z" />
         <meta property="article:modified_time" content="2016-12-08 15:48:37Z" />
@@ -73,7 +73,7 @@
         <meta name="twitter:title" content="Cross SharePoint platform Maintenance Tools using PnP PowerShell" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151154" />
+            <meta name="twitter:image" content="/images/2016/12/powershell.jpg?r=202007151244" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="PnP, PowerShell, SharePoint, Maintenance, SharePoint 2013, SharePoint Online" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,11 +201,12 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151154" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2016/12/powershell.jpg?r=202007151244" alt="Cross SharePoint platform Maintenance Tools using PnP PowerShell" />
         </div>
    
     <div class="content">
-        <p>Hi guys, As a SharePoint consultant, I have often been asked to achieve some boring and repetitive maintenance tasks.</p>
+        <p>Hi guys,</p>
+<p>As a SharePoint consultant, I have often been asked to achieve some boring and repetitive maintenance tasks.</p>
 <blockquote>
 <p>&quot;I want to move all of these 100 documents from this site to that one&quot;</p>
 </blockquote>
@@ -217,11 +218,19 @@
 <blockquote>
 <p>&quot;I changed the default content type of this library, I do not want it to be 'Document' but 'My Super Document' with some uselessful fields in it. I WANT to remove the &quot;Document&quot; content type from the list but I can't since it is still used by the 100 documents in the library&quot;</p>
 </blockquote>
-<p>We will take this last one as our case study, later in this post. If you try to achieve one of those three ONLY with the SharePoint standard user interface. It is possible, but as fast as you can go, I think you have at least for a few hours of work. Imagine if this number of 100 documents was actually 10000 ?! As a developer, I am lazy and proud to be so, There must be a way to automate this kind of task.</p>
+<p>We will take this last one as our case study, later in this post.
+If you try to achieve one of those three ONLY with the SharePoint standard user interface.
+It is possible, but as fast as you can go, I think you have at least for a few hours of work. Imagine if this number of 100 documents was actually 10000?!</p>
+<p>As a developer, I am lazy and proud to be so, There must be a way to automate this kind of task.</p>
 <h3 id="use-third-party-tool">Use third-party tool</h3>
-<p>For content migration and some other management tasks, you can use some really great tools like <a href="https://en.share-gate.com/">ShareGate</a>. But customers that already pay for servers, SQL Server and SharePoint licenses, and the consultants to help them, sometimes, they are pretty reticent to buy other tools licenses...</p>
+<p>For content migration and some other management tasks, you can use some really great tools like <a href="https://en.share-gate.com/">ShareGate</a>.
+But customers that already pay for servers, SQL Server and SharePoint licenses, and the consultants to help them, sometimes, they are pretty reticent to buy other tools licenses...</p>
 <h3 id="script-your-own-maintenance-tasks">Script your own maintenance tasks</h3>
-<p><img src="/images/2016/12/powershell.jpg" alt="powershell" />In my developer mind, it then becomes actually a challenge to convert this boring maintenance job into &quot;Develop something to help me doing the job&quot;. Moreover, some power users or IT Pros might be able to reuse your scripts later. Whenever I code something, I tend to (over-)split it into reusable and generic parts, sometines I never re-use them... but you never know, one day, maybe... With this in mind, if I come up with a maintenance task script for a SharePoint OnPrem, I don't want to have to rewrite it a few months later when I want to run the script against SharePoint Online. So let's use what's usable on both platforms. <a href="https://github.com/SharePoint/PnP-PowerShell/blob/master/Documentation/readme.md">SharePoint PnP PowerShell</a>. As already mentioned in one of my previous posts, it is a set of Cmdlets that make use of the SharePoint Client Side Object Model (CSOM) to perform tasks. You have .msi packages <a href="https://github.com/SharePoint/PnP-PowerShell/tree/master/Binaries">here</a> (one for each current platform). In the past, with SharePoint 2010 and early 2013, I used to write a lot of automated tasks with the Server-side (SSOM) PowerShell, and the PnP commands makes it very similar to what I used and even easier in some cases. Behind the scenes, it is &quot;just&quot; a wrapper on the PnP Core library features</p>
+<p><img src="/images/2016/12/powershell.jpg" alt="powershell" /></p>
+<p>In my developer mind, it then becomes actually a challenge to convert this boring maintenance job into &quot;Develop something to help me doing the job&quot;. Moreover, some power users or IT Pros might be able to reuse your scripts later.
+Whenever I code something, I tend to (over-)split it into reusable and generic parts, sometines I never re-use them... but you never know, one day, maybe...</p>
+<p>With this in mind, if I come up with a maintenance task script for a SharePoint OnPrem, I don't want to have to rewrite it a few months later when I want to run the script against SharePoint Online. So let's use what's usable on both platforms: <a href="https://github.com/SharePoint/PnP-PowerShell/blob/master/Documentation/readme.md">SharePoint PnP PowerShell</a>.</p>
+<p>As already mentioned in one of my previous posts, it is a set of Cmdlets that make use of the SharePoint Client Side Object Model (CSOM) to perform tasks. You have .msi packages <a href="https://github.com/SharePoint/PnP-PowerShell/tree/master/Binaries">here</a> (one for each current platform). In the past, with SharePoint 2010 and early 2013, I used to write a lot of automated tasks with the Server-side (SSOM) PowerShell, and the PnP commands makes it very similar to what I used and even easier in some cases. Behind the scenes, it is &quot;just&quot; a wrapper on the PnP Core library features</p>
 <h3 id="the-case-study">The case study</h3>
 <p>Let's take the third real life (almost) case mentioned above. Migrate all items from a Content Type to another one. It is especially useful when you want to change the default content type which is used by all the existing items.</p>
 <h3 id="the-maintenance-task-implementation">The maintenance task implementation</h3>
@@ -231,7 +240,85 @@
 <li>The source content type</li>
 <li>The target content type</li>
 </ul>
-<p>For simplicity, I will use here the name of the content types as arguments to my script [code language=&quot;powershell&quot;] [CmdletBinding()] Param ( [Parameter(Mandatory=$True)] [string]$List, [Parameter(Mandatory=$True)] [string]$SourceContentType, [Parameter(Mandatory=$True)] [string]$TargetContentType ) [/code] Load the target list object and its necessary properties [code language=&quot;powershell&quot;] # Instantiate the list object $ListObj = Get-PnPList -Identity $List If (!$ListObj) { Throw &quot;The target list cannot be found&quot; } Get-PnPProperty -ClientObject $ListObj -Property Title,ContentTypes [/code] Load the source content type object and its necessary properties [code language=&quot;powershell&quot;] # Instantiate the source content type object $SourceContentTypeObj = Get-PnPContentType -List <span class="math">\(ListObj | ? {\)</span><em>.Name -eq $SourceContentType} If (!$SourceContentTypeObj) { Throw &quot;The specified content type cannot be found in the list&quot; } # Ensure the source content type name and id Get-PnPProperty -ClientObject $SourceContentTypeObj -Property Name,Id [/code] Try to retrieve the target content type from the target list, if not found, try to find it in the site collection and add it to the list [code language=&quot;powershell&quot;] # Try to retrieve the target content type from the target list $TargetContentTypeObj = Get-PnPContentType -List <span class="math">\(ListObj | ?{\)</span></em>.Name -eq $TargetContentType} # If the target content type does not already exist in the target list, add it If (!$TargetContentTypeObj) { # Retrieve it from the available content types <span class="math">\(TargetContentTypeObj = Get-PnPContentType -InSiteHierarchy | ?{\)</span><em>.Name -eq $TargetContentType} If (!$TargetContentTypeObj) { Throw &quot;The specified content type does not exist either in list or in site collection&quot; } # Add the content type to the target list Add-PnPContentTypeToList -List $ListObj -ContentType $TargetContentTypeObj } [/code] we need to retrieve all the target items (All the items that have the specified source content type). If no items are found, the script terminates. [code language=&quot;powershell&quot;] # Get all items of the target list having the source content type $camlQuery = $(&quot;<View> <Query> <Where> <Eq> <FieldRef Name='ContentType'/> <Value Type='Computed'>$SourceContentType</Value> </Eq> </Where> </Query> <ViewFields> <FieldRef Name='Id'/> <FieldRef Name='Title'/> <FieldRef Name='FileLeafRef'/> </ViewFields> </View>&quot;) $itemsToUpdate = Get-PnPListItem -List $ListObj -Query $camlQuery $total = $itemsToUpdate.Count if ($total -eq 0) { Write-Host &quot;No items to migrate&quot; Return } [/code] We go through the list of retrieved items and call the Set-PnPListItem cmdlet that allows to set the values for the properties of the specified list item (The rest of the code is for displaying a progress bar using Write-Progress built in cmdlet) [code language=&quot;powershell&quot;] $progressStep = 100/$total For ($i = 0; $i -lt $total; $i++) { $item = $itemsToUpdate[$i] $title = if ($item.Title) {$item.Title} else {$item[&quot;FileLeafRef&quot;]} $itemInfo = &quot;<span class="math">\(title \[\)</span>($item.Id)]&quot; $currentProgress = ($i+1)*$progressStep Try { $dummy = Set-PnPListItem -List $ListObj -Identity $item -ContentType $TargetContentTypeObj Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has been migrated&quot; -PercentComplete $currentProgress } Catch { Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has not been migrated&quot; -PercentComplete $currentProgress Write-Warning &quot;Item $itemInfo cannot be fully updated.&quot; Write-Error $</em>.Error.Message Write-Error $_.Error.StackTrace } } Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Operation complete&quot; -PercentComplete 1 [/code] [caption width=&quot;672&quot; id=&quot;attachment_365&quot; align=&quot;aligncenter&quot;]<img src="/images/2016/12/running_migratecontenttypes.png" alt="running_migratecontenttypes" /> Here is what it looks like ;)[/caption]You can find the entire .ps1 one <a href="https://github.com/ypcode/samples/blob/master/Migrate-ListContentType.ps1">here</a> As usual, I hope this will help you and give you ideas to write your own maintenance scripts and have fun with tasks that are usually boring Leave your comments ! See ya !</p>
+<p>For simplicity, I will use here the name of the content types as arguments to my script</p>
+<pre><code class="language-powershell">[CmdletBinding()\] 
+Param ( 
+  \[Parameter(Mandatory=$True)\] 
+  \[string\]$List, 
+  \[Parameter(Mandatory=$True)\] 
+  \[string\]$SourceContentType, 
+  \[Parameter(Mandatory=$True)\] 
+  \[string\]$TargetContentType )
+</code></pre>
+<p>Load the target list object and its necessary properties</p>
+<pre><code class="language-powershell"> # Instantiate the list object 
+ $ListObj = Get-PnPList -Identity $List 
+ If (!$ListObj) { 
+   Throw &quot;The target list cannot be found&quot; 
+  } 
+  
+  Get-PnPProperty -ClientObject $ListObj -Property Title,ContentTypes
+</code></pre>
+<p>Load the source content type object and its necessary properties</p>
+<pre><code class="language-powershell">  # Instantiate the source content type object 
+  $SourceContentTypeObj = Get-PnPContentType -List $ListObj | ? {$_.Name -eq $SourceContentType} 
+  If (!$SourceContentTypeObj) { 
+    Throw &quot;The specified content type cannot be found in the list&quot; 
+  } 
+  
+  # Ensure the source content type name and id 
+  Get-PnPProperty -ClientObject $SourceContentTypeObj -Property Name,Id 
+</code></pre>
+<p>Try to retrieve the target content type from the target list, if not found, try to find it in the site collection and add it to the list</p>
+<pre><code class="language-powershell">   # Try to retrieve the target content type from the target list 
+   $TargetContentTypeObj = Get-PnPContentType -List $ListObj | ?{$_.Name -eq $TargetContentType} 
+   # If the target content type does not already exist in the target list, add it 
+   If (!$TargetContentTypeObj) { 
+     # Retrieve it from the available content types 
+     $TargetContentTypeObj = Get-PnPContentType -InSiteHierarchy | ?{$_.Name -eq $TargetContentType} 
+     If (!$TargetContentTypeObj) { 
+       Throw &quot;The specified content type does not exist either in list or in site collection&quot; 
+      } 
+      # Add the content type to the target list 
+      Add-PnPContentTypeToList -List $ListObj -ContentType $TargetContentTypeObj 
+    } 
+</code></pre>
+<pre><code>we need to retrieve all the target items (All the items that have the specified source content type). If no items are found, the script terminates. 
+</code></pre>
+<pre><code class="language-powershell">    # Get all items of the target list having the source content type 
+    $camlQuery = $(&quot;&lt;View&gt; &lt;Query&gt; &lt;Where&gt; &lt;Eq&gt; &lt;FieldRef Name='ContentType'/&gt; &lt;Value Type='Computed'&gt;$SourceContentType&lt;/Value&gt; &lt;/Eq&gt; &lt;/Where&gt; &lt;/Query&gt; &lt;ViewFields&gt; &lt;FieldRef Name='Id'/&gt; &lt;FieldRef Name='Title'/&gt; &lt;FieldRef Name='FileLeafRef'/&gt; &lt;/ViewFields&gt; &lt;/View&gt;&quot;)
+    
+    $itemsToUpdate = Get-PnPListItem -List $ListObj -Query $camlQuery $total = $itemsToUpdate.Count 
+    if ($total -eq 0) { 
+      Write-Host &quot;No items to migrate&quot; 
+      Return 
+    } 
+</code></pre>
+<p>We go through the list of retrieved items and call the Set-PnPListItem cmdlet that allows to set the values for the properties of the specified list item (The rest of the code is for displaying a progress bar using Write-Progress built in cmdlet)</p>
+<pre><code class="language-powershell">$progressStep = 100/$total 
+For ($i = 0; $i -lt $total; $i++) { 
+  $item = $itemsToUpdate\[$i\] 
+  $title = if ($item.Title) {$item.Title} else {$item\[&quot;FileLeafRef&quot;\]} 
+  $itemInfo = &quot;$title \[$($item.Id)\]&quot; 
+  $currentProgress = ($i+1)*$progressStep 
+  Try { 
+    $dummy = Set-PnPListItem -List $ListObj -Identity $item -ContentType $TargetContentTypeObj 
+    Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has been migrated&quot; -PercentComplete $currentProgress 
+  } Catch { 
+    Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has not been migrated&quot; -PercentComplete $currentProgress 
+    Write-Warning &quot;Item $itemInfo cannot be fully updated.&quot; 
+    Write-Error $_.Error.Message 
+    Write-Error $_.Error.StackTrace 
+  } 
+} 
+Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Operation complete&quot; -PercentComplete 1
+</code></pre>
+<p>Here is what it looks like ;)
+<img src="/images/2016/12/running_migratecontenttypes.png" alt="running_migratecontenttypes" /></p>
+<p>You can find the entire .ps1 one <a href="https://github.com/ypcode/samples/blob/master/Migrate-ListContentType.ps1">here</a></p>
+<p>As usual, I hope this will help you and give you ideas to write your own maintenance scripts and have fun with tasks that are usually boring Leave your comments !</p>
+<p>See ya !</p>
+<p>Yannick</p>
 
     </div>
 </div>
