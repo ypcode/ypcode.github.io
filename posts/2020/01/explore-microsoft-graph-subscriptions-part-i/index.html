@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Explore Microsoft Graph Subscriptions - Part I" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-i" />
-        <meta property="og:image" content="https://ypcode.github.io/images/2020/01/msgraph-webhooks-parti.png" />
+        <meta property="og:image" content="/images/2020/01/msgraph-webhooks-parti.png" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2020-01-06 07:44:12Z" />
         <meta property="article:modified_time" content="2020-01-06 07:44:12Z" />
@@ -76,7 +76,7 @@
         <meta name="twitter:title" content="Explore Microsoft Graph Subscriptions - Part I" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-i" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/2020/01/msgraph-webhooks-parti.png" />
+            <meta name="twitter:image" content="/images/2020/01/msgraph-webhooks-parti.png" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Azure, Azure Functions, JavaScript, JSON, Microsoft 365, Microsoft Graph, Office 365, Subscriptions, Webhook" />
         <meta name="twitter:site" content="@yp_code" />
@@ -204,17 +204,23 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/2020/01/msgraph-webhooks-parti.png" alt="Explore Microsoft Graph Subscriptions - Part I" />
+            <img class="content-item-featured-image" src="/images/2020/01/msgraph-webhooks-parti.png" alt="Explore Microsoft Graph Subscriptions - Part I" />
         </div>
    
     <div class="content">
-        <p>  Hi Microsoft 365 devs ! Today I start a new series of blog posts in which I'll explore a very interesting capability regarding your Microsoft 365 corporate data: <strong>Microsoft Graph Subscriptions</strong>, or, if you prefer, <strong>Microsoft Graph Webhooks.</strong> In a few words, it means the ability to notify an external system whenever something happens in your corporate data.</p>
+        <p>Hi Microsoft 365 devs !</p>
+<p>Today I start a new series of blog posts in which I'll explore a very interesting capability regarding your Microsoft 365 corporate data: <strong>Microsoft Graph Subscriptions</strong>, or, if you prefer, <strong>Microsoft Graph Webhooks.</strong>
+In a few words, it means the ability to notify an external system whenever something happens in your corporate data.</p>
 <h2 id="what-is-a-webhook">What is a Webhook ?</h2>
-<p>A Webhook is a callback issued by a system that manages information to an external system. It is commonly done as a HTTP POST message containing information about the notification generally expressed in JSON. While I still haven't found a true technical standard reference, numbers of systems have integrated them with more or less the same approach (GitHub, Facebook, Twitter, ...). However, they all have their own variant.</p>
+<p>A Webhook is a callback issued by a system that manages information to an external system. It is commonly done as a HTTP POST message containing information about the notification generally expressed in JSON.
+While I still haven't found a true technical standard reference, numbers of systems have integrated them with more or less the same approach (GitHub, Facebook, Twitter, ...).
+However, they all have their own variant.</p>
 <h2 id="microsoft-graph-subscription-aka-webhook">Microsoft Graph Subscription (aka Webhook)</h2>
-<p>In the Microsoft Graph <a href="https://docs.microsoft.com/en-us/graph/api/resources/webhooks?view=graph-rest-1.0">official documentation</a>, you will barely spot the word &quot;<strong><em>Webhook</em></strong>&quot;. Instead, it will be referred to as &quot;<strong><em>Subscription</em></strong>&quot;. It is basically a synonym. In Microsoft Graph, you are able to manage (create, update and delete) subscriptions to resources. That means you are able to request Microsoft Graph to notify an endpoint of your choice that a particular change has occurred to one of your Microsoft Graph resources.</p>
+<p>In the Microsoft Graph <a href="https://docs.microsoft.com/en-us/graph/api/resources/webhooks?view=graph-rest-1.0">official documentation</a>, you will barely spot the word &quot;<strong><em>Webhook</em></strong>&quot;. Instead, it will be referred to as &quot;<strong><em>Subscription</em></strong>&quot;, it is basically a synonym.</p>
+<p>In Microsoft Graph, you are able to manage (create, update and delete) subscriptions to resources. That means you are able to request Microsoft Graph to notify an endpoint of your choice that a particular change has occurred to one of your Microsoft Graph resources.</p>
 <h3 id="how-does-it-work">How does it work ?</h3>
-<p>Once you have created a subscription to a specific type of change of a particular resource, Microsoft Graph will issue a HTTP POST call with a JSON payload that will basically contain the identifier of the affected resource and the type of change. The recipient of this notification will then be able to trigger any routine or process in reaction to this change.</p>
+<p>Once you have created a subscription to a specific type of change of a particular resource, Microsoft Graph will issue a HTTP POST call with a JSON payload that will basically contain the identifier of the affected resource and the type of change.
+The recipient of this notification will then be able to trigger any routine or process in reaction to this change.</p>
 <h3 id="limitations-and-concerns">Limitations and concerns</h3>
 <p>By the time of this writing, according to the official docs, Microsoft Graph V1 supports only a certain set of resource types:</p>
 <ul>
@@ -230,11 +236,14 @@
 </ul>
 <p>Moreover, there are some concerns you have to keep in mind when implementing a Microsoft Graph Webhook :</p>
 <ul>
-<li><strong>Subscription lifetime</strong>: In order to keep any system stable, a subscription usually has an expiration date to avoid the processing workload for something that is no longer used. When the expiration date is reached, the subscription is simply removed. The same applies obviously to Microsoft Graph (which is a huge system that needs to remain stable...). The expiration date is quite short (up to maximum 3 days for almost all of the resource types). The subscription can obviously be updated and the expiration date can be changed. It means it is up to the Webhook owner to take care of the <strong>subscription not to expire</strong>.</li>
+<li><strong>Subscription lifetime</strong>: In order to keep any system stable, a subscription usually has an expiration date to avoid the processing workload for something that is no longer used. When the expiration date is reached, the subscription is simply removed. The same applies obviously to Microsoft Graph (which is a huge system that needs to remain stable...).
+The expiration date is quite short (up to maximum 3 days for almost all of the resource types).
+The subscription can obviously be updated and the expiration date can be changed. It means it is up to the Webhook owner to take care of the <strong>subscription not to expire</strong>.</li>
 <li><strong>HTTPS</strong>: The HTTP endpoint to which the notification will be sent must use a HTTPS public address which requires a valid public certificate.</li>
 <li><strong>URL reachable from the Web</strong>: Since the URL will be called <strong>from</strong> the Microsoft Cloud computers, it requires that the URLs are reachable on the Web. If your recipient system is some on-prem web app, make sure you set the proper firewall rules and DNS redirections!</li>
-<li><strong>Web Requests</strong>: Since Webhooks are essentially Web Requests, you have to make sure that your recipient responds in a timely manner (10 seconds). If a timeout occurs multiple times, the subscription will be more than likely deleted by Microsoft Graph. In order to reduce the response delay, you have to perform the minimal possible task when receiving the notification. your recipient should rather store or queue the notification and reply to the HTTP request. In turn, another asynchronous program will process the queued notification.</li>
+<li><strong>Web Requests</strong>: Since Webhooks are essentially Web Requests, you have to make sure that your recipient responds in a timely manner (10 seconds).</li>
 </ul>
+<p>If a timeout occurs multiple times, the subscription will be more than likely deleted by Microsoft Graph. In order to reduce the response delay, you have to perform the minimal possible task when receiving the notification. your recipient should rather store or queue the notification and reply to the HTTP request. In turn, another asynchronous program will process the queued notification.</p>
 <h2 id="a-basic-webhook-implementation">A basic Webhook Implementation</h2>
 <p>Let's see how we can do a very basic implementation of a Microsoft Graph Webhook! In order to have an hands-on experience with this sample, you will need to have the sufficient privileges on Microsoft Graph (The best is to have a dev tenant with global admin rights ! ;) ) as well as an Azure valid subscription because we will use an Azure Function as our notified endpoint. As a sample scenario, we will subscribe to added events to our personal calendar, The Azure Function will simply output the received notification to the log console.</p>
 <h3 id="our-notification-endpoint-azure-function">Our notification endpoint (Azure Function)</h3>
@@ -319,7 +328,9 @@ Make sure you signed in with your account.</p>
 <h3 id="lets-test-it">Let's test it !</h3>
 <p>Open your outlook calendar and add a new event, after a few seconds, you should see in your Azure Function logs something like <img src="/images/2020/01/azure-function-notificationbody.png" alt="Azure-Function-NotificationBody" /></p>
 <h2 id="conclusion">Conclusion</h2>
-<p>Now, you know the fundamentals of creating subscriptions in Microsoft Graph! What's next ? In Part II of this post series, we will go a bit deeper and see how to develop a Webhook with proper dev tools and will try to address some of the concerns mentioned above, handling the subscription lifetime and queuing the notifications for asynchronous processing. I hope you enjoyed reading this and then I got your interest to come back read part II soon ;)   Cheers, Yannick</p>
+<p>Now, you know the fundamentals of creating subscriptions in Microsoft Graph! What's next ? In Part II of this post series, we will go a bit deeper and see how to develop a Webhook with proper dev tools and will try to address some of the concerns mentioned above, handling the subscription lifetime and queuing the notifications for asynchronous processing. I hope you enjoyed reading this and then I got your interest to come back read part II soon ;)</p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>

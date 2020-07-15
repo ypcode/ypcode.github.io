@@ -60,10 +60,10 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Be schizophrenic at debugging SPFx too ! (Edge Canary - revision)" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/08/be-schizophrenic-debugging-spfx-too-edgecanary-rev" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg" />
+        <meta property="og:image" content="/images/2019/08/edge_canary_config01.png" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-08-23 08:32:28Z" />
-        <meta property="article:modified_time" content="2019-08-23 08:32:28Z" />
+        <meta property="article:modified_time" content="2020-07-15 11:20:00Z" />
                 <meta property="article:tag" content="Debugging" />
                 <meta property="article:tag" content="HTML" />
                 <meta property="article:tag" content="JavaScript" />
@@ -77,7 +77,7 @@
         <meta name="twitter:title" content="Be schizophrenic at debugging SPFx too ! (Edge Canary - revision)" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/08/be-schizophrenic-debugging-spfx-too-edgecanary-rev" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg" />
+            <meta name="twitter:image" content="/images/2019/08/edge_canary_config01.png" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Debugging, HTML, JavaScript, JS, Microsoft Edge Canary, SharePoint, SharePoint Framework, SPFx, TypeScript, VSCode" />
         <meta name="twitter:site" content="@yp_code" />
@@ -205,41 +205,56 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/08/edge_canary_config01.png" alt="Be schizophrenic at debugging SPFx too ! (Edge Canary - revision)" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint devs, A few months ago, I wrote this article about being able to manage your user profiles for SPFx debugging purposes using VSCode and Google Chrome. You might have heard about this new revamp of Microsoft Edge now based on Chromium (the Open Source core of Google Chrome), It is currently still in preview under the codename &quot;Canary&quot;. So far, I haven't ran into any major issue using it and, I really like it, the best of what I liked in Chrome but Microsoft oriented. I dream about when it will become the standard browser in corporations ! Anyway, since it is based on Chromium, it brings the awesome feature of profiles which I think we probably are all using in Chrome ! That means we can leverage the same kind of tricks to use it as browser when debugging with VSCode ! In order to be as concrete as possible, I copy pasted the section of my previous article here under and will update the relevant pieces according to Edge Canary</p>
+        <p>Hi SharePoint devs,</p>
+<p>A few months ago, I wrote this article about being able to manage your user profiles for SPFx debugging purposes using VSCode and Google Chrome. You might have heard about this new revamp of Microsoft Edge now based on Chromium (the Open Source core of Google Chrome), It is currently still in preview under the codename &quot;Canary&quot;. So far, I haven't ran into any major issue using it and, I really like it, the best of what I liked in Chrome but Microsoft oriented. I dream about when it will become the standard browser in corporations ! Anyway, since it is based on Chromium, it brings the awesome feature of profiles which I think we probably are all using in Chrome ! That means we can leverage the same kind of tricks to use it as browser when debugging with VSCode ! In order to be as concrete as possible, I copy pasted the section of my previous article here under and will update the relevant pieces according to Edge Canary</p>
 <h2 id="the-idea-multiple-profiles-for-debugging-in-various-user-scenarios">The idea : Multiple profiles for debugging in various user scenarios</h2>
-<p>On the Microsoft Docs, you can find a procedure that explains <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/debug-in-vscode">how to setup a debugging environment using VSCode</a> and Chrome (or Edge). The technique explained further relies on <strong>Edge Canary</strong> profiles so, basically, we can follow either Chrome or Edge procedure. If you have never seen this article before,  reading it will help you better understand what follows. The important part here is that you install the &quot;Debugger for Edge&quot; extension that <strong>supports both EdgeHTML and Chromium</strong> variants of Edge Basically, in <strong><em>.vscode\launch.json</em></strong> file, you can add and edit debug configurations, by default you have 2 entries &quot;Local Workbench&quot; to debug locally and &quot;Hosted Workbench&quot; to debug your solution within the Workbench hosted on SharePoint (so you can really interact with SharePoint APIs) <img src="https://ypcode.files.wordpress.com/2019/02/debug_workbench.png" alt="debug_workbench" /> First we need to run <strong>gulp serve --nobrowser</strong> in order to serve locally the solution to debug. If you give that &quot;Hosted Workbench&quot; a try (you need to select it in the debug pane) and press F5 or click the &quot;Play&quot; button in VSCode. Chrome opens up in incognito mode, and obviously prompts you for logging in. <img src="https://ypcode.files.wordpress.com/2019/02/incognito_login.png" alt="incognito_login" /> Since you are in incognito mode, none of your preferences, sessions, history will be kept, which means, that when you stop debugging and restart, you have once again to log in.</p>
+<p>On the Microsoft Docs, you can find a procedure that explains <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/debug-in-vscode">how to setup a debugging environment using VSCode</a> and Chrome (or Edge).</p>
+<p>The technique explained further relies on <strong>Edge Canary</strong> profiles so, basically, we can follow either Chrome or Edge procedure. If you have never seen this article before,  reading it will help you better understand what follows. The important part here is that you install the &quot;Debugger for Edge&quot; extension that <strong>supports both EdgeHTML and Chromium</strong> variants of Edge Basically, in <strong><em>.vscode\launch.json</em></strong> file, you can add and edit debug configurations, by default you have 2 entries &quot;Local Workbench&quot; to debug locally and &quot;Hosted Workbench&quot; to debug your solution within the Workbench hosted on SharePoint (so you can really interact with SharePoint APIs)</p>
+<p><img src="/images/2019/02/debug_workbench.png" alt="debug_workbench" /></p>
+<p>First we need to run <strong>gulp serve --nobrowser</strong> in order to serve locally the solution to debug. If you give that &quot;Hosted Workbench&quot; a try (you need to select it in the debug pane) and press F5 or click the &quot;Play&quot; button in VSCode. Chrome opens up in incognito mode, and obviously prompts you for logging in.</p>
+<p><img src="/images/2019/02/incognito_login.png" alt="incognito_login" /></p>
+<p>Since you are in incognito mode, none of your preferences, sessions, history will be kept, which means, that when you stop debugging and restart, you have once again to log in.</p>
 <h2 id="hey-arent-we-supposed-to-talk-about-edge-canary">Hey, aren't we supposed to talk about Edge Canary ?</h2>
-<p>You're right, let's switch to it right now ! <img src="https://ypcode.files.wordpress.com/2019/08/canary-profiles.png" alt="canary-profiles" />In my Microsoft Edge canary settings, I have a bunch of profiles I use for my various accounts, They keep persisted sessions, cookies, passwords, etc... First of all, we will change our configuration to use Microsoft Edge Canary instead. In order to do that, in the .vscode\launch.json file replace the type value of the debug configuration you want from &quot;<strong>chrome</strong>&quot; to &quot;<strong>edge</strong>&quot;, but this will make you use the EdgeHTML version (the initial version of Edge), to use the Canary version, you will need to set also another <strong>version</strong> property set to &quot;<strong>canary</strong>&quot;. Maybe I missed an important part... make sure you have Microsoft Edge Canary version properly installed :D ! You can get it there <a href="https://www.microsoftedgeinsider.com/en-us/download">https://www.microsoftedgeinsider.com/en-us/download</a> You will also have to update the remote debug port to <em><strong>2015</strong></em> that is the one used by edge and just FYI, the <strong>-incognito</strong> option switch of Google Chrome is now called <strong>-inPrivate</strong> but we won't use it ! The first update of a debug configuration in the launch.json file should look like</p>
-<blockquote>
-<p>{</p>
-<p>&quot;name&quot;:&quot;Hosted workbench&quot;,</p>
-<p>&quot;type&quot;:&quot;edge&quot;,</p>
-<p>&quot;version&quot;:&quot;canary&quot;,</p>
-<p>&quot;request&quot;:&quot;launch&quot;,</p>
-<p>&quot;url&quot;:&quot;https://pvxdev.sharepoint.com/sites/labs/_layouts/workbench.aspx&quot;,</p>
-<p workspaceRoot="">&quot;webRoot&quot;:&quot;$&quot;,</p>
-<p>&quot;sourceMaps&quot;:true,</p>
-<p>&quot;sourceMapPathOverrides&quot;:{</p>
-<p webRoot="">&quot;webpack:///.././src/<em>&quot;:&quot;$/src/</em>&quot;,</p>
-<p webRoot="">&quot;webpack:///../../../src/<em>&quot;:&quot;$/src/</em>&quot;,</p>
-<p webRoot="">&quot;webpack:///../../../../src/<em>&quot;:&quot;$/src/</em>&quot;,</p>
-<p webRoot="">&quot;webpack:///../../../../../src/<em>&quot;:&quot;$/src/</em>&quot;</p>
-<p>},</p>
-<p>&quot;runtimeArgs&quot;:[</p>
-<p>&quot;--remote-debugging-port=2015&quot;,</p>
-<p>&quot;-inPrivate&quot;</p>
-<p>]</p>
-<p>}</p>
-</blockquote>
+<p>You're right, let's switch to it right now !</p>
+<p><img src="/images/2019/08/canary-profiles.png" alt="canary-profiles" /></p>
+<p>In my Microsoft Edge canary settings, I have a bunch of profiles I use for my various accounts, They keep persisted sessions, cookies, passwords, etc... First of all, we will change our configuration to use Microsoft Edge Canary instead. In order to do that, in the .vscode\launch.json file replace the type value of the debug configuration you want from &quot;<strong>chrome</strong>&quot; to &quot;<strong>edge</strong>&quot;, but this will make you use the EdgeHTML version (the initial version of Edge), to use the Canary version, you will need to set also another <strong>version</strong> property set to &quot;<strong>canary</strong>&quot;. Maybe I missed an important part... make sure you have Microsoft Edge Canary version properly installed :D ! You can get it there <a href="https://www.microsoftedgeinsider.com/en-us/download">https://www.microsoftedgeinsider.com/en-us/download</a></p>
+<p>You will also have to update the remote debug port to <em><strong>2015</strong></em> that is the one used by edge and just FYI, the <strong>-incognito</strong> option switch of Google Chrome is now called <strong>-inPrivate</strong> but we won't use it !</p>
+<p>The first update of a debug configuration in the launch.json file should look like</p>
+<pre><code class="language-json">{
+ &quot;name&quot;:&quot;Hosted workbench&quot;,
+ &quot;type&quot;:&quot;edge&quot;,
+ &quot;version&quot;:&quot;canary&quot;,
+ &quot;request&quot;:&quot;launch&quot;,
+ &quot;url&quot;:&quot;https://tenant.sharepoint.com/sites/labs/_layouts/workbench.aspx&quot;,
+ &quot;webRoot&quot;:&quot;${workspaceRoot}&quot;,
+ &quot;sourceMaps&quot;:true,
+ &quot;sourceMapPathOverrides&quot;:{
+ &quot;webpack:///.././src/*&quot;:&quot;${webRoot}/src/*&quot;,
+ &quot;webpack:///../../../src/*&quot;:&quot;${webRoot}/src/*&quot;,
+ &quot;webpack:///../../../../src/*&quot;:&quot;${webRoot}/src/*&quot;,
+ &quot;webpack:///../../../../../src/*&quot;:&quot;${webRoot}/src/*&quot;
+ },
+ &quot;runtimeArgs&quot;: [
+ &quot;--remote-debugging-port=2015&quot;,
+ &quot;-inPrivate&quot;
+ ] 
+}
+</code></pre>
 <p>Okay, now we can run Edge Canary as our browser for debugging, but you already probably noticed that every time you start a new debug &quot;session&quot;, you loose every preferences and settings ?</p>
 <h3 id="the-chrome-edge-canary-chromium-user-data-directory">The Chrome Edge Canary (Chromium) User Data Directory</h3>
-<p>Edge Canary keeps all those profiles information in the local app data of your user <em><strong>%USERPROFILE%\AppData\Local\Microsoft\Edge SxS\User Data</strong></em> <img src="https://ypcode.files.wordpress.com/2019/08/default_canary_userdata.png" alt="default_canary_userdata" /> Yes, they are all named &quot;Profile X&quot; but they really contain the data of the profiles I gave names to in Chrome Edge Canary. So why can't we see them when debugging with VS Code ? If you check out the other possible entries of the config, you'll see something interesting <img src="https://ypcode.files.wordpress.com/2019/02/launch_json_userdatadir.png" alt="launch_json_userdatadir" /> This <em><strong>userDataDir</strong></em> property default value is <strong><em>true</em></strong> which means VSCode will always recreate a temporary user directory and not use the one in your AppData. Let's play with this setting, let's try with a value set to <strong><em>false</em></strong>. Hey that seems to work, it opens up a new tab in my current Chrome Edge Canary session ! But wait... Yeah, that was too easy, after 10 secs, I get the following in VS Code <img src="https://ypcode.files.wordpress.com/2019/02/debug_connect_error_vscode.png" alt="debug_connect_error_vscode" /> After a bit of searching, I learned it is actually some kind of limitation in Chromium, the --remote-debugging option cannot be used on the default Chromium &quot;scope&quot; if any browser window has been previously opened... Well, that is most likely the case, except if you use a different browser to read documentations etc...</p>
+<p>Edge Canary keeps all those profiles information in the local app data of your user <em><strong>%USERPROFILE%\AppData\Local\Microsoft\Edge SxS\User Data</strong></em></p>
+<p><img src="/images/2019/08/default_canary_userdata.png" alt="default_canary_userdata" /></p>
+<p>Yes, they are all named &quot;Profile X&quot; but they really contain the data of the profiles I gave names to in Chrome Edge Canary. So why can't we see them when debugging with VS Code ? If you check out the other possible entries of the config, you'll see something interesting !</p>
+<p><a href="/images/2019/02/launch_json_userdatadir.png">launch_json_userdatadir</a></p>
+<p>This <em><strong>userDataDir</strong></em> property default value is <strong><em>true</em></strong> which means VSCode will always recreate a temporary user directory and not use the one in your AppData. Let's play with this setting, let's try with a value set to <strong><em>false</em></strong>. Hey that seems to work, it opens up a new tab in my current Chrome Edge Canary session ! But wait... Yeah, that was too easy, after 10 secs, I get the following in VS Code</p>
+<p><a href="/images/2019/02/debug_connect_error_vscode.png">debug_connect_error_vscode</a></p>
+<p>After a bit of searching, I learned it is actually some kind of limitation in Chromium, the --remote-debugging option cannot be used on the default Chromium &quot;scope&quot; if any browser window has been previously opened... Well, that is most likely the case, except if you use a different browser to read documentations etc...</p>
 <h2 id="so-we-cannot-use-our-usual-edge-canary-profiles">So we cannot use our usual Edge Canary profiles</h2>
-<p>Basically, That's correct, we cannot use our default Chrome profiles configuration for debugging, at least, not easily... I guess it would be possible to hack the config files and copy/paste the profile directories... But I would not do that because I am pretty sure it will, one way or another, ruin my existing configuration :D Okay, but can't we have another persisted configuration at least ? <strong>YES WE CAN !</strong> And that is exactly what we are going to do, the <strong>userDataDir</strong> option can actually take 3 types of value:</p>
+<p>Basically, that's correct, we cannot use our default Chrome profiles configuration for debugging, at least, not easily... I guess it would be possible to hack the config files and copy/paste the profile directories... But I would not do that because I am pretty sure it will, one way or another, ruin my existing configuration :D Okay, but can't we have another persisted configuration at least ? <strong>YES WE CAN !</strong> And that is exactly what we are going to do, the <strong>userDataDir</strong> option can actually take 3 types of value:</p>
 <ul>
 <li>true: Use the &quot;global&quot; Chrome user data directory</li>
 <li>false: Recreate a temporary user data directory</li>
@@ -252,15 +267,189 @@
 </ul>
 <p>Let's go for the shared folder.</p>
 <h2 id="initialize-a-new-user-data-and-profiles">Initialize a new user data (and profiles)</h2>
-<p>From a cmd prompt, type, for instance, the following command <strong><em>&gt; start msedge --user-data-dir=&quot;C:\Workspace\tools\edge-canary-dev-userdata&quot;</em></strong> You might probably want to update the path <strong><em>C:\Workspace\tools\edge-canary-dev-userdata</em></strong> by something that is relevant on your computer You can specify whatever folder path you want (even not existing), you can see a new Edge Canary instance opening, you can also check the path you specified to see it has been initialized with a bunch of files. In that new instance, you can manage profiles and create the ones you want. You can also already login to your tenant using the different user profiles you want or prepare any profile specific configuration ! <img src="https://ypcode.files.wordpress.com/2019/08/console_start_new_canary.png" alt="console_start_new_canary" />   <img src="https://ypcode.files.wordpress.com/2019/08/edge_canary_config02.png" alt="edge_canary_config02" />   <img src="https://ypcode.files.wordpress.com/2019/02/debug_with_userdir.png" alt="debug_with_userdir" /> We can now set the <em><strong>userDataDir</strong></em> value to the path of our new folder, hit F5 and ... Cool ! that works, it takes the context with my created profiles. Let's try to go a bit further !</p>
+<p>From a cmd prompt, type, for instance, the following command</p>
+<pre><code class="language-powershell">start msedge --user-data-dir=&quot;C:\\Workspace\\tools\\edge-canary-dev-userdata&quot;
+</code></pre>
+<p>You might probably want to update the path <strong><em>C:\Workspace\tools\edge-canary-dev-userdata</em></strong> by something that is relevant on your computer You can specify whatever folder path you want (even not existing), you can see a new Edge Canary instance opening, you can also check the path you specified to see it has been initialized with a bunch of files. In that new instance, you can manage profiles and create the ones you want. You can also already login to your tenant using the different user profiles you want or prepare any profile specific configuration !</p>
+<p><img src="/images/2019/08/console_start_new_canary.png" alt="console_start_new_canary" />
+<img src="/images/2019/08/edge_canary_config02.png" alt="edge_canary_config02" />
+<img src="/images/2019/02/debug_with_userdir.png" alt="debug_with_userdir" /></p>
+<p>We can now set the <em><strong>userDataDir</strong></em> value to the path of our new folder, hit F5 and ... Cool ! that works, it takes the context with my created profiles. Let's try to go a bit further !</p>
 <h2 id="specify-profile-in-debug-config">Specify profile in debug config</h2>
-<p>It is actually possible to specify the profile to use in the Chrome command line using the <strong><em>--profile-directory=Profile 3</em></strong> switch. As you can see you have to specify the name of the folder which is not the name you gave to the profiles, By exploring them, you probably can determine what folder matches what profile. An easiest way is to check out the _<strong>Local State</strong> _file in the new User Data Dir that is a JSON file that contains many config entries as well as the profiles. It will be trimmed and most likely unreadable, you will need to apply some formatting (e.g. using VS code built-in JSON formatting). You can also use this little PowerShell script I wrote that will return the matching values. It takes a single argument that is the path to the user data directory, again, by default I set some value that is relevant on my own machine. Feel free to update it according to your needs! <a href="https://gist.github.com/ypcode/5138f5193edb3c6db63a28cb0822a71f">https://gist.github.com/ypcode/5138f5193edb3c6db63a28cb0822a71f</a> And get the following result <img src="https://ypcode.files.wordpress.com/2019/02/mapping_profiles.png" alt="mapping_profiles" /> See how I can extract values from a complex JSON file ? Oh God, I LOVE PowerShell, let's do some more ! Put the following script in the same folder as the previous one <a href="https://gist.github.com/ypcode/f2618e3a6bd82384d368bb1ea45434a0">https://gist.github.com/ypcode/f2618e3a6bd82384d368bb1ea45434a0</a> And call it, for instance, with these arguments:</p>
-<blockquote>
-<p><em><strong>.\GenerateDebugProfilesLaunchConfig-MSEdgeCanary.ps1 -ConfigBaseName &quot;DevProfile &quot; -Url <a href="https://pvxdev.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx">https://pvxdev.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx</a> | Clip</strong></em></p>
-</blockquote>
-<p>Update the URL of your tenant and page (it can be the workbench or any other page), you'll notice this command output is piped to Clip, which means the result is automatically put into your clipboard. You then simply have to paste it into your <strong><em>launch.json</em></strong> file and save it, if you want to keep existing configuration as well, you will have to fix the JSON format <a href="https://gist.github.com/ypcode/c5eb2ee59d0e9085292a7e88d1d29c3b">https://gist.github.com/ypcode/c5eb2ee59d0e9085292a7e88d1d29c3b</a> Go to the debug pane and see the new debug configurations <img src="https://ypcode.files.wordpress.com/2019/08/debug_configs.png" alt="debug_configs" /> Select a config and start debugging, you already logged in with you pre-configured session and it will keep whatever you save in these profiles !</p>
+<p>It is actually possible to specify the profile to use in the Chrome command line using the <strong><em>--profile-directory=Profile 3</em></strong> switch. As you can see you have to specify the name of the folder which is not the name you gave to the profiles, By exploring them, you probably can determine what folder matches what profile. An easiest way is to check out the _<strong>Local State</strong> _file in the new User Data Dir that is a JSON file that contains many config entries as well as the profiles. It will be trimmed and most likely unreadable, you will need to apply some formatting (e.g. using VS code built-in JSON formatting). You can also use this little PowerShell script I wrote that will return the matching values. It takes a single argument that is the path to the user data directory, again, by default I set some value that is relevant on my own machine. Feel free to update it according to your needs!</p>
+<pre><code class="language-powershell">param(     [string]$UserDataDir=&quot;C:\workspace\tools\edge-canary-dev-userdata&quot; )  $localStateJson = Get-Content &quot;$UserDataDir\Local State&quot; $localState = $localStateJson | ConvertFrom-Json $profileKeys = $localState.profile.info_cache | Get-Member | ? {$_.MemberType -eq &quot;NoteProperty&quot;} $infoCache = $localState.profile.info_cache  $allEntries = @() ForEach($key in $profileKeys) {     $profile = $key.Name     $profileDisplayName = $infoCache.&quot;$profile&quot;.name     $newEntry = @{         Profile=$profile;         Name=$profileDisplayName;     };       $allEntries += $newEntry }  $allEntries
+</code></pre>
+<p>And get the following result</p>
+<p><img src="/images/2019/02/mapping_profiles.png" alt="mapping_profiles" /></p>
+<p>See how I can extract values from a complex JSON file ? Oh God, I LOVE PowerShell, let's do some more ! Put the following script in the same folder as the previous one</p>
+<pre><code class="language-powershell">param(
+    [string]$ConfigBaseName = &quot;Dev Profile &quot;,
+    [string]$Url = &quot;https://your.sharepoint.com/sites/test/_layouts/workbench.aspx&quot;,
+    [string]$UserDataDir = &quot;C:\workspace\tools\edge-canary-dev-userdata&quot;
+)
+
+# Get the profiles
+$profiles = .\Get-EdgeCanaryVSCodeDebugProfiles.ps1 -UserDataDir $UserDataDir
+
+$allConfigs = @()
+ForEach ($profile in $profiles) {
+    $profileName = $profile.Name
+    $profileKey = $profile.Profile
+    $newLaunchConfig = New-Object -TypeName psobject
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;name&quot; -Value $configBaseName$profileName
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;type&quot; -Value &quot;edge&quot;
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;version&quot; -Value &quot;canary&quot;
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;request&quot; -Value &quot;launch&quot;
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;url&quot; -Value $url
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;webRoot&quot; -Value &quot;`${workspaceRoot}&quot;
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;sourceMaps&quot; -Value $True
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;userDataDir&quot; -Value $userDataDir
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;sourceMapPathOverrides&quot; -Value @{
+        &quot;webpack:///.././src/*&quot;           = &quot;`${webRoot}/src/*&quot;;
+        &quot;webpack:///../../../src/*&quot;       = &quot;`${webRoot}/src/*&quot;;
+        &quot;webpack:///../../../../src/*&quot;    = &quot;`${webRoot}/src/*&quot;;
+        &quot;webpack:///../../../../../src/*&quot; = &quot;`${webRoot}/src/*&quot;;
+    }
+    $newLaunchConfig | Add-Member -MemberType NoteProperty -Name &quot;runtimeArgs&quot; -Value @( &quot;--remote-debugging-port=2015&quot;, &quot;--profile-directory=$profileKey&quot;)
+
+    $allConfigs += $newLaunchConfig
+}
+
+$allConfigs | ConvertTo-Json
+</code></pre>
+<p>And call it, for instance, with these arguments:</p>
+<pre><code class="language-powershell">.\GenerateDebugProfilesLaunchConfig-MSEdgeCanary.ps1 -ConfigBaseName &quot;DevProfile &quot; -Url https://tenant.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx | Clip
+</code></pre>
+<p>Update the URL of your tenant and page (it can be the workbench or any other page), you'll notice this command output is piped to Clip, which means the result is automatically put into your clipboard. You then simply have to paste it into your <strong><em>launch.json</em></strong> file and save it, if you want to keep existing configuration as well, you will have to fix the JSON format</p>
+<pre><code class="language-json">{
+    &quot;version&quot;: &quot;0.2.0&quot;,
+    &quot;configurations&quot;: [
+        {
+            &quot;name&quot;: &quot;Local workbench&quot;,
+            &quot;type&quot;: &quot;chrome&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://localhost:4321/temp/workbench.html&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=9222&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;Hosted workbench&quot;,
+            &quot;type&quot;: &quot;edge&quot;,
+            &quot;version&quot;: &quot;canary&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://tenant.sharepoint.com/sites/labs/_layouts/workbench.aspx&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=2015&quot;,
+                &quot;-inPrivate&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;DevProfile Owner&quot;,
+            &quot;type&quot;: &quot;edge&quot;,
+            &quot;version&quot;: &quot;canary&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://tenant.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;userDataDir&quot;: &quot;C:\\workspace\\tools\\edge-canary-dev-userdata&quot;,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=2015&quot;,
+                &quot;--profile-directory=Profile 1&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;DevProfile Member&quot;,
+            &quot;type&quot;: &quot;edge&quot;,
+            &quot;version&quot;: &quot;canary&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://tenant.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;userDataDir&quot;: &quot;C:\\workspace\\tools\\edge-canary-dev-userdata&quot;,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=2015&quot;,
+                &quot;--profile-directory=Profile 2&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;DevProfile Visitor&quot;,
+            &quot;type&quot;: &quot;edge&quot;,
+            &quot;version&quot;: &quot;canary&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://tenant.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;userDataDir&quot;: &quot;C:\\workspace\\tools\\edge-canary-dev-userdata&quot;,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=2015&quot;,
+                &quot;--profile-directory=Profile 3&quot;
+            ]
+        },
+        {
+            &quot;name&quot;: &quot;DevProfile Guest Access&quot;,
+            &quot;type&quot;: &quot;edge&quot;,
+            &quot;version&quot;: &quot;canary&quot;,
+            &quot;request&quot;: &quot;launch&quot;,
+            &quot;url&quot;: &quot;https://tenant.sharepoint.com/sites/labs/SitePages/Lab-testing.aspx&quot;,
+            &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+            &quot;sourceMaps&quot;: true,
+            &quot;userDataDir&quot;: &quot;C:\\workspace\\tools\\edge-canary-dev-userdata&quot;,
+            &quot;sourceMapPathOverrides&quot;: {
+                &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+                &quot;webpack:///.././src/*&quot;: &quot;${webRoot}/src/*&quot;
+            },
+            &quot;runtimeArgs&quot;: [
+                &quot;--remote-debugging-port=2015&quot;,
+                &quot;--profile-directory=Profile 4&quot;
+            ]
+        }
+    ]
+}
+</code></pre>
+<p>Go to the debug pane and see the new debug configurations</p>
+<p><img src="/images/2019/08/debug_configs.png" alt="debug_configs" /></p>
+<p>Select a config and start debugging, you already logged in with you pre-configured session and it will keep whatever you save in these profiles !</p>
 <h2 id="thats-it">That's it</h2>
-<p>Happy to share the technique <strong>ALSO with EDGE CANARY</strong>, If you have ideas to improve it and concerns that I missed, please, let me know ! Cheers ! Yannick</p>
+<p>Happy to share the technique <strong>ALSO with EDGE CANARY</strong>, If you have ideas to improve it and concerns that I missed, please, let me know !</p>
+<p>Cheers !</p>
+<p>Yannick</p>
 
     </div>
 </div>

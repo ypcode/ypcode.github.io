@@ -26,6 +26,11 @@ p {
   margin-top: 15px;
 }
 
+table {
+  width: 90%;
+  margin: auto;
+}
+
 .stick-container {
   position: relative;
 }

@@ -211,7 +211,7 @@
 <li>Postman</li>
 </ul>
 <h2 id="setup-the-app-credentials-and-permissions">Setup the app credentials and permissions</h2>
-<p>In order to setup the app credentials and permissions, you first need to go to the app registration page: <em><strong><a href="https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx">https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx</a></strong></em> <img src="https://ypcode.files.wordpress.com/2017/09/register-app.png" alt="register-app" /></p>
+<p>In order to setup the app credentials and permissions, you first need to go to the app registration page: <em><strong><a href="https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx">https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx</a></strong></em> <img src="/images/2017/09/register-app.png" alt="register-app" /></p>
 <ol>
 <li>Click the <strong>Generate</strong> button next to the Client Id field to generate a new one.</li>
 <li>Click the <strong>Generate</strong> button next to the Client Secret field to generate a new one.</li>
@@ -220,7 +220,7 @@
 <li>Set the Redirect URL to https://localhost</li>
 <li>Click the <strong>Create</strong> button</li>
 </ol>
-<p>( * bullets 4 &amp; 5 values don't really matter but the UI will not validate them if they have an incorrect format) <img src="https://ypcode.files.wordpress.com/2017/09/clientid_clientsecret.png" alt="clientid_clientsecret" /> Keep safely the Client Id and Client Secret values because you will never be able to recover the secret if you lose it. Then you need to set the permissions for this app <em><strong><a href="https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx">https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx</a></strong></em> <img src="https://ypcode.files.wordpress.com/2017/09/app-permissions.png" alt="app-permissions" /></p>
+<p>( * bullets 4 &amp; 5 values don't really matter but the UI will not validate them if they have an incorrect format) <img src="/images/2017/09/clientid_clientsecret.png" alt="clientid_clientsecret" /> Keep safely the Client Id and Client Secret values because you will never be able to recover the secret if you lose it. Then you need to set the permissions for this app <em><strong><a href="https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx">https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx</a></strong></em> <img src="/images/2017/09/app-permissions.png" alt="app-permissions" /></p>
 <ul>
 <li>
 <ol>
@@ -238,7 +238,7 @@
 </ol>
 </li>
 </ul>
-<p><a href="https://gist.github.com/ypcode/0db7e84e8e3c102140f3950ffc259eb9">https://gist.github.com/ypcode/0db7e84e8e3c102140f3950ffc259eb9</a></p>
+<p><code>\n&lt;AppPermissionRequests AllowAppOnlyPolicy=&quot;true&quot;&gt;   &lt;AppPermissionRequest Scope=&quot;http://sharepoint/content/sitecollection/web&quot; Right=&quot;FullControl&quot;/&gt; &lt;/AppPermissionRequests&gt;\n</code></p>
 <ul>
 <li>
 <ol start="4">
@@ -246,11 +246,11 @@
 </ol>
 </li>
 </ul>
-<p><img src="https://ypcode.files.wordpress.com/2017/09/trust.png" alt="trust" /> Check the application requires the permission you expect it to and click the <em><strong>Trust it</strong></em> button.</p>
+<p><img src="/images/2017/09/trust.png" alt="trust" /> Check the application requires the permission you expect it to and click the <em><strong>Trust it</strong></em> button.</p>
 <h2 id="get-the-access-token">Get the access token</h2>
-<p>In order to use Postman to call the REST API, you need to include the proper access token. With PnP PowerShell, you can get the app access token if you're connected using app credentials <a href="https://gist.github.com/ypcode/b3a08f88e04ddbcc346868ff9d056c42">https://gist.github.com/ypcode/b3a08f88e04ddbcc346868ff9d056c42</a> These commands above will connect you to your site with app credentials and copy the access token to the clipboard.</p>
+<p>In order to use Postman to call the REST API, you need to include the proper access token. With PnP PowerShell, you can get the app access token if you're connected using app credentials <code>\nConnect-PnPOnline https://&lt;your-tenant&gt;.sharepoint.com/sites/&lt;your-site&gt; -AppId &lt;your_client_id&gt; -AppSecret &lt;your_client_secret&gt; Get-PnPAppAuthAccessToken | Clip\n</code> These commands above will connect you to your site with app credentials and copy the access token to the clipboard.</p>
 <h2 id="issue-requests-with-postman">Issue requests with Postman</h2>
-<p><img src="https://ypcode.files.wordpress.com/2017/09/postman1.png" alt="postman" /></p>
+<p><img src="/images/2017/09/postman1.png" alt="postman" /></p>
 <ol>
 <li>Select the proper REST API URL</li>
 <li>Set the <em><strong>Authorization</strong></em> header with a value &quot;<em><strong>Bearer #YOUR-TOKEN#</strong></em>&quot;. Replace #YOUR-TOKEN# by the value you have in the clipboard.</li>

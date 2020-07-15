@@ -60,10 +60,10 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Be schizophrenic at debugging SPFx too !" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/02/be-schizophrenic-debugging-spfx-too" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg" />
+        <meta property="og:image" content="/images/2019/02/debugging_chrome_profiles.png" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-02-08 15:03:49Z" />
-        <meta property="article:modified_time" content="2019-02-08 15:03:49Z" />
+        <meta property="article:modified_time" content="2020-07-14 11:45:00Z" />
                 <meta property="article:tag" content="Chrome" />
                 <meta property="article:tag" content="JS" />
                 <meta property="article:tag" content="Office 365" />
@@ -78,7 +78,7 @@
         <meta name="twitter:title" content="Be schizophrenic at debugging SPFx too !" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/02/be-schizophrenic-debugging-spfx-too" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg" />
+            <meta name="twitter:image" content="/images/2019/02/debugging_chrome_profiles.png" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Chrome, JS, Office 365, SharePoint, SharePoint Framework, SharePoint Online, SPFx, SPFx extensions, TypeScript, VSCode, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -206,15 +206,36 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/02/debugging_chrome_profiles.png" alt="Be schizophrenic at debugging SPFx too !" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint devs, Quite a while ago, I wrote a blog post <a href="https://ypcode.wordpress.com/2017/10/09/quicktip-be-efficiently-schizophrenic-with-office-365-and-chrome/">QuickTip – Be efficiently schizophrenic with Office 365 and Chrome</a> that explains to those of you who need to deal with multiple tenants how you can easily switch from an account to another. Since then, I had in mind to do something similar with SPFx solutions debugging, after an unsuccessful mere try., I didn't really spend more time on it since, at the time, it was not part of my immediate needs. Obviously, that day arrived that it became really useful for me. I then went a bit deeper into it and came up with a solution I am starting to use. This solution is done and tested on Windows 10 only but I think the concept would be quite the same on Linux or Mac. I did not try it, if you do so, let met know ! Also, I only start to use this technique, I did not get into any issues using it so far, but maybe I missed some issues that it might cause,  so, if you encounter or foresee any, let me know !</p>
+        <p>Hi SharePoint devs, Quite a while ago, I wrote a blog post <a href="/posts/2017/10/quicktip-be-efficiently-schizophrenic-office-365-chrome/">QuickTip – Be efficiently schizophrenic with Office 365 and Chrome</a> that explains to those of you who need to deal with multiple tenants how you can easily switch from an account to another.</p>
+<p>Since then, I had in mind to do something similar with SPFx solutions debugging, after an unsuccessful mere try,
+I didn't really spend more time on it since, at the time, it was not part of my immediate needs.
+Obviously, that day arrived that it became really useful for me. I then went a bit deeper into it and came up with a solution I am starting to use.
+This solution is done and tested on Windows 10 only but I think the concept would be quite the same on Linux or Mac *I did not try it, if you do so, let met know ! Also, I only start to use this technique, I did not get into any issues using it so far, but maybe I missed some issues that it might cause,  so, if you encounter or foresee any, let me know !</p>
 <h2 id="the-idea-multiple-profiles-for-debugging-in-various-user-scenarios">The idea : Multiple profiles for debugging in various user scenarios</h2>
-<p>On the Microsoft Docs, you can find a procedure that explains <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/debug-in-vscode">how to setup a debugging environment using VSCode</a> and Chrome (or Edge). The technique explained further relies on Chrome profiles so we will follow the according procedure. If you have never seen this article before,  reading it will help you better understand what follows. Basically, in <strong><em>.vscode\launch.json</em></strong> file, you can add and edit debug configurations, by default you have 2 entries &quot;Local Workbench&quot; to debug locally and &quot;Hosted Workbench&quot; to debug your solution within the Workbench hosted on SharePoint (so you can really interact with SharePoint APIs) <img src="https://ypcode.files.wordpress.com/2019/02/debug_workbench.png" alt="debug_workbench" /> First we need to run <strong>gulp serve --nobrowser</strong> in order to serve locally the solution to debug. If you give that &quot;Hosted Workbench&quot; a try (you need to select it in the debug pane) and press F5 or click the &quot;Play&quot; button in VSCode. Chrome opens up in incognito mode, and obviously prompts you for logging in. <img src="https://ypcode.files.wordpress.com/2019/02/incognito_login.png" alt="incognito_login" /> Since you are in incognito mode, none of your preferences, sessions, history will be kept, which means, that when you stop debugging and restart, you have once again to log in. <img src="https://ypcode.files.wordpress.com/2019/02/list_profiles.png" alt="list_profiles" />In my chrome settings, I have a bunch of profiles I use for my various accounts, They keep persisted sessions, cookies, passwords, etc... <img src="https://ypcode.files.wordpress.com/2019/02/new_userdir_profiles.png" alt="new_userdir_profiles" />It would be nice to have the same while debugging, Let's see if we can select other profiles in debugging. To do so, the first step is to disable incognito mode since profiles are not supported in that mode . In the launch.json config entry, get rid of the <strong><em>-incognito</em></strong> arguments specified in the <strong><em>runtimeArgs</em></strong> section and hit F5 ! Okay, now we can switch profiles but ... Hey where are all my profiles ?! Let's dig into it !</p>
+<p>On the Microsoft Docs, you can find a procedure that explains <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/debug-in-vscode">how to setup a debugging environment using VSCode</a> and Chrome (or Edge).
+The technique explained further relies on Chrome profiles so we will follow the according procedure. If you have never seen this article before, reading it will help you better understand what follows.
+Basically, in <strong><em>.vscode\launch.json</em></strong> file, you can add and edit debug configurations, by default you have 2 entries &quot;Local Workbench&quot; to debug locally and &quot;Hosted Workbench&quot; to debug your solution within the Workbench hosted on SharePoint (so you can really interact with SharePoint APIs)</p>
+<p><img src="/images/2019/02/debug_workbench.png" alt="debug_workbench" /></p>
+<p>First we need to run <strong>gulp serve --nobrowser</strong> in order to serve locally the solution to debug. If you give that &quot;Hosted Workbench&quot; a try (you need to select it in the debug pane) and press F5 or click the &quot;Play&quot; button in VSCode. Chrome opens up in incognito mode, and obviously prompts you for logging in.</p>
+<p><img src="/images/2019/02/incognito_login.png" alt="incognito_login" /></p>
+<p>Since you are in incognito mode, none of your preferences, sessions, history will be kept, which means, that when you stop debugging and restart, you have once again to log in.</p>
+<p><img src="/images/2019/02/list_profiles.png" alt="list_profiles" /></p>
+<p>In my chrome settings, I have a bunch of profiles I use for my various accounts, They keep persisted sessions, cookies, passwords, etc...</p>
+<p><img src="/images/2019/02/new_userdir_profiles.png" alt="new_userdir_profiles" /></p>
+<p>It would be nice to have the same while debugging, Let's see if we can select other profiles in debugging. To do so, the first step is to disable incognito mode since profiles are not supported in that mode . In the launch.json config entry, get rid of the <strong><em>-incognito</em></strong> arguments specified in the <strong><em>runtimeArgs</em></strong> section and hit F5 !
+Okay, now we can switch profiles but ... Hey where are all my profiles ?! Let's dig into it !</p>
 <h3 id="the-chrome-user-data-directory">The Chrome User Data Directory</h3>
-<p>Chrome keeps all those profiles information in the local app data of your user <strong><em>%USERPROFILE%\AppData\Local\Google\Chrome\User Data</em></strong> <img src="https://ypcode.files.wordpress.com/2019/02/appdata_profiles.png" alt="appdata_profiles" /> Yes, they are all named &quot;Profile X&quot; but they really contain the data of the profiles I gave names to in Chrome. So why does Chrome doesn't see them in debugging with VS Code ? If you check out the other possible entries of the config, you'll see something interesting <img src="https://ypcode.files.wordpress.com/2019/02/launch_json_userdatadir.png" alt="launch_json_userdatadir" /> This <em><strong>userDataDir</strong></em> property default value is <strong><em>true</em></strong> which means VSCode will always recreate a temporary user directory and not use the one in your AppData. Let's play with this setting, let's try with a value set to <strong><em>false</em></strong>. Hey that seems to work, it opens up a new tab in my current Chrome session ! But wait... Yeah, that was too easy, after 10 secs, I get the following in VS Code <img src="https://ypcode.files.wordpress.com/2019/02/debug_connect_error_vscode.png" alt="debug_connect_error_vscode" /> After a bit of searching, I learned it is actually some kind of limitation in Chrome, the --remote-debugging option cannot be used on the default Chrome &quot;scope&quot; if any browser window has been previously opened... Well, that is most likely the case, except if you use a different browser to read documentations etc...</p>
+<p>Chrome keeps all those profiles information in the local app data of your user <strong><em>%USERPROFILE%\AppData\Local\Google\Chrome\User Data</em></strong></p>
+<p><img src="/images/2019/02/appdata_profiles.png" alt="appdata_profiles" /></p>
+<p>Yes, they are all named &quot;Profile X&quot; but they really contain the data of the profiles I gave names to in Chrome. So why does Chrome doesn't see them in debugging with VS Code ? If you check out the other possible entries of the config, you'll see something interesting</p>
+<p><img src="/images/2019/02/launch_json_userdatadir.png" alt="launch_json_userdatadir" /></p>
+<p>This <em><strong>userDataDir</strong></em> property default value is <strong><em>true</em></strong> which means VSCode will always recreate a temporary user directory and not use the one in your AppData. Let's play with this setting, let's try with a value set to <strong><em>false</em></strong>. Hey that seems to work, it opens up a new tab in my current Chrome session ! But wait... Yeah, that was too easy, after 10 secs, I get the following in VS Code</p>
+<p><img src="/images/2019/02/debug_connect_error_vscode.png" alt="debug_connect_error_vscode" /></p>
+<p>After a bit of searching, I learned it is actually some kind of limitation in Chrome, the --remote-debugging option cannot be used on the default Chrome &quot;scope&quot; if any browser window has been previously opened... Well, that is most likely the case, except if you use a different browser to read documentations etc...</p>
 <h2 id="so-we-cannot-use-our-usual-chrome-profiles">So we cannot use our usual Chrome profiles</h2>
 <p>Basically, That's correct, we cannot use our default Chrome profiles configuration for debugging, at least, not easily... Okay, but can't we have another persisted configuration at least ? <strong>YES WE CAN !</strong> And that is exactly what we are going to do, the <strong>userDataDir</strong> option can actually take 3 types of value:</p>
 <ul>
@@ -229,15 +250,133 @@
 </ul>
 <p>Let's go for the shared folder.</p>
 <h2 id="initialize-a-new-user-data-and-profiles">Initialize a new user data (and profiles)</h2>
-<p>From a cmd prompt, type the following command <strong><em>&gt; start chrome --user-data-dir=&quot;C:\Workspace\chrome\dev_user_data&quot;</em></strong> You can specify whatever folder path you want (even not existing), you can see a new Chrome instance opening, you can also check the path you specified to see it has been initialized with a bunch of files. In that new instance, you can manage profiles and create the ones you want. <img src="https://ypcode.files.wordpress.com/2019/02/new_userdir_chrome.png" alt="new_userdir_chrome.png" /> <img src="https://ypcode.files.wordpress.com/2019/02/new_profiles.png" alt="new_profiles" /> <img src="https://ypcode.files.wordpress.com/2019/02/debug_with_userdir.png" alt="debug_with_userdir" /> We can now set the <em><strong>userDataDir</strong></em> value to the path of our new folder, hit F5 and ... Cool ! that works, it takes the context with my created profiles. Let's try to go a bit further !</p>
+<p>From a cmd prompt, type the following command <strong><em>&gt; start chrome --user-data-dir=&quot;C:\Workspace\chrome\dev_user_data&quot;</em></strong> You can specify whatever folder path you want (even not existing), you can see a new Chrome instance opening, you can also check the path you specified to see it has been initialized with a bunch of files. In that new instance, you can manage profiles and create the ones you want.</p>
+<p><img src="/images/2019/02/new_userdir_chrome.png" alt="new_userdir_chrome.png" />
+<img src="/images/2019/02/new_profiles.png" alt="new_profiles" />
+<img src="/images/2019/02/debug_with_userdir.png" alt="debug_with_userdir" /></p>
+<p>We can now set the <em><strong>userDataDir</strong></em> value to the path of our new folder, hit F5 and ... Cool ! that works, it takes the context with my created profiles. Let's try to go a bit further !</p>
 <h2 id="specify-profile-in-debug-config">Specify profile in debug config</h2>
-<p>It is actually possible to specify the profile to use in the Chrome command line using the <strong><em>--profile-directory=Profile 3</em></strong> switch. As you can see you have to specify the name of the folder which is not the name you gave to the profiles, By exploring them, you probably can determine what folder matches what profile. An easiest way is to check out the _<strong>Local State</strong> _file in the new User Data Dir that is a JSON file that contains many config entries as well as the profiles. You can also use this little PowerShell script I wrote that will return the matching values <a href="https://gist.github.com/ypcode/039fc6f32b0b48e20e6cfd9e5610666f">https://gist.github.com/ypcode/039fc6f32b0b48e20e6cfd9e5610666f</a> And get the following result <img src="https://ypcode.files.wordpress.com/2019/02/mapping_profiles.png" alt="mapping_profiles" /> See how I can extract values from a complex JSON file ? Oh God, I LOVE PowerShell, let's do some more ! Put the following script in the same folder as the previous one <a href="https://gist.github.com/ypcode/98203c9e5929e3b4d40d13918d2194a4">https://gist.github.com/ypcode/98203c9e5929e3b4d40d13918d2194a4</a> And call it with these arguments:</p>
-<blockquote>
-<p><strong><em>.\GenerateDebugProfileLaunchConfig.ps1 -Url <a href="https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx">https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx</a> -UserDataDir $UserDataDir -ConfigBaseName &quot;Hosted Workbench Profile &quot;</em></strong></p>
-</blockquote>
-<p>And get the content to put in your <strong><em>launch.json</em></strong> file and save it <a href="https://gist.github.com/ypcode/de76ad8ffc62737e8a7134423a14c8f8">https://gist.github.com/ypcode/de76ad8ffc62737e8a7134423a14c8f8</a> Go to the debug pane and see the new debug configurations <img src="https://ypcode.files.wordpress.com/2019/02/generated_profile_debug_configs.png" alt="generated_profile_debug_configs" /> Select a config and start debugging, you already logged in with you pre-configured session and it will keep whatever you save in these profiles !</p>
+<p>It is actually possible to specify the profile to use in the Chrome command line using the <strong><em>--profile-directory=Profile 3</em></strong> switch. As you can see you have to specify the name of the folder which is not the name you gave to the profiles, By exploring them, you probably can determine what folder matches what profile. An easiest way is to check out the _<strong>Local State</strong> _file in the new User Data Dir that is a JSON file that contains many config entries as well as the profiles. You can also use this little PowerShell script I wrote that will return the matching values</p>
+<pre><code class="language-powershell">param(     
+    [string]$UserDataDir = &quot;C:\\Workspace\\chrome\\dev_user_dir&quot; 
+)  
+
+$localStateJson = Get-Content &quot;$UserDataDir\\Local State&quot; $localState = $localStateJson | ConvertFrom-Json $profileKeys = $localState.profile.info_cache | Get-Member | ? { $_.MemberType -eq &quot;NoteProperty&quot; } 
+$infoCache = $localState.profile.info_cache  
+$allEntries = @() 
+ForEach($key in $profileKeys) { 
+    $profile = $key.Name
+    $profileDisplayName = $infoCache.&quot;$profile&quot;.name     
+    $newEntry = @{        
+         Profile = $profile; 
+         Name = $profileDisplayName; 
+    }; 
+    $allEntries += $newEntry 
+} 
+$allEntries
+</code></pre>
+<p>And get the following result</p>
+<p><img src="/images/2019/02/mapping_profiles.png" alt="mapping_profiles" /></p>
+<p>See how I can extract values from a complex JSON file ? Oh God, I LOVE PowerShell, let's do some more ! Put the following script in the same folder as the previous one</p>
+<pre><code class="language-powershell">param(
+    [string]$ConfigBaseName = &quot;Workbench Profile &quot;,
+    [string]$Url = &quot;https://your.sharepoint.com/sites/test/_layouts/workbench.aspx&quot;,
+    [string]$UserDataDir = &quot;C:\Workspace\chrome\dev_user_data&quot;
+)
+
+# Get the profiles
+$profiles = .\Get-ChromeVSCodeDebugProfiles.ps1 -UserDataDir $UserDataDir
+
+$allConfigs = @()
+ForEach ($profile in $profiles) {
+    $profileName = $profile.Name
+    $profileKey = $profile.Profile
+    $newLaunchConfig = New-Object -TypeName psobject
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;name&quot; -Value $configBaseName$profileName
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;type&quot; -Value &quot;chrome&quot;
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;request&quot; -Value &quot;launch&quot;
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;url&quot; -Value $url
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;webRoot&quot; -Value &quot;`${workspaceRoot}&quot;
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;sourceMaps&quot; -Value $True
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;userDataDir&quot; -Value $userDataDir
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;sourceMapPathOverrides&quot; -Value @{
+    &quot;webpack:///../../../src/*&quot;= &quot;`${webRoot}/src/*&quot;;
+    &quot;webpack:///../../../../src/*&quot;= &quot;`${webRoot}/src/*&quot;;
+    &quot;webpack:///../../../../../src/*&quot;= &quot;`${webRoot}/src/*&quot;;
+    }
+    $newLaunchConfig |Add-Member -MemberType NoteProperty -Name &quot;runtimeArgs&quot; -Value @( &quot;--remote-debugging-port=9222&quot;, &quot;--profile-directory=$profileKey&quot;)
+
+    $allConfigs += $newLaunchConfig
+}
+
+$allConfigs | ConvertTo-Json
+</code></pre>
+<p>And call it with these arguments:</p>
+<pre><code class="language-powershell">_.\\GenerateDebugProfileLaunchConfig.ps1 -Url https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx -UserDataDir $UserDataDir -ConfigBaseName &quot;Hosted Workbench Profile &quot;
+</code></pre>
+<p>And get the content to put in your <strong><em>launch.json</em></strong> file and save it</p>
+<pre><code class="language-json">{
+    &quot;name&quot;: &quot;Hosted Workbench Profile Admin&quot;,
+    &quot;type&quot;: &quot;chrome&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;url&quot;: &quot;https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx&quot;,
+    &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+    &quot;sourceMaps&quot;: true,
+    &quot;userDataDir&quot;: &quot;C:\\Workspace\\chrome\\dev_user_data&quot;,
+    &quot;sourceMapPathOverrides&quot;: {
+        &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;
+    },
+    &quot;runtimeArgs&quot;: [
+        &quot;--remote-debugging-port=9222&quot;,
+        &quot;--profile-directory=Profile 1&quot;
+    ]
+},
+{
+    &quot;name&quot;: &quot;Hosted Workbench Profile Editor&quot;,
+    &quot;type&quot;: &quot;chrome&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;url&quot;: &quot;https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx&quot;,
+    &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+    &quot;sourceMaps&quot;: true,
+    &quot;userDataDir&quot;: &quot;C:\\Workspace\\chrome\\dev_user_data&quot;,
+    &quot;sourceMapPathOverrides&quot;: {
+        &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;
+    },
+    &quot;runtimeArgs&quot;: [
+        &quot;--remote-debugging-port=9222&quot;,
+        &quot;--profile-directory=Profile 2&quot;
+    ]
+},
+{
+    &quot;name&quot;: &quot;Hosted Workbench Profile Visitor&quot;,
+    &quot;type&quot;: &quot;chrome&quot;,
+    &quot;request&quot;: &quot;launch&quot;,
+    &quot;url&quot;: &quot;https://yourtenant.sharepoint.com/sites/yoursite/_layouts/workbench.aspx&quot;,
+    &quot;webRoot&quot;: &quot;${workspaceRoot}&quot;,
+    &quot;sourceMaps&quot;: true,
+    &quot;userDataDir&quot;: &quot;C:\\Workspace\\chrome\\dev_user_data&quot;,
+    &quot;sourceMapPathOverrides&quot;: {
+        &quot;webpack:///../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;,
+        &quot;webpack:///../../../../../src/*&quot;: &quot;${webRoot}/src/*&quot;
+    },
+    &quot;runtimeArgs&quot;: [
+        &quot;--remote-debugging-port=9222&quot;,
+        &quot;--profile-directory=Profile 3&quot;
+    ]
+}
+</code></pre>
+<p>Go to the debug pane and see the new debug configurations</p>
+<p><img src="/images/2019/02/generated_profile_debug_configs.png" alt="generated_profile_debug_configs" /></p>
+<p>Select a config and start debugging, you already logged in with you pre-configured session and it will keep whatever you save in these profiles !</p>
 <h2 id="thats-it">That's it</h2>
-<p>I am convinced it will ease testing and switching user context on dev time for me, happy to share the technique, If you have ideas to improve it and concerns that I missed, please, let me know ! Cheers ! Yannick</p>
+<p>I am convinced it will ease testing and switching user context on dev time for me, happy to share the technique, If you have ideas to improve it and concerns that I missed, please, let me know !</p>
+<p>Cheers !</p>
+<p>Yannick</p>
 
     </div>
 </div>

@@ -222,12 +222,12 @@ Errors at runtime</h2>
 <p>It means that, if you mistakenly fool TypeScript, it is still possible to have errors at runtime, let's take the case where we get serialized JSON from a remote endpoint.
 We cannot really ensure at authoring time, what will be returned by the server at runtime.
 However, we want our code to be checked as any other part, you will probably write code like this</p>
-<p><img src="https://ypcode.files.wordpress.com/2017/08/sample_pnpjs.png" alt="sample_pnpjs" /></p>
+<p><img src="/images/2017/08/sample_pnpjs.png" alt="sample_pnpjs" /></p>
 <p>The <code>IlistInfo</code> is an interface I defined.
 However, let's imagine (very very unlikely ;) hum...) I made a typo in the interface, TypeScript trust me and doesn't complain about my mistake.
 However, there is one !</p>
-<p><img src="https://ypcode.files.wordpress.com/2017/08/pnpjs_typo.png" alt="pnpjs_typo" />
-<img src="https://ypcode.files.wordpress.com/2017/08/pnpjs_typo_output.png" alt="pnpjs_typo_output" /></p>
+<p><img src="/images/2017/08/pnpjs_typo.png" alt="pnpjs_typo" />
+<img src="/images/2017/08/pnpjs_typo_output.png" alt="pnpjs_typo_output" /></p>
 <h2 id="conclusion">Conclusion</h2>
 <p>You can see at runtime, there was something unexpected.
 You have to play the TypeScript game fairly to be very efficient, and be sure of what you put in your interfaces if the data structure will be serialized or deserialized.  

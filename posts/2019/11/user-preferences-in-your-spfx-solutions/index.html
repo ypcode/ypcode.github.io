@@ -229,27 +229,35 @@
 <p>A few month ago I wrote a <a href="https://ypcode.wordpress.com/2019/08/19/spfx-scoped-context-services/">blog post</a> about scoping the context (or the service instances) to a particular WebPart instance rather than scoping to the page.
 I then implemented a sample using the same technique of implementing a SPFx service that must be configured to be scoped to a WebPart instance. The sample, that you can see an exhibit here below, is simply a list of super heroes that the user can click to set as his/her favorite.
 Obviously that is probably not a real-word need, but it illustrates quite well the implementation keeping the business logic very simple.</p>
-<p><img src="https://ypcode.files.wordpress.com/2019/11/user_prefs_sample01.png" alt="user_prefs_sample01.png" /></p>
+<p><img src="/images/2019/11/user_prefs_sample01.png" alt="user_prefs_sample01.png" /></p>
 <p>We can see the content of the local storage dictionary to see what values are stored and how they are keyed.</p>
-<p><img src="https://ypcode.files.wordpress.com/2019/11/user_prefs_f12_localstorage.png" alt="user_prefs_f12_localstorage" /></p>
+<p><img src="/images/2019/11/user_prefs_f12_localstorage.png" alt="user_prefs_f12_localstorage" /></p>
 <ol>
 <li> A Prefix in order to identify our own entries (SharePoint Online massively uses local storage so we need to identify them</li>
 <li>The unique IDs of the WebPart instances, it ensures to keep preferences for each specific instance</li>
 <li>A stringified JSON object, in our case, the object has only one <em><strong>favoriteSuperHero</strong></em> property, but that object might contains dozen of properties without any issues</li>
 </ol>
 <p>Here is the code of the UserPreferences service</p>
-<p><a href="https://gist.github.com/ypcode/262d9da128a01dbc13dcc723daf0f132">https://gist.github.com/ypcode/262d9da128a01dbc13dcc723daf0f132</a></p>
+<p><code>\nimport { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;  export interface IUserPreferences {     favoriteSuperHero: string; }  export interface IUserPreferencesService extends IUserPreferences {     configure(instanceId: string): void; }  export class UserPreferencesService implements IUserPreferencesService {     private _instanceId: string = null;     private _internalData: IUserPreferences = null;      constructor(private serviceScope: ServiceScope) {      }      public configure(instanceId: string): void {         this._instanceId = instanceId;     }      public get favoriteSuperHero(): string {         this._ensureLoadWebPartUserPreferences();         return this._internalData.favoriteSuperHero;     }      public set favoriteSuperHero(value: string) {         this._internalData.favoriteSuperHero = value;         this._saveWebPartUserPreferences();     }      private get userPreferencesKey(): string {         return `USER_PREFS_${this._instanceId}`;     }      private _saveWebPartUserPreferences() {         if (!localStorage) {             console.error(&quot;local storage feature is not supported in this browser&quot;);             return;         }          const toSave = this._internalData || { favoriteSuperHero: null };         const userPreferencesAsString = JSON.stringify(toSave);         localStorage.setItem(this.userPreferencesKey, userPreferencesAsString);     }      private _ensureLoadWebPartUserPreferences() {         if (!localStorage) {             console.error(&quot;local storage feature is not supported in this browser&quot;);             return;         }          if (!this._internalData) {             const userPreferencesAsString = localStorage.getItem(this.userPreferencesKey);             if (userPreferencesAsString) {                 this._internalData = JSON.parse(userPreferencesAsString) as IUserPreferences;             } else {                 this._internalData = {                     favoriteSuperHero: null                 };             }         }     } }  export const UserPreferencesServiceKey = ServiceKey.create&lt;IUserPreferencesService&gt;(&quot;ypcode-user-preferences&quot;, UserPreferencesService);\n</code></p>
 <p>Let's see how to configure the service in the WebPart class</p>
-<p><a href="https://gist.github.com/ypcode/c95f4c0804c7f87a6a011cf160189f9c">https://gist.github.com/ypcode/c95f4c0804c7f87a6a011cf160189f9c</a></p>
+<p><code>\nimport * as React from 'react'; import * as ReactDom from 'react-dom'; import { Version, ServiceScope } from '@microsoft/sp-core-library'; import {   BaseClientSideWebPart,   IPropertyPaneConfiguration,   PropertyPaneTextField } from '@microsoft/sp-webpart-base';  import * as strings from 'UserSettingsSampleWebPartStrings'; import UserSettingsSample from './components/UserSettingsSample'; import { IUserSettingsSampleProps } from './components/IUserSettingsSampleProps'; import { UserPreferencesServiceKey, UserPreferencesService } from '../../services/UserPreferencesService';   export interface IUserSettingsSampleWebPartProps {   description: string; }  export default class UserSettingsSampleWebPart extends BaseClientSideWebPart&lt;IUserSettingsSampleWebPartProps&gt; {    private _usedServiceScope: ServiceScope;    public onInit(): Promise&lt;void&gt; {     return super.onInit().then(() =&gt; {       // Create a child scope for the current WebPart       this._usedServiceScope = this.context.serviceScope.startNewChild();       // Configure it with the current WebPart instance Id       const serviceInstance = this._usedServiceScope.createAndProvide(UserPreferencesServiceKey, UserPreferencesService);       serviceInstance.configure(this.instanceId);       this._usedServiceScope.finish();     });   }    public render(): void {      const element: React.ReactElement&lt;IUserSettingsSampleProps&gt; = React.createElement(       UserSettingsSample,       {         serviceScope: this._usedServiceScope       }     );      ReactDom.render(element, this.domElement);   } //... }\n</code></p>
 <p>And then see, with this implementation how easy it is to manipulate user preferences</p>
-<p><a href="https://gist.github.com/ypcode/ba8978cbc3634afb191c399608aa5a69">https://gist.github.com/ypcode/ba8978cbc3634afb191c399608aa5a69</a></p>
-<p>As usual, you can find the entire solution on my <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-user-settings">GitHub repo here</a>.</p>
-<h2 id="conclusion">Conclusion</h2>
-<p>I think this approach can be used almost as is in many scenarios, or at least, inspire a lot of developers in addressing those kinds of needs.
-I hope you found this post interesting and feel free to let me know any feedback !</p>
-<p>See you soon in a next post :)</p>
-<p>Cheers,</p>
-<p>Yannick</p>
+<pre><code class="language-\nimport" IUserSettingsSampleProps="">
+
+As usual, you can find the entire solution on my [GitHub repo here](https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-user-settings).
+
+Conclusion
+----------
+
+I think this approach can be used almost as is in many scenarios, or at least, inspire a lot of developers in addressing those kinds of needs. 
+I hope you found this post interesting and feel free to let me know any feedback ! 
+
+See you soon in a next post :) 
+
+Cheers, 
+
+Yannick
+</code></pre>
 
     </div>
 </div>

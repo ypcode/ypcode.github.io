@@ -209,26 +209,26 @@
     <div class="content">
         <p>Hi SharePoint guys, Today, I am very proud to announce the upcoming <em><strong>release of Site Designs Studio 1.0</strong>.</em> [EDIT] The latest version (1.1) of Site Designs Studio, is now maintained under a PnP repository <a href="https://github.com/SharePoint/sp-dev-solutions/tree/master/solutions/SiteDesignsStudio">here</a></p>
 <h2 id="site-designs-and-site-scripts">Site Designs and Site Scripts</h2>
-<p>Recently, Microsoft has released a new capability in SharePoint Online : <strong>Site Designs</strong>. It is a modern way of automating customizations of SharePoint sites. You can use them in the Modern site creation interface on the SharePoint homepage. A Site design is a set of Site Scripts that will be applied to the modern site when it is created. These scripts are a set of actions to configure. [caption id=&quot;attachment_5249&quot; align=&quot;alignnone&quot; width=&quot;1743&quot;]<img src="https://ypcode.files.wordpress.com/2018/03/createsite01.png" alt="CreateSite01.png" /> Choose the Modern Site type[/caption] [caption id=&quot;attachment_5250&quot; align=&quot;alignnone&quot; width=&quot;1795&quot;]<img src="https://ypcode.files.wordpress.com/2018/03/choosesitedesign.png" alt="ChooseSiteDesign" /> Choose the design to apply to the site[/caption] <img src="https://ypcode.files.wordpress.com/2018/03/site-design-applying.png" alt="site-design-applying" />   When the site is created, the Site Design will be applied, in other words, the customization actions will be executed. When all actions are executed, you will be invited to view the updated site.        </p>
+<p>Recently, Microsoft has released a new capability in SharePoint Online : <strong>Site Designs</strong>. It is a modern way of automating customizations of SharePoint sites. You can use them in the Modern site creation interface on the SharePoint homepage. A Site design is a set of Site Scripts that will be applied to the modern site when it is created. These scripts are a set of actions to configure. [caption id=&quot;attachment_5249&quot; align=&quot;alignnone&quot; width=&quot;1743&quot;]<img src="/images/2018/03/createsite01.png" alt="CreateSite01.png" /> Choose the Modern Site type[/caption] [caption id=&quot;attachment_5250&quot; align=&quot;alignnone&quot; width=&quot;1795&quot;]<img src="/images/2018/03/choosesitedesign.png" alt="ChooseSiteDesign" /> Choose the design to apply to the site[/caption] <img src="/images/2018/03/site-design-applying.png" alt="site-design-applying" />   When the site is created, the Site Design will be applied, in other words, the customization actions will be executed. When all actions are executed, you will be invited to view the updated site.        </p>
 <h2 id="json-and-rest-api">JSON and REST API</h2>
 <p>By the time of this writing, the only official ways of managing Site Designs and Site Scripts is through REST API or SharePoint Online Management shell. <a href="https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-design-overview">Check out this page</a> to get all the needed technical information. The Site Scripts are described in JSON format. While it is quite easy to use for developers, the business end-users won't probably be very confortable with these technical matters.</p>
 <h2 id="site-designs-studio">Site Designs Studio</h2>
-<p>I decided to create a user-friendly interface that will allow these end-users to manage and create Site Scripts and Site Designs. I called it <em>Site Designs Studio</em>. It is a SharePoint Framework WebPart that will rely on a JSON schema to dynamically build a Site Script generator UI, manage the Site Designs and associate Site Scripts to them. <img src="https://ypcode.files.wordpress.com/2018/03/sss-home.png" alt="sss-home" /></p>
+<p>I decided to create a user-friendly interface that will allow these end-users to manage and create Site Scripts and Site Designs. I called it <em>Site Designs Studio</em>. It is a SharePoint Framework WebPart that will rely on a JSON schema to dynamically build a Site Script generator UI, manage the Site Designs and associate Site Scripts to them. <img src="/images/2018/03/sss-home.png" alt="sss-home" /></p>
 <h3 id="manage-site-designs">Manage Site Designs</h3>
-<p><img src="https://ypcode.files.wordpress.com/2018/03/sss-designs.png" alt="sss-designs.png" /></p>
+<p><img src="/images/2018/03/sss-designs.png" alt="sss-designs.png" /></p>
 <ul>
 <li>To create a new Site Design, click the &quot;+ New&quot; button</li>
 <li>By clicking the pen under the Site Design picture, you will be able to update its information</li>
 <li>You can delete a Site Design by clicking the trash icon</li>
 </ul>
-<p><img src="https://ypcode.files.wordpress.com/2018/03/edit-sitedesign.png" alt="edit-sitedesign" /> Here you can edit the information of the design and associate the available scripts that you need.</p>
+<p><img src="/images/2018/03/edit-sitedesign.png" alt="edit-sitedesign" /> Here you can edit the information of the design and associate the available scripts that you need.</p>
 <h3 id="manage-site-scripts">Manage Site Scripts</h3>
-<p><img src="https://ypcode.files.wordpress.com/2018/03/sss-sitescripts.png" alt="sss-sitescripts" /> The WebPart displays the list of Site Scripts in your tenant</p>
+<p><img src="/images/2018/03/sss-sitescripts.png" alt="sss-sitescripts" /> The WebPart displays the list of Site Scripts in your tenant</p>
 <ul>
 <li>Click the edit icon to edit the Site Script</li>
 <li>Click the trash icon to delete the Site Script</li>
 </ul>
-<p><img src="https://ypcode.files.wordpress.com/2018/03/sss-sitescriptedit.png" alt="sss-sitescriptedit.png" /></p>
+<p><img src="/images/2018/03/sss-sitescriptedit.png" alt="sss-sitescriptedit.png" /></p>
 <ol>
 <li>A script action graphically represented</li>
 <li>the actual generated JSON of the Site Script</li>
@@ -241,7 +241,7 @@
 <li>Switch to &quot;Code-only&quot; mode</li>
 <li>Switch to &quot;Split&quot; mode (as in the exhibit)</li>
 </ol>
-<p><img src="https://ypcode.files.wordpress.com/2018/03/sss-add-action.png" alt="sss-add-action.png" /> By clicking the &quot;+&quot; button, you can add a new action to your script.</p>
+<p><img src="/images/2018/03/sss-add-action.png" alt="sss-add-action.png" /> By clicking the &quot;+&quot; button, you can add a new action to your script.</p>
 <h2 id="enjoy">Enjoy !</h2>
 <p>Here it is, without any specific technical knowledge, we all will be able to create and manage Site Scripts and Site Designs. Currently I only publish the <a href="https://github.com/ypcode/sp-site-designs-studio">source code of the WebPart here</a> but I plan to ship an easy-to-install package very soon. Stay tuned. Give your feedback and ideas, I would be more than happy to bring some new features to this software. Cheers, Yannick</p>
 
