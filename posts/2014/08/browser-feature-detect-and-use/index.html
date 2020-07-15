@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Browser Feature Detection : Detect and use!" />
+            <meta property="og:description" content="See the purpose of detecting the available feature on the client's browser" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2014/08/browser-feature-detect-and-use" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151116" />
+        <meta property="og:image" content="/images/2014/08/browsers.jpg?r=202007151154" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2014-08-17 11:44:33Z" />
         <meta property="article:modified_time" content="2014-08-17 11:44:33Z" />
@@ -70,9 +71,10 @@
                 <meta property="article:tag" content="Feature" />
                 <meta property="article:tag" content="HTML" />
         <meta name="twitter:title" content="Browser Feature Detection : Detect and use!" />
+            <meta name="twitter:description" content="See the purpose of detecting the available feature on the client's browser" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2014/08/browser-feature-detect-and-use" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151116" />
+            <meta name="twitter:image" content="/images/2014/08/browsers.jpg?r=202007151154" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="browsers, HTML5, Web, Feature, HTML" />
         <meta name="twitter:site" content="@yp_code" />
@@ -200,21 +202,70 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151116" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2014/08/browsers.jpg?r=202007151154" alt="Browser Feature Detection : Detect and use!" />
         </div>
    
     <div class="content">
-        <p>Hi devs! I will discuss in this post a technique today's web developers should all use for the web applications they build: the <a href="/images/2014/08/wired_browsers02_620x258.jpg"><img src="http://ypcode.files.wordpress.com/2014/08/wired_browsers02_620x258.jpg?w=300" alt="browsers" /></a><strong>browser feature detection</strong>. A major concern for every web developers is the browser compatibility of their application. How will the web pages be rendered? How will the JavaScript be interpreted? Will the behaviors be consistent across different browsers? The major browsers each have their own rendering and JavaScript implementation. This obviously causes inconsistency that developers have to deal with. To do so, a simple way is to check what the currently used browser is. This could be done by checking the user agent property of the <strong>navigator</strong> object.  </p>
+        <p>Hi devs!</p>
+<p>I will discuss in this post a technique today's web developers should all use for the web applications they build: the <strong>browser feature detection</strong>. A major concern for every web developers is the browser compatibility of their application. How will the web pages be rendered? How will the JavaScript be interpreted? Will the behaviors be consistent across different browsers?</p>
+<p>The major browsers each have their own rendering and JavaScript implementation. This obviously causes inconsistency that developers have to deal with. To do so, a simple way is to check what the currently used browser is. This could be done by checking the user agent property of the <strong>navigator</strong> object.  </p>
 <h5 id="testing-if-current-browser-is-ie">Testing if current browser is IE</h5>
-<p>[code language=&quot;javascript&quot;] <script type="text/javascript"> if (navigator.userAgent.indexOf(&quot;MSIE&quot;) &gt; 0) { // Run IE specific code } </script> [/code]   This technique can work but has a major drawback. The developer must know every browser, every versions and how the features are handled in each of them. You can visit the website <a href="http://caniuse.com">http://caniuse.com</a> to check the support of a specific feature in a specific version of a browser . Instead of implmenting main and fallback solutions for each browser and each browser version, another more reliable approach is to detect the proper handling of a specific feature before making use of it.  </p>
+<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot;&gt; 
+  if (navigator.userAgent.indexOf(&quot;MSIE&quot;) &gt; 0) { 
+   // Run IE specific code 
+  } 
+&lt;/script&gt;
+</code></pre>
+<p>This technique can work but has a major drawback. The developer must know every browser, every versions and how the features are handled in each of them. You can visit the website <a href="http://caniuse.com">http://caniuse.com</a> to check the support of a specific feature in a specific version of a browser . Instead of implmenting main and fallback solutions for each browser and each browser version, another more reliable approach is to detect the proper handling of a specific feature before making use of it.  </p>
 <h5 id="testing-the-event-subscribing-method">Testing the event subscribing method</h5>
-<p>[code language=&quot;javascript&quot;] <script type="text/javascript"> if (window.addEventListener) { window.addEventListener(&quot;load&quot;, myCallback, false); } else if (window.attachEvent) { window.attachEvent(&quot;onload&quot;, myCallback); } </script> [/code] A good technique is to implement a set of functions that will encapsulate the feature detection. Some cross-browser libraries such as JQuery could also be used.</p>
+<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot;&gt; 
+  if (window.addEventListener) { 
+      window.addEventListener(&quot;load&quot;, myCallback, false); 
+  } else if (window.attachEvent) { 
+      window.attachEvent(&quot;onload&quot;, myCallback); 
+  } 
+&lt;/script&gt; 
+</code></pre>
+<p>A good technique is to implement a set of functions that will encapsulate the feature detection. Some cross-browser libraries such as JQuery could also be used.</p>
 <h5 id="custom-cross-browser-subscribetoevent">Custom cross-browser subscribeToEvent()</h5>
-<p>[code language=&quot;javascript&quot;] <a id="clickme">CLICK ME</a> <script type="text/javascript"> function subscribeToEvent(eventIssuer, eventType, callback) { if (eventIssuer.addEventListener) { eventIssuer.addEventListener(eventType, callback, false); } else if (eventIssuer.attachEvent) { eventIssuer.attachEvent(&quot;on&quot;+eventType, callback); } } var clickme = document.getElementById(&quot;clickme&quot;); subscribeToEvent(clickme,&quot;click&quot;, function() { alert(&quot;you clicked me&quot;); }); </script> [/code]</p>
+<p>[code language=&quot;javascript&quot;]</p>
+<pre><code class="language-html">&lt;a id=&quot;clickme&quot;&gt;CLICK ME&lt;/a&gt;
+&lt;script type=&quot;text/javascript&quot;&gt;
+  function subscribeToEvent(eventIssuer, eventType, callback) { 
+    if (eventIssuer.addEventListener) { 
+      eventIssuer.addEventListener(eventType, callback, false); 
+    } else if (eventIssuer.attachEvent) { 
+      eventIssuer.attachEvent(&quot;on&quot;+eventType, callback); 
+    } 
+  } 
+  var clickme = document.getElementById(&quot;clickme&quot;); 
+  subscribeToEvent(clickme,&quot;click&quot;, function() { 
+    alert(&quot;you clicked me&quot;); 
+  }); 
+&lt;/script&gt; 
+</code></pre>
 <h5 id="use-jquery-library"> Use JQuery library</h5>
-<p>[code language=&quot;javascript&quot;] <a id="clickme">CLICK ME</a> <script type="text/javascript"> $(&quot;#clickme&quot;).on(&quot;click&quot;, function() { alert(&quot;you clicked me&quot;); }); // Or use the specific click function // $(&quot;#clickme&quot;).click(function() { alert(&quot;you clicked me&quot;); }); </script> [/code] For HTML5/CSS3, we can use the library <strong>Modernizr</strong> (<a href="http://modernizr.com">http://modernizr.com</a>) which purpose is to detect the support of a specific feature in the current browser.</p>
+<p>[code language=&quot;javascript&quot;]</p>
+<pre><code class="language-html">&lt;a id=&quot;clickme&quot;&gt;CLICK ME&lt;/a&gt; 
+&lt;script type=&quot;text/javascript&quot;&gt; 
+  $(&quot;#clickme&quot;).on(&quot;click&quot;, function() { 
+    alert(&quot;you clicked me&quot;); 
+  }); 
+  // Or use the specific click function 
+  // $(&quot;#clickme&quot;).click(function() { alert(&quot;you clicked me&quot;); }); 
+&lt;/script&gt;
+</code></pre>
+<p>For HTML5/CSS3, we can use the library <strong>Modernizr</strong> (<a href="http://modernizr.com">http://modernizr.com</a>) which purpose is to detect the support of a specific feature in the current browser.</p>
 <h5 id="a-sample-of-feature-detection-with-modernizr">A sample of feature detection with Modernizr</h5>
-<p>[code language=&quot;javascript&quot;] <script type="text/javascript"> if (Modernizr.canvas) { // code that uses HTML5 canvas } </script> [/code] I hope this post will encourage you to make cross-browsers solutions more efficiently by detecting features and you enjoyed reading it. Kind Regards, Yannick</p>
+<pre><code class="language-html">&lt;script type=&quot;text/javascript&quot;&gt; 
+  if (Modernizr.canvas) { 
+    // code that uses HTML5 canvas 
+  } 
+&lt;/script&gt;
+</code></pre>
+<p>I hope this post will encourage you to make cross-browsers solutions more efficiently by detecting features and you enjoyed reading it.</p>
+<p>Kind Regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>
