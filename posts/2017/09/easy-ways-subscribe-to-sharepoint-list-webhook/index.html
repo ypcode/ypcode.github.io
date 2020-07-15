@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Easy ways to subscribe to a SharePoint List Webhook" />
+            <meta property="og:description" content="In this post, I share the easy ways I know to subscribe to a SharePoint List Webhook" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/09/easy-ways-subscribe-to-sharepoint-list-webhook" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
+        <meta property="og:image" content="/images/2017/09/webhook300.png?r=202007150651" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-09-18 06:00:43Z" />
         <meta property="article:modified_time" content="2017-09-18 06:00:43Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="Webhook" />
                 <meta property="article:tag" content="SPEditor" />
         <meta name="twitter:title" content="Easy ways to subscribe to a SharePoint List Webhook" />
+            <meta name="twitter:description" content="In this post, I share the easy ways I know to subscribe to a SharePoint List Webhook" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/09/easy-ways-subscribe-to-sharepoint-list-webhook" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
+            <meta name="twitter:image" content="/images/2017/09/webhook300.png?r=202007150651" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Azure Functions, PnP, PowerShell, Remote Provisionning, SharePoint, SharePoint Online, Webhook, SPEditor" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,19 +205,24 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150404" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/09/webhook300.png?r=202007150651" alt="Easy ways to subscribe to a SharePoint List Webhook" />
         </div>
    
     <div class="content">
-        <p>Hi guys, <img src="/images/2017/09/webhook300.png" alt="webhook300" />In the beginning of this year, a cool feature was brought to General Availability in SharePoint Online: <strong>List Webhooks</strong>. They are an alternative to Remote Event Receivers and Flow to trigger process when an event occurs in a list. They are more aligned to the current trends and standards of the Web development industry. It could be quite cumbersome to register a new Webhook, I want to show here multiple easier ways to do so with great tools such as SP Editor Chrome plugin, PnP JS Core and PnP PowerShell.</p>
+        <p>Hi guys,</p>
+<p>In the beginning of this year, a cool feature was brought to General Availability in SharePoint Online: <strong>List Webhooks</strong>.
+They are an alternative to Remote Event Receivers and Flow to trigger process when an event occurs in a list.
+They are more aligned to the current trends and standards of the Web development industry.
+It could be quite cumbersome to register a new Webhook, I want to show here multiple easy ways to do so with great tools such as SP Editor Chrome plugin, PnP JS Core and PnP PowerShell.</p>
 <h2 id="subscribe-to-a-new-list-webhook">Subscribe to a new List Webhook</h2>
-<p>To register (or &quot;Subscribe to&quot;) a List Webhook, we need to POST a HTTP message with proper credentials to a particular SharePoint API endpoint. I encourage you to read <a href="https://dev.office.com/sharepoint/docs/apis/webhooks/overview-sharepoint-webhooks">Reference Docs</a> to know all the details. Several experts (From Microsoft and the community) built some samples:</p>
+<p>To register (or &quot;Subscribe to&quot;) a List Webhook, we need to POST a HTTP message with proper credentials to a particular SharePoint API endpoint.
+I encourage you to read the <a href="https://dev.office.com/sharepoint/docs/apis/webhooks/overview-sharepoint-webhooks">Reference Docs</a> to know all the details. Several experts (From Microsoft and the community) built some samples:</p>
 <ul>
 <li><a href="https://github.com/SharePoint/sp-dev-samples/tree/master/Samples/WebHooks.List">https://github.com/SharePoint/sp-dev-samples/tree/master/Samples/WebHooks.List</a></li>
 <li><a href="https://www.eliostruyf.com/sample-node-js-sharepoint-webhook-application-released/">https://www.eliostruyf.com/sample-node-js-sharepoint-webhook-application-released/</a></li>
 <li><a href="http://johnliu.net/blog/2016/9/working-with-sharepoint-webhooks-with-javascript-using-an-azure-function">http://johnliu.net/blog/2016/9/working-with-sharepoint-webhooks-with-javascript-using-an-azure-function</a></li>
 </ul>
-<p>On my own, I also built an example with Node.js <a href="https://ypcode.wordpress.com/2017/01/19/build-a-sharepoint-webhook-with-node-js/">here</a> at the time of the GA annoucement.</p>
+<p>On my own, I also built an example with Node.js <a href="/posts/2017/01/build-sharepoint-webhook-nodejs/">here</a> at the time of the GA annoucement.</p>
 <h2 id="simpler-ways-to-subscribe-to-a-new-list-webhook">Simpler ways to subscribe to a new List Webhook</h2>
 <p>While the technique to subscribe to a new Webhook is pretty straightforward, it is also a bit cumbersome because you have to either use a HTTP tool (such as POSTMAN) and get the proper access token, or code an application that will use App Only credentials. I want to show you here multiple easier ways to do it. For each way described in this post, your Webhook endpoint obviously has to be up and running. If you are not sure how to build it, please <a href="https://dev.office.com/sharepoint/docs/apis/webhooks/sharepoint-webhooks-using-azure-functions">check the dedicated page in Reference Docs to setup a basic List Webhook hosted in an Azure Function</a></p>
 <h3 id="use-the-sp-editor-chrome-extension">Use the SP Editor Chrome Extension</h3>
@@ -234,22 +241,71 @@
 <li>The second argument of the <em><strong>add()</strong></em> method is the expiration date in ISO string format. It must be maximum 6 months from today.</li>
 <li>hit <em><strong>Ctrl+D</strong></em></li>
 </ol>
-<p><code>\nimport pnp from &quot;pnp&quot;;  pnp.sp.web.lists.getByTitle(&quot;testwebhook&quot;) .subscriptions .add(&quot;https://your-functions.azurewebsites.net/api/sample-webhook&quot;, &quot;2017-12-01T00:00:00+00:00&quot;) .then(r =&gt; console.log(&quot;Webhook added&quot;)) .catch(r =&gt; console.log(r));\n</code> <img src="/images/2017/09/speditor-pnpconsole1.png" alt="speditor-pnpconsole.png" /> While PnP JS Core library will most likely be used in a Client-Side application (JS embedding or SPFx solution). It can also run in a Node.js application with AppOnly credentials. From an automation perspective, we can imagine implementing gulp tasks that will manage Webhook subscriptions using the PnP JS Core library. These gulp tasks can then be used from CLI or from some ALM pipeline (<a href="https://www.eliostruyf.com/use-build-and-release-pipelines-in-vsts-to-automate-your-sharepoint-framework-deployments/">Check out this excellent post about ALM with SPFx from Elio Struyf</a>).</p>
+<pre><code class="language-typescript">import pnp from &quot;pnp&quot;;  
+pnp.sp.web.lists.getByTitle(&quot;testwebhook&quot;) 
+  .subscriptions 
+  .add(&quot;https://your-functions.azurewebsites.net/api/sample-webhook&quot;, &quot;2017-12-01T00:00:00+00:00&quot;) 
+  .then(r =&gt; console.log(&quot;Webhook added&quot;)) 
+  .catch(r =&gt; console.log(r));
+</code></pre>
+<p><img src="/images/2017/09/speditor-pnpconsole1.png" alt="speditor-pnpconsole.png" /></p>
+<p>While PnP JS Core library will most likely be used in a Client-Side application (JS embedding or SPFx solution). It can also run in a Node.js application with AppOnly credentials. From an automation perspective, we can imagine implementing gulp tasks that will manage Webhook subscriptions using the PnP JS Core library.
+These gulp tasks can then be used from CLI or from some ALM pipeline (<a href="https://www.eliostruyf.com/use-build-and-release-pipelines-in-vsts-to-automate-your-sharepoint-framework-deployments/">Check out this excellent post about ALM with SPFx from Elio Struyf</a>).</p>
 <h3 id="use-pnp-powershell-cmdlets">Use PnP PowerShell Cmdlets</h3>
-<p>With the PnP PowerShell module installed on your computer (<em><strong>Install-Module SharePointPnPPowerShellOnline</strong></em>, make sure to install at least the September 2017 release), you can use dedicated Cmdlets for managing Webhook subscriptions. You can as well use the provisioning Engine with an external XML template file.</p>
+<p>With the PnP PowerShell module installed on your computer (<strong>Install-Module SharePointPnPPowerShellOnline</strong>, make sure to install at least the September 2017 release), you can use dedicated Cmdlets for managing Webhook subscriptions. You can as well use the provisioning Engine with an external XML template file.</p>
 <h4 id="lets-first-see-how-to-use-the-dedicated-cmdlets">Let's first see how to use the dedicated Cmdlets</h4>
-<p><code>\nConnect-PnPOnline https://yourtenant.sharepoint.com/sites/yoursite # &quot;testwebhook&quot; is the name of our target list Add-PnPWebhookSubscription -List testwebhook -NotificationUrl https://your-functions.azurewebsites.net/api/sample-webhook  # The command above outputs the following # Id                 : 080e41c2-3c30-4c4d-8d1c-fa22249aedc0 # ClientState        : # ExpirationDateTime : 12-Mar-18 22:00:00 # NotificationUrl    : https://your-functions.azurewebsites.net/api/sample-webhook # Resource           : 6efa3b51-f514-4b88-9117-3d158e3f8fe2  # We can also remove the subscription with the following Cmdlet Remove-PnPWebhookSubscription -List  testwebhook -Identity 080e41c2-3c30-4c4d-8d1c-fa22249aedc0\n</code> <em><strong>Note:</strong></em> If your Webhook endpoint is not existing or is not reachable, you most likely will run into the following exception:</p>
-<blockquote>
-<p>Add-PnPWebhookSubscription : {&quot;odata.error&quot;:{&quot;code&quot;:&quot;-1, System.InvalidOperationException&quot;,&quot;message&quot;:{&quot;lang&quot;:&quot;en-US&quot;,&quot;value&quot;:&quot;Failed to validate the notification URL 'https://your-functions.azurewebsites.net/api/sample-webhook'.&quot;}}} At line:1 char:1 + Add-PnPWebhookSubscription -List testwebhook -NotificationUrl https:/ ... + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ + CategoryInfo : WriteError: (:) [Add-PnPWebhookSubscription], Exception + FullyQualifiedErrorId : EXCEPTION,SharePointPnP.PowerShell.Commands.Webhooks.AddWebhookSubscription</p>
-</blockquote>
-<p>When writing this post, I actually encountered an issue I want to share here just to let you know it might happen. My Webhook endpoint was already existing and is hosted in an Azure Function with the cheapest pricing tier. It can go idle, and in that case, it might take more than 5 seconds to respond to the validation request issued by SharePoint. That will result as the error described here above.</p>
+<pre><code class="language-powershell">Connect-PnPOnline https://yourtenant.sharepoint.com/sites/yoursite 
+# &quot;testwebhook&quot; is the name of our target list 
+Add-PnPWebhookSubscription -List testwebhook -NotificationUrl https://your-functions.azurewebsites.net/api/sample-webhook  
+# The command above outputs the following 
+# Id                 : 080e41c2-3c30-4c4d-8d1c-fa22249aedc0 
+# ClientState        : 
+# ExpirationDateTime : 12-Mar-18 22:00:00 
+# NotificationUrl    : https://your-functions.azurewebsites.net/api/sample-webhook 
+# Resource           : 6efa3b51-f514-4b88-9117-3d158e3f8fe2  
+# We can also remove the subscription with the following Cmdlet 
+Remove-PnPWebhookSubscription -List  testwebhook -Identity 080e41c2-3c30-4c4d-8d1c-fa22249aedc0
+</code></pre>
+<p>[^] If your Webhook endpoint is not existing or is not reachable, you most likely will run into the following exception:</p>
+<pre><code class="language-powershell">&gt; Add-PnPWebhookSubscription : {&quot;odata.error&quot;:{&quot;code&quot;:&quot;-1, System.InvalidOperationException&quot;,&quot;message&quot;:{&quot;lang&quot;:&quot;en-US&quot;,&quot;value&quot;:&quot;Failed to validate the notification URL 'https://your-functions.azurewebsites.net/api/sample-webhook'.&quot;}}} 
+At line:1 char:1 + Add-PnPWebhookSubscription -List testwebhook -NotificationUrl https:/ ... + ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ + CategoryInfo : WriteError: (:) [Add-PnPWebhookSubscription], Exception + FullyQualifiedErrorId : EXCEPTION,SharePointPnP.PowerShell.Commands.Webhooks.AddWebhookSubscription
+
+When writing this post, I actually encountered an issue I want to share here just to let you know it might happen. My Webhook endpoint was already existing and is hosted in an Azure Function with the cheapest pricing tier. It can go idle, and in that case, it might take more than 5 seconds to respond to the validation request issued by SharePoint. That will result as the error described here above.
+</code></pre>
 <h4 id="lets-see-how-to-use-the-pnp-provisioning-engine">Let's see how to use the PnP Provisioning Engine</h4>
-<p>First you need to have the template to apply. You can extract it from a source site or you can totally build it manually, make sure to have the following template at least for the provisioning engine to be able to process it. <code>\n&lt;pnp:Provisioning      xmlns:pnp=&quot;http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema&quot;&gt;     &lt;pnp:Preferences Generator=&quot;OfficeDevPnP.Core, Version=2.18.1709.0, Culture=neutral, PublicKeyToken=3751622786b357c2&quot; /&gt;     &lt;pnp:Templates ID=&quot;CONTAINER-TEMPLATE-WEBHOOK&quot;&gt;         &lt;pnp:ProvisioningTemplate ID=&quot;TEMPLATE-WEBHOOK&quot; Version=&quot;1&quot; BaseSiteTemplate=&quot;STS#0&quot; Scope=&quot;RootSite&quot;&gt;             &lt;pnp:Lists&gt;                 &lt;pnp:ListInstance Title=&quot;testwebhook&quot; TemplateType=&quot;100&quot; Url=&quot;Lists/testwebhook&quot;&gt;                     &lt;pnp:Webhooks&gt;                         &lt;pnp:Webhook ServerNotificationUrl=&quot;https://your-functions.azurewebsites.net/api/sample-webhook&quot; ExpiresInDays=&quot;179&quot; /&gt;                     &lt;/pnp:Webhooks&gt;                 &lt;/pnp:ListInstance&gt;             &lt;/pnp:Lists&gt;         &lt;/pnp:ProvisioningTemplate&gt;     &lt;/pnp:Templates&gt; &lt;/pnp:Provisioning&gt;\n</code> You have to set the values for the attributes of the <em><strong>Webhook</strong></em> element:</p>
+<p>First you need to have the template to apply.
+You can extract it from a source site or you can totally build it manually, make sure to have the following template at least for the provisioning engine to be able to process it.</p>
+<pre><code class="language-xml">&lt;pnp:Provisioning xmlns:pnp=&quot;http://schemas.dev.office.com/PnP/2017/05/ProvisioningSchema&quot;&gt;     
+  &lt;pnp:Preferences Generator=&quot;OfficeDevPnP.Core, Version=2.18.1709.0, Culture=neutral, PublicKeyToken=3751622786b357c2&quot; /&gt;     
+    &lt;pnp:Templates ID=&quot;CONTAINER-TEMPLATE-WEBHOOK&quot;&gt;         
+      &lt;pnp:ProvisioningTemplate ID=&quot;TEMPLATE-WEBHOOK&quot; Version=&quot;1&quot; BaseSiteTemplate=&quot;STS#0&quot; Scope=&quot;RootSite&quot;&gt;
+        &lt;pnp:Lists&gt;
+          &lt;pnp:ListInstance Title=&quot;testwebhook&quot; TemplateType=&quot;100&quot; Url=&quot;Lists/testwebhook&quot;&gt;
+            &lt;pnp:Webhooks&gt;
+              &lt;pnp:Webhook ServerNotificationUrl=&quot;https://your-functions.azurewebsites.net/api/sample-webhook&quot; ExpiresInDays=&quot;179&quot;/&gt;
+            &lt;/pnp:Webhooks&gt;
+          &lt;/pnp:ListInstance&gt;
+        &lt;/pnp:Lists&gt;
+      &lt;/pnp:ProvisioningTemplate&gt;
+    &lt;/pnp:Templates&gt;
+  &lt;/pnp:Provisioning&gt;
+</code></pre>
+<p>You have to set the values for the attributes of the <em><strong>Webhook</strong></em> element:</p>
 <ul>
-<li><em><strong>ServerNotificationUrl</strong></em>: the Url of your webhook endpoint</li>
-<li><em><strong>ExpiresInDays</strong></em>: the number of days after which the Webhook will expire. Must be less than 180.</li>
+<li><strong>ServerNotificationUrl</strong>: the Url of your webhook endpoint</li>
+<li><strong>ExpiresInDays</strong>: the number of days after which the Webhook will expire. Must be less than 180.</li>
 </ul>
-<p>You then have, obviously, to call the cmdlet to apply the template to your site: <code>\nConnect-PnPOnline https://yourtenant.sharepoint.com/sites/yoursite $path = &quot;.\The\Path\to\your\template.xml&quot; Apply-PnPProvisioningTemplate -Path $path\n</code> It is That simple !   While the dedicated Cmdlets could be used in a deployment script with conditions and &quot;dynamic&quot; values, the provisioning engine approach could be really useful when you need to reproduce the configuration of an existing site (or just one list). A combination of both approaches can also be considered.   As usually, I hope this article will help you with SharePoint list Webhook subscriptions. Feel free to give me your feedback ! Cheers, Yannick</p>
+<p>You then have, obviously, to call the cmdlet to apply the template to your site:</p>
+<pre><code class="language-powershell">Connect-PnPOnline https://yourtenant.sharepoint.com/sites/yoursite $path = &quot;.\The\Path\to\your\template.xml&quot; 
+Apply-PnPProvisioningTemplate -Path $path
+</code></pre>
+<p>It is That simple !  
+While the dedicated Cmdlets could be used in a deployment script with conditions and &quot;dynamic&quot; values, the provisioning engine approach could be really useful when you need to reproduce the configuration of an existing site (or just one list).
+A combination of both approaches can also be considered.  </p>
+<p>As usual, I hope this article will help you with SharePoint list Webhook subscriptions.
+Feel free to give me your feedback!</p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>

@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Call your protected API from SPFx solutions" />
+            <meta property="og:description" content="An easy way to basically protect your API to restrict access to the users of your tenant" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/10/call-protected-api-spfx" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
+        <meta property="og:image" content="/images/2017/10/api-works.png?r=202007150651" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-10-23 05:00:37Z" />
         <meta property="article:modified_time" content="2017-10-23 05:00:37Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="Tenant" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="Call your protected API from SPFx solutions" />
+            <meta name="twitter:description" content="An easy way to basically protect your API to restrict access to the users of your tenant" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/10/call-protected-api-spfx" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
+            <meta name="twitter:image" content="/images/2017/10/api-works.png?r=202007150651" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Office 365, PowerShell, SharePoint, SharePoint Framework, SharePoint Online, SPFx, Tenant, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,30 +205,97 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150404" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/10/api-works.png?r=202007150651" alt="Call your protected API from SPFx solutions" />
         </div>
    
     <div class="content">
-        <p>Hi devs, While the SharePoint Framework (aka SPFx) is getting more and more features, it becomes very handy to build engaging UI in the SharePoint context, at the Micro-services Era, it would be nice to let our solutions calling our various sets of APIs from various origins. We already have a large set of capabilities with the Microsoft Graph but we might also need to call API's outside of the Office 365 ecosystem (Line-of-Business or third parties...). Obviously, if the API processes sensitive data, it has to have at least a basic authorization mechasnism. In this post, I will show how we can achieve this using Azure Functions. If your Azure functions are contained in your tenant underlying Azure AD, there are some tricks that can be used to authenticate the current Office 365 user. (I blogged in the past about it <a href="https://ypcode.wordpress.com/2017/06/29/leverage-app-only-features-with-spfx-pnp-and-azure-functions/">here</a>). If, instead, they are in an external Azure AD, or even if it is an API hosted on a totally different platform, we can use access keys in the tenant. The technique explained below will help you do that.</p>
+        <p>Hi devs, While the SharePoint Framework (aka SPFx) is getting more and more features, it becomes very handy to build engaging UI in the SharePoint context, at the Micro-services Era, it would be nice to let our solutions calling our various sets of APIs from various origins. We already have a large set of capabilities with the Microsoft Graph but we might also need to call API's outside of the Office 365 ecosystem (Line-of-Business or third parties...). Obviously, if the API processes sensitive data, it has to have at least a basic authorization mechasnism. In this post, I will show how we can achieve this using Azure Functions. If your Azure functions are contained in your tenant underlying Azure AD, there are some tricks that can be used to authenticate the current Office 365 user. (I blogged in the past about it <a href="/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions/">here</a>). If, instead, they are in an external Azure AD, or even if it is an API hosted on a totally different platform, we can use access keys in the tenant. The technique explained below will help you do that.</p>
 <h2 id="our-protected-api">Our protected API</h2>
-<p>As I said above, we will use an Azure Function to simulate a protected API, but it can be any kind of API on any kind of platform. It will just be really easy to provision an new Azure Function with just a few clicks. Once logged in the Azure Portal, if you don't already have one, create a new Azure Functions app. <img src="/images/2017/10/search-function-apps.png" alt="search-function-apps" /> <img src="/images/2017/10/new-azure-function1.png" alt="new-azure-function.png" />   There is a requirement the API should meet to be called from your SPFx solution, it must allow Cross Origin Resource Sharing (CORS), If you use a public API, it will most likely satisfy this condition. In the case of our Azure Function, we have to tweak a dedicated setting. Switch to the <em><strong>Platform Features</strong></em> tab and select the <em><strong>CORS</strong></em> item. <img src="/images/2017/10/platform-features-tab.png" alt="platform-features-tab" /> <img src="/images/2017/10/cors_link.png" alt="CORS_link.png" /> In the <em>Allowed Origins</em>, remove the default values and add &quot;*<strong>&quot;</strong>, you can also choose to allow only certain domains. <img src="/images/2017/10/cors_all.png" alt="CORS_ALL.png" /> Now that we have set the needed configuration for our Function App, we can add our function. Add a new <em><strong>HttpTrigger</strong></em> in your preferred language, in this case I chose JavaScript, (IMHO, it is easier to work with SPFx, because we work directly with JSON, but remember, this API could be anything, and more than likely will not be dedicated for your SPFx solution). <img src="/images/2017/10/add-newhttptrigger-js.png" alt="add-newhttptrigger-js.png" /> I leave the sample code as it is (except for the body that I make a JSON object with a <strong>message</strong> property and append &quot;from protected API&quot; in the default message). <img src="/images/2017/10/azure-func-code.png" alt="azure-func-code" /> Click the <em><strong>Get function URL</strong></em> link in the right corner <img src="/images/2017/10/azure-func-url-link.png" alt="azure-func-url-link" /> <img src="/images/2017/10/copy-azure-func-url.png" alt="copy-azure-func-url" /> Choose the default for Key (it will be the &quot;password&quot; to access our API, then copy/paste the URL, we will need it in our code. And that's it for our API !</p>
+<p>As I said above, we will use an Azure Function to simulate a protected API, but it can be any kind of API on any kind of platform. It will just be really easy to provision an new Azure Function with just a few clicks. Once logged in the Azure Portal, if you don't already have one, create a new Azure Functions app.</p>
+<p><img src="/images/2017/10/search-function-apps.png" alt="search-function-apps" />
+<img src="/images/2017/10/new-azure-function1.png" alt="new-azure-function.png" />  </p>
+<p>There is a requirement the API should meet to be called from your SPFx solution, it must allow Cross Origin Resource Sharing (CORS), If you use a public API, it will most likely satisfy this condition. In the case of our Azure Function, we have to tweak a dedicated setting. Switch to the <em><strong>Platform Features</strong></em> tab and select the <em><strong>CORS</strong></em> item.</p>
+<p><img src="/images/2017/10/platform-features-tab.png" alt="platform-features-tab" />
+<img src="/images/2017/10/cors_link.png" alt="CORS_link.png" /></p>
+<p>In the <em>Allowed Origins</em>, remove the default values and add &quot;*<strong>&quot;</strong>, you can also choose to allow only certain domains.</p>
+<p><img src="/images/2017/10/cors_all.png" alt="CORS_ALL.png" /></p>
+<p>Now that we have set the needed configuration for our Function App, we can add our function. Add a new <em><strong>HttpTrigger</strong></em> in your preferred language, in this case I chose JavaScript, (IMHO, it is easier to work with SPFx, because we work directly with JSON, but remember, this API could be anything, and more than likely will not be dedicated for your SPFx solution).</p>
+<p><img src="/images/2017/10/add-newhttptrigger-js.png" alt="add-newhttptrigger-js.png" /></p>
+<p>I leave the sample code as it is (except for the body that I make a JSON object with a <strong>message</strong> property and append &quot;from protected API&quot; in the default message).</p>
+<p><img src="/images/2017/10/azure-func-code.png" alt="azure-func-code" /></p>
+<p>Click the <em><strong>Get function URL</strong></em> link in the right corner</p>
+<p><img src="/images/2017/10/azure-func-url-link.png" alt="azure-func-url-link" />
+<img src="/images/2017/10/copy-azure-func-url.png" alt="copy-azure-func-url" /></p>
+<p>Choose the default for Key (it will be the &quot;password&quot; to access our API, then copy/paste the URL, we will need it in our code. And that's it for our API !</p>
 <h2 id="our-spfx-extension">Our SPFx extension</h2>
-<p>I opted here to create an simplistic SPFx Application Customizer extension that will show the message from the API in an Alert Dialog. Let's create our extension. Go for the now famous _**yo @microsoft/sharepoint. **_Answer the questions to choose a <em>SharePoint Online target environment</em>, <em>extension</em> and <em>ApplicationCustomizer</em>. In your Application Customizer code file, let's first create a constant outside of our class that will hold the API URL: <code>\nexport const API_URL = 'https://my-func.azurewebsites.net/api/myapi';\n</code> Notice that I removed the ?code= ... but let's keep its value, we will need it later. Let's change the properties interface of our customizer to be <a href="https://gist.github.com/ypcode/1132b22cf206927e43462881dc29ac42">https://gist.github.com/ypcode/1132b22cf206927e43462881dc29ac42</a> In the <em><strong>onInit()</strong></em> method of our ApplicationCustomizer class, we write the following code <a href="https://gist.github.com/ypcode/9641e38a570773dc576e1a3160b33d9d">https://gist.github.com/ypcode/9641e38a570773dc576e1a3160b33d9d</a> in the terminal, type the <em><strong>gulp serve --nobrowser</strong></em> command and go to your SharePoint Online site. in the URL append the following string:</p>
+<p>I opted here to create an simplistic SPFx Application Customizer extension that will show the message from the API in an Alert Dialog. Let's create our extension.</p>
+<ul>
+<li>Go for the now famous <strong>yo @microsoft/sharepoint.</strong></li>
+<li>Answer the questions to choose a <em>SharePoint Online target environment</em>,  <em>extension</em> and <em>ApplicationCustomizer</em>.
+In your Application Customizer code file, let's first create a constant outside of our class that will hold the API URL:</li>
+</ul>
+<pre><code class="language-typescript">export const API_URL = 'https://my-func.azurewebsites.net/api/myapi';
+</code></pre>
+<p>Notice that I removed the ?code= ... but let's keep its value, we will need it later.
+Let's change the properties interface of our customizer to be</p>
+<pre><code class="language-typescript">export interface IAzureFunctionMessageApplicationCustomizerProperties {
+  apiKeyPropertyKey: string;
+}
+</code></pre>
+<p>In the <em>onInit()</em> method of our ApplicationCustomizer class, we write the following code</p>
+<pre><code class="language-typescript">// Get the API key from tenant properties
+    this.context.spHttpClient
+      .get(`_api/web/GetStorageEntity('${this.properties.apiKeyPropertyKey}')`, SPHttpClient.configurations.v1)
+      .then((tenantPropResponse: Response) =&gt; tenantPropResponse.json())
+      .then((prop) =&gt; {
+        let userDisplayName = this.context.pageContext.user.displayName;
+        return this.context.httpClient.get(`${API_URL}?&amp;name=${userDisplayName}&amp;code=${prop.Value}`,
+          HttpClient.configurations.v1);
+      })
+      .then((apiResponse: Response) =&gt; apiResponse.json())
+      .then((apiPayload) =&gt; {
+        if (apiPayload.statusCode &amp;&amp; apiPayload.statusCode != 200) {
+          Dialog.alert(`ERROR [${apiPayload.statusCode}] : ${apiPayload.error}`);
+        } else {
+          Dialog.alert(apiPayload.message);
+        }
+      })
+      .catch(error =&gt; {
+        Dialog.alert(&quot;ERROR: UNAUTHORIZED ACCESS&quot;);
+        console.log(error);
+      });
+
+    return Promise.resolve();
+</code></pre>
+<p>in the terminal, type the command</p>
+<pre><code class="language-bash">gulp serve --nobrowser
+</code></pre>
+<p>then go to your SharePoint Online site. in the URL append the following string:</p>
 <p><em>?loadSPFX=true&amp;debugManifestsFile=https://localhost:4321/temp/manifests.js&amp;customActions={&quot;<strong>b5d0b3ee-f1dc-4c96-b1ce-d81c8b21a139</strong>&quot;:{&quot;location&quot;:&quot;ClientSideExtension.ApplicationCustomizer&quot;,&quot;properties&quot;:{&quot;apiKeyPropertyKey&quot;:&quot;SPFxTestApiKey&quot;}}}</em>  </p>
-<p>Change the Id in bold by the Id you will find in your xxxx.manifest.json <img src="/images/2017/10/manifestjson.png" alt="manifestjson.png" /></p>
-<p>If we try it now, we see <img src="/images/2017/10/unauthorized.png" alt="unauthorized" /></p>
-<p>Indeed, you might have noticed in the code the first HTTP call we issue to the <em><strong>_api/web/GetStorageEntity</strong></em> endpoint.</p>
-<p>We actually use here a recent feature in Office 365: <strong>Tenant-Scope properties</strong>. It's a location where administrators can store information that can be accessed by regular (properly logged in) users through JavaScript.</p>
+<p>Change the Id in bold by the Id you will find in your xxxx.manifest.json</p>
+<p><img src="/images/2017/10/manifestjson.png" alt="manifestjson.png" /></p>
+<p>If we try it now, we see</p>
+<p><img src="/images/2017/10/unauthorized.png" alt="unauthorized" /></p>
+<p>Indeed, you might have noticed in the code the first HTTP call we issue to the <strong>_api/web/GetStorageEntity</strong> endpoint.</p>
+<p>We actually use here a recent feature in Office 365: <strong>Tenant-Scope properties</strong>.
+It's a location where administrators can store information that can be accessed by regular (properly logged in) users through JavaScript.</p>
 <h2 id="store-the-api-access-key-in-sharepoint">Store the API Access Key in SharePoint</h2>
-<p>We will use this location to store the access key to our API. To do so, we need to install the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=35588">SharePoint Online Management Shell.</a> Once installed, open a PowerShell console and type the following commands.</p>
-<p><code>\nConnect-SPOService https://yourtenant-admin.sharepoint.com Set-SPOStorageEntity -Site https://yourtenant.sharepoint.com/sites/appcatalog -Key SPFxTestApiKey -Value &quot;The API code&quot; -Description &quot;The key to the API&quot;  -Comments &quot;...&quot;\n</code></p>
+<p>We will use this location to store the access key to our API. To do so, we need to install the <a href="https://www.microsoft.com/en-us/download/details.aspx?id=35588">SharePoint Online Management Shell.</a> 
+Once installed, open a PowerShell console and type the following commands.</p>
+<pre><code class="language-powershell">Connect-SPOService https://yourtenant-admin.sharepoint.com Set-SPOStorageEntity -Site https://yourtenant.sharepoint.com/sites/appcatalog -Key SPFxTestApiKey -Value &quot;The API code&quot; -Description &quot;The key to the API&quot;  -Comments &quot;...&quot;
+</code></pre>
 <ul>
 <li>The value of the URL argument should be the URL of your App Catalog.</li>
 <li>The value of the Value argument is the code we removed from the API URL earlier.</li>
 </ul>
-<p>Now that we have the access key or the API stored as a tenant property, we can retry our extension. <img src="/images/2017/10/api-works.png" alt="api-works" /></p>
+<p>Now that we have the access key or the API stored as a tenant property, we can retry our extension.</p>
+<p><img src="/images/2017/10/api-works.png" alt="api-works" /></p>
 <h2 id="conclusion"> Conclusion</h2>
-<p>Here we use the tenant properties to store the Access Key of our API. It is only one of the possibilities that Tenant properties offer. We can imagine using them to store License keys, configuration objects or any kind of information that must be available across the tenant. Moreover,  here, we do store the API access key in clear directly in the tenant property bag. We might also imagine a solution in which we'd store a kind of pre-shared key or a &quot;secret&quot; that will never go on the wire in clear but instead will be used to compute a unique hash that will be recomputed by the API to check the incoming request is not a malicious one and is issued by an expected endpoint. From a security perspective, we can implement all kind of scenarios to better protect our APIs. Hope you will find this interesting and it will help you in your SPFx journey ! Please give your feedback !</p>
+<p>Here we use the tenant properties to store the Access Key of our API.
+It is only one of the possibilities that Tenant properties offer.
+We can imagine using them to store License keys, configuration objects or any kind of information that must be available across the tenant. Moreover,  here, we do store the API access key in clear directly in the tenant property bag.
+We might also imagine a solution in which we'd store a kind of pre-shared key or a &quot;secret&quot; that will never go on the wire in clear but instead will be used to compute a unique hash that will be recomputed by the API to check the incoming request is not a malicious one and is issued by an expected endpoint. From a security perspective, we can implement all kind of scenarios to better protect our APIs. Hope you will find this interesting and it will help you in your SPFx journey !</p>
+<p>Please give your feedback !</p>
 <p> Yannick</p>
 
     </div>
