@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Embrace the power of SPFx WebPart properties" />
+            <meta property="og:description" content="In this post, you will see what is the super power that modern WebPart properties thanks to their metadata" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/09/embrace-the-power-spfx-webpart-properties" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150651" />
+        <meta property="og:image" content="/images/2017/09/configure-wp-content-link.png?r=202007150757" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-09-05 05:00:26Z" />
         <meta property="article:modified_time" content="2017-09-05 05:00:26Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SPFx" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="Embrace the power of SPFx WebPart properties" />
+            <meta name="twitter:description" content="In this post, you will see what is the super power that modern WebPart properties thanks to their metadata" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/09/embrace-the-power-spfx-webpart-properties" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150651" />
+            <meta name="twitter:image" content="/images/2017/09/configure-wp-content-link.png?r=202007150757" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="HTML, SharePoint, SharePoint Framework, SharePoint Online, SPFx, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,42 +203,87 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150651" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/09/configure-wp-content-link.png?r=202007150757" alt="Embrace the power of SPFx WebPart properties" />
         </div>
    
     <div class="content">
-        <p>Hello SharePoint guys ! A few days ago, the PnP team released a great guidance post about the properties of the client-side WebParts built with the SharePoint Framework (SPFx). This post is available <a href="https://dev.office.com/sharepoint/docs/spfx/web-parts/guidance/integrate-web-part-properties-with-sharepoint">here</a>.</p>
+        <p>Hello SharePoint guys !</p>
+<p>A few days ago, the PnP team released a great guidance post about the properties of the client-side WebParts built with the SharePoint Framework (SPFx). This post is available <a href="https://dev.office.com/sharepoint/docs/spfx/web-parts/guidance/integrate-web-part-properties-with-sharepoint">here</a>.</p>
 <h2 id="amazing-stuff-webparts-properties">Amazing stuff: WebParts properties</h2>
 <p>Indeed, in this guidance, I actually read stuff I did not know about at all and it really amazed me. Don't take me wrong, WebPart properties have always existed, nothing really new here compared to old-school server-side WebParts. What is an awesome new capability is that the WebParts properties can now have metadata !</p>
 <h2 id="whats-the-purpose">What's the purpose ?</h2>
-<p>The metadata for WebParts properties can now leverage some SharePoint built-in capabilities. Indeed, your WebParts properties can now</p>
+<p>The metadata for WebParts properties can now leverage some SharePoint built-in capabilities.
+Indeed, your WebParts properties can now</p>
 <ul>
 <li>be indexed by the Search Engine.</li>
 <li>be treated as safe HTML string.</li>
 <li>if the value is a URL (to a file or an image),  can be automatically updated when the referenced asset is moved or renamed.</li>
 </ul>
 <h2 id="lets-put-it-in-practice">Let's put it in practice</h2>
-<p>I then decided to test it by myself and I have to admit it works really well. Let's take a concrete WebPart example. A Content Editor WebPart that can take either an external source file or direct content in Markdown or HTML format. [gallery ids=&quot;4146,4145,4149&quot; type=&quot;slideshow&quot;] In this post, I won't detail the whole implementation but focus on testing the WebPart properties capabilities instead. Feel free to <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/content-editor">take a look in the code</a> if you're interested.</p>
+<p>I then decided to test it by myself and I have to admit it works really well.
+Let's take a concrete WebPart example.
+A Content Editor WebPart that can take either an external source file or direct content in Markdown or HTML format.</p>
+<p>[gallery ids=&quot;4146,4145,4149&quot; type=&quot;slideshow&quot;]</p>
+<p>In this post, I won't detail the whole implementation but focus on testing the WebPart properties capabilities instead.
+Feel free to <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/content-editor">take a look in the code</a> if you're interested.</p>
 <h3 id="deploy-the-solution">Deploy the solution</h3>
-<p>First fetch my samples repository from GitHub, (I'll assume you have git tools and a proper SPFx dev environment installed on your computer). In a terminal, enter the following commands: <code>\ngit clone https://github.com/ypcode/ypcode-spfx-samples.git cd ypcode-spfx-samples\content-editor-webpart\ npm install gulp build gulp package-solution gulp serve --nobrowser\n</code> <em>CAUTION : This cannot be tested through the SharePoint Workbench (even the hosted one), It can only be tested in a real Modern Page. That's why here, we will serve the scripts through the <strong>gulp serve</strong> command but we need to deploy the solution in the app catalog.</em> Go to the <strong>sharepoint/solution</strong> folder of your project and drag and drop the <strong>spfx-content-editor.sppkg</strong> file into your app catalog library. <img src="/images/2017/09/deply_app_catalog01.png" alt="deply_app_catalog01" /><img src="/images/2017/09/deply_app_catalog02.png" alt="deply_app_catalog02" /> Tick the &quot;<strong><em>Make this solution available to all sites in the organization</em></strong>&quot; checkbox and click the <em><strong>Deploy</strong></em> button.</p>
+<p>First fetch my samples repository from GitHub, (I'll assume you have git tools and a proper SPFx dev environment installed on your computer). In a terminal, enter the following commands:</p>
+<pre><code class="language-bash">git clone https://github.com/ypcode/ypcode-spfx-samples.git 
+cd ypcode-spfx-samples\\content-editor-webpart\\ 
+npm install gulp build gulp package-solution gulp serve --nobrowser
+</code></pre>
+<p><em>CAUTION</em> : This cannot be tested through the SharePoint Workbench (even the hosted one), it can only be tested in a real Modern Page.
+That's why here, we will serve the scripts through the <strong>gulp serve</strong> command but we need to deploy the solution in the app catalog.</p>
+<ol>
+<li>Go to the <strong>sharepoint/solution</strong> folder of your project</li>
+<li>drag and drop the <strong>spfx-content-editor.sppkg</strong> file into your app catalog library.</li>
+</ol>
+<p><img src="/images/2017/09/deply_app_catalog01.png" alt="deply_app_catalog01" />
+<img src="/images/2017/09/deply_app_catalog02.png" alt="deply_app_catalog02" /></p>
+<ol start="3">
+<li>Tick the &quot;<em>Make this solution available to all sites in the organization</em>&quot; checkbox and click the <strong>Deploy</strong> button.</li>
+</ol>
 <h3 id="add-the-webpart">Add the WebPart</h3>
-<p>Let's create a modern page in our SharePoint site and add our WebPart to the new page: <img src="/images/2017/09/newpage.png" alt="newpage" /> <img src="/images/2017/09/add-wp.png" alt="add-wp.png" /></p>
+<p>Let's create a modern page in our SharePoint site and add our WebPart to the new page:</p>
+<p><img src="/images/2017/09/newpage.png" alt="newpage" /> 
+<img src="/images/2017/09/add-wp.png" alt="add-wp.png" /></p>
 <h3 id="auto-updated-urls">Auto updated URLs</h3>
-<p>Add a &quot;Content Editor&quot; WebPart and configure its properties <img src="/images/2017/09/configure-wp-content-link.png" alt="configure-wp-content-link.png" /></p>
+<p>Add a &quot;Content Editor&quot; WebPart and configure its properties</p>
+<p><img src="/images/2017/09/configure-wp-content-link.png" alt="configure-wp-content-link.png" /></p>
 <ol>
 <li>Choose &quot;Link to content file&quot; as the &quot;Type of source&quot;.</li>
 <li>Enter the server relative URL of a Markdown file (*.md) in your SharePoint site (In this case, I just uploaded the default README.md file from the SPFx solution into the default documents library of my site)</li>
-<li>Switch the <em><strong>Show Caption</strong></em> option to <em><strong>On.</strong></em></li>
-<li>Click the <em><strong>Publish</strong>*</em> button of the page.</li>
+<li>Switch the <strong>Show Caption</strong> option to <strong>On</strong>.</li>
+<li>Click the <strong>Publish</strong> button of the page.</li>
 </ol>
-<h6 id="during-my-tests-the-capabilities-demonstrated-here-only-worked-with-published-modern-pages">(* during my tests, the capabilities demonstrated here only worked with published modern pages)</h6>
-<p>When your WebPart displays properly the content of your Markdown file, try to move or rename the file and refresh the page the WebPart is on. Before : <img src="/images/2017/09/before_rename.png" alt="before_rename" /> <img src="/images/2017/09/rename_file.png" alt="rename_file" /> After: <img src="/images/2017/09/after_rename.png" alt="after_rename" /> The property is automatically updated ! This will prevent a lot of dead links when moving or renaming source documents or pictures ! Awesome !</p>
+<p>[^] during my tests, the capabilities demonstrated here only worked with published modern pages</p>
+<p>When your WebPart displays properly the content of your Markdown file, try to move or rename the file and refresh the page the WebPart is on.
+Before :
+<img src="/images/2017/09/before_rename.png" alt="before_rename" />
+<img src="/images/2017/09/rename_file.png" alt="rename_file" /></p>
+<p>After:
+<img src="/images/2017/09/after_rename.png" alt="after_rename" /></p>
+<p>The property is automatically updated !
+This will prevent a lot of dead links when moving or renaming source documents or pictures ! Awesome !</p>
 <h3 id="html-string-properties">HTML string properties</h3>
-<p>Let's add another Content Editor WebPart, configure the source format as HTML and add some HTML content in edit mode, let's also add a script tag to try injecting some script ! <img src="/images/2017/09/direct-html-content.png" alt="direct-html-content" /> Let's publish the page and see the result <img src="/images/2017/09/direct-html-content-display.png" alt="direct-html-content-display" /> We can see the HTML is properly rendered but no alert box is displayed, all unsecure HTML is automatically removed from the value. If you switch back to edit mode, you will see that the <script> tag is no longer here. And the best part is <strong>I didn't write any code to handle this</strong> ! Awesome !</p>
+<p>Let's add another Content Editor WebPart, configure the source format as HTML and add some HTML content in edit mode, let's also add a script tag to try injecting some script!</p>
+<p><img src="/images/2017/09/direct-html-content.png" alt="direct-html-content" /></p>
+<p>Let's publish the page and see the result</p>
+<p><img src="/images/2017/09/direct-html-content-display.png" alt="direct-html-content-display" /></p>
+<p>We can see the HTML is properly rendered but no alert box is displayed,</p>
+<p>all unsecure HTML is automatically removed from the value.
+If you switch back to edit mode, you will see that the script tag is no longer here. And the best part is: I did not write any code to handle this ! Awesome !</p>
 <h3 id="indexed-metadata">Indexed metadata</h3>
-<p>For the next capability, you might have to wait for several minutes, actually the time needed for the crawler to process. All the WebPart properties for which you set metadata are indexed and can be searched through the Search Engine <img src="/images/2017/09/search.png" alt="search" /> <img src="/images/2017/09/search-result.png" alt="search-result" /> The pages that contain WebParts which properties values match the search criteria are then returned in the search results. Awesome !</p>
+<p>For the next capability, you might have to wait for several minutes, actually the time needed for the crawler to process.
+All the WebPart properties for which you set metadata are indexed and can be searched through the Search Engine</p>
+<p><img src="/images/2017/09/search.png" alt="search" />
+<img src="/images/2017/09/search-result.png" alt="search-result" /></p>
+<p>The pages that contain WebParts which properties values match the search criteria are then returned in the search results. Awesome !</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>According to me, these cool features open up a variety of possibilities in our SharePoint developments. I really hope you liked this post and the cool features it demonstrates. Feel free to give your feedback ! Yannick</p>
+<p>According to me, these cool features open up a variety of possibilities in our SharePoint developments.
+I really hope you liked this post and the cool features it demonstrates.</p>
+<p>Feel free to give your feedback!</p>
+<p>Yannick</p>
 
     </div>
 </div>

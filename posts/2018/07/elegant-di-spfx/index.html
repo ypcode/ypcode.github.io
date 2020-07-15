@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Elegant DI in SPFx" />
+            <meta property="og:description" content="Based on some research, in this post, I describe a mean to write elegant dependency injection in your code using a declarative style" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2018/07/elegant-di-spfx" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150651" />
+        <meta property="og:image" content="/images/2018/07/spfx-elegant-di.png?r=202007150757" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2018-07-30 05:00:34Z" />
         <meta property="article:modified_time" content="2018-07-30 05:00:34Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SharePoint Online" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="Elegant DI in SPFx" />
+            <meta name="twitter:description" content="Based on some research, in this post, I describe a mean to write elegant dependency injection in your code using a declarative style" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2018/07/elegant-di-spfx" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150651" />
+            <meta name="twitter:image" content="/images/2018/07/spfx-elegant-di.png?r=202007150757" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JS, SharePoint, SharePoint Framework, SharePoint Online, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,13 +203,18 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150651" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2018/07/spfx-elegant-di.png?r=202007150757" alt="Elegant DI in SPFx" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint Devs, Today, I am going to discuss a small Proof of Concept I worked today that might be interesting to write SPFx code: Easy and elegant Dependency Injection !</p>
+        <p>Hi SharePoint Devs,</p>
+<p>Today, I am going to discuss a small Proof of Concept I worked today that might be interesting to write SPFx code:
+Easy and elegant Dependency Injection !</p>
 <h2 id="services-in-sharepoint-framework">Services in SharePoint Framework</h2>
-<p>SPFx has built-in artifacts to create services and consume them. It is a class named <strong><em>ServiceScope</em></strong>. It is a container in which you can register service instances. From your consumer code, you call its <strong><em>consume()</em></strong> method to get an instance of the service you need.</p>
+<p>SPFx has built-in artifacts to create services and consume them.
+It is a class named <strong>ServiceScope</strong>.
+It is a container in which you can register service instances.
+From your consumer code, you call its <strong>consume()</strong> method to get an instance of the service you need.</p>
 <h3 id="register-a-custom-service">Register a custom service</h3>
 <p>To register a service of our own, we need to declare 3 things:</p>
 <ul>
@@ -215,13 +222,153 @@
 <li>The service default implementation</li>
 <li>The <strong>ServiceKey</strong> to identify the service</li>
 </ul>
-<p>In SPFx, services must always have a default implementation ! Let's create a Greetings Service that will return a message <code>\nimport { ServiceKey } from &quot;@microsoft/sp-core-library&quot;;  export interface IGreetingsService {     sayHello(who: string) : string; }  export class GreetingsService implements IGreetingsService {     public sayHello(who: string) : string {         return `Hello ${who}`;     } }  export const GreetingsServiceKey = ServiceKey.create&lt;IGreetingsService&gt;( 	'YPCODE:GreetingsService', 	GreetingsService );\n</code> From a consumer code, we can call the <em><strong>consume()</strong></em> method of the <strong><em>ServiceScope</em></strong> instance to be able to consume the appropriate service. Obiously, the consumer code must have a reference to that ServiceScope instance <a href="https://gist.github.com/ypcode/b2dff097c73d0a4220e6f8db04f58979">https://gist.github.com/ypcode/b2dff097c73d0a4220e6f8db04f58979</a></p>
+<p>In SPFx, services must always have a default implementation !
+Let's create a Greetings Service that will return a message</p>
+<pre><code class="language-typescript">import { ServiceKey } from &quot;@microsoft/sp-core-library&quot;;  
+export interface IGreetingsService {     
+  sayHello(who: string) : string; 
+}  
+
+export class GreetingsService implements IGreetingsService {     
+  public sayHello(who: string) : string {         
+    return `Hello ${who}`;     
+  } 
+}  
+
+export const GreetingsServiceKey = ServiceKey.create&lt;IGreetingsService&gt;( 	'YPCODE:GreetingsService', 	GreetingsService );
+</code></pre>
+<p>From a consumer code, we can call the <strong>consume()</strong> method of the <strong>ServiceScope</strong> instance to be able to consume the appropriate service. Obiously, the consumer code must have a reference to that ServiceScope instance</p>
+<pre><code class="language-typescript">import {GreetingsServiceKey} from &quot;../services/GreetingsService&quot;;
+
+// ...
+public Greet() {
+  let service = this.serviceScope.consume(GreetingsServiceKey);
+  let message = service.sayHello(&quot;Yannick&quot;);
+  console.log(message);
+}
+// ...
+</code></pre>
 <h3 id="default-and-child-scopes">Default and child Scopes</h3>
-<p>There is a default instance of the <strong><em>ServiceScope</em></strong> that we might consider as the Root Service Scope. We can also create child scopes, on which we can override the instances of some services. It is particularly useful when we need to have specific implementations according to environment (Unit testing, Workbench, Prod, ...) or specific configurations (e.g. WebPart or Extensions properties). Typically, the configuration of child scope is done at the startup of the application, in the <strong><em>onInit()</em></strong> method of the WebPart or Extension. This method returns a promise, until this promise is resolved, a loading screen will be displayed and then the <strong><em>render()</em></strong> method is called The <strong><em>ServiceScope</em></strong> has a <strong><em>whenFinished()</em></strong> method that calls a specified callback when the scope configuration is finished. We can use this method in conjunction with the <strong><em>onInit()</em></strong> to make sure the services are properly configured before starting the rendering. <code>\npublic onInit(): Promise&lt;any&gt; { 	return ( 		super 		.onInit() 		// Set the global configuration of the application 		// This is where we will define the proper services according to the context (Local, Test, Prod,...) 		// or according to specific settings 		.then(() =&gt; { 	let scope = this.context.serviceScope; 				return new Promise((resolve, reject) =&gt; { 					if (this.properties.config) { 						switch (this.properties.config) { 							case 'config2': 								let childScope = scope.startNewChild(); 								childScope.createAndProvide(GreetingsServiceKey, AltGreetingsService); 								childScope.finish(); 								usedScope = childScope; 								break; 							case 'config1': 							default: 								break; 						} 					}  					scope.whenFinished(() =&gt; { 						resolve(); 					}); 			}); 		}) 	); 	}\n</code></p>
+<p>There is a default instance of the <strong>ServiceScope</strong> that we might consider as the Root Service Scope.
+We can also create child scopes, on which we can override the instances of some services.
+It is particularly useful when we need to have specific implementations according to environment (Unit testing, Workbench, Prod, ...) or specific configurations (e.g. WebPart or Extensions properties).</p>
+<p>Typically, the configuration of child scope is done at the startup of the application, in the <strong>onInit()</strong> method of the WebPart or Extension.
+This method returns a promise, until this promise is resolved, a loading screen will be displayed and then the <strong>render()</strong> method is called.</p>
+<p>The <strong>ServiceScope</strong> has a <strong>whenFinished()</strong> method that calls a specified callback when the scope configuration is finished.
+We can use this method in conjunction with the <strong>onInit()</strong> to make sure the services are properly configured before starting the rendering.</p>
+<pre><code class="language-typescript">public onInit(): Promise&lt;any&gt; { 	
+  return ( 		
+    super 		
+      .onInit() 		
+      // Set the global configuration of the application 		
+      // This is where we will define the proper services according to the context (Local, Test, Prod,...) 		
+      // or according to specific settings
+      .then(() =&gt; { 	
+        let scope = this.context.serviceScope;
+        return new Promise((resolve, reject) =&gt; {
+          if (this.properties.config) { 						
+            switch (this.properties.config) { 							
+              case 'config2': 								
+                  let childScope = scope.startNewChild(); 								
+                  childScope.createAndProvide(GreetingsServiceKey, AltGreetingsService); 								
+                  childScope.finish(); 								
+                  usedScope = childScope; 								
+                  break; 							
+              case 'config1': 							
+              default: 								
+                  break; 						
+            } 					
+          }  					
+          scope.whenFinished(() =&gt; { 						
+            resolve(); 					
+          }); 		
+        }); 		
+      }) 	
+  ); 	}
+</code></pre>
 <h2 id="the-servicescope-reference">The ServiceScope reference</h2>
-<p>Something that might happen to be pretty annoying is that we need to pass a reference to the ServiceScope in any consumer code. A easier way would be to keep that reference in a Singleton instance accessible from anywhere. Let's create a <strong><em>DependenciesManager</em></strong> class and a Single exported instance <code>\nexport class DependenciesManager {     private serviceScope: ServiceScope;  	public configure( 		rootServiceScope: ServiceScope, 		serviceScopeConfiguration: (rootServiceScope: ServiceScope) =&gt; Promise&lt;ServiceScope&gt; 	): Promise&lt;any&gt; { 		return new Promise((resolve, reject) =&gt; { 			serviceScopeConfiguration(rootServiceScope) 				.then((usedScope) =&gt; {           this.serviceScope = usedScope; 					resolve(); 				}) 				.catch((error) =&gt; { 					reject(error); 				}); 		}); 	}  	public inject&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;): TService { 		if (this.serviceScope) { 			return this.serviceScope.consume(serviceKey); 		} else {       return null;     } 	} }  const Dependencies: DependenciesManager = new DependenciesManager(); export default Dependencies;\n</code> And the consumer code <a href="https://gist.github.com/ypcode/76f317abc6940a46ff60635f4f8861d7">https://gist.github.com/ypcode/76f317abc6940a46ff60635f4f8861d7</a></p>
+<p>Something that might happen to be pretty annoying is that we need to pass a reference to the ServiceScope in any consumer code. A easier way would be to keep that reference in a Singleton instance accessible from anywhere. Let's create a <strong><em>DependenciesManager</em></strong> class and a Single exported instance</p>
+<pre><code class="language-typescript">export class DependenciesManager {
+    private serviceScope: ServiceScope;
+
+	public configure(
+		rootServiceScope: ServiceScope,
+		serviceScopeConfiguration: (rootServiceScope: ServiceScope) =&gt; Promise&lt;ServiceScope&gt;
+	): Promise&lt;any&gt; {
+		return new Promise((resolve, reject) =&gt; {
+			serviceScopeConfiguration(rootServiceScope)
+				.then((usedScope) =&gt; {
+          this.serviceScope = usedScope;
+					resolve();
+				})
+				.catch((error) =&gt; {
+					reject(error);
+				});
+		});
+	}
+
+	public inject&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;): TService {
+		if (this.serviceScope) {
+			return this.serviceScope.consume(serviceKey);
+		} else {
+      return null;
+    }
+	}
+}
+
+const Dependencies: DependenciesManager = new DependenciesManager();
+export default Dependencies;
+</code></pre>
+<p>And the consumer code</p>
+<pre><code class="language-typescript">import Dependencies from &quot;../di/DependencyManager&quot;;
+//...
+// We can now avoid to pass the ServiceScope instance reference
+let service = Dependencies.inject(GreetingsServiceKey);
+service.sayHello(&quot;Yannick&quot;);
+// ...
+</code></pre>
 <h2 id="a-touch-of-elegance">A touch of Elegance</h2>
-<p>So far, we ease up the problem of the ServiceScope reference to pass in to each consumer code. Inspired by serveral Frameworks and techniques I've been using, I would like to simply declare the services I need and use them seamlessly. In TypeScript, we can use decorators to annotate some code and execute some logic in a declarative way. The idea was, when I annotate a field of a class with <strong><em>@inject()</em></strong> decorator, it calls the inject method of the DependenciesManager. Some tricky part with the SharePoint Framework is that decorators will be evaluated before the <strong><em>ServiceScope</em></strong> is actually ready and available. I then need to go the other way around. The decorators will add the references they are applied to in an array. In The Dependencies Manager, when the ServiceScope is configured, all the references will be assigned with the appropriate service instance. An elegant dependency injection might look like <code>\nimport * as React from 'react'; import styles from './HelloWorld.module.scss'; import { IHelloWorldProps } from './IHelloWorldProps'; import { IGreetingsService, GreetingsServiceKey } from '../../../services/GreetingsService'; import { inject } from '../../../di/DependenciesManager';  export default class HelloWorld extends React.Component&lt;IHelloWorldProps, {}&gt; {   // We declare a field that will be injected with the GreetingsService registered instance   @inject(GreetingsServiceKey) private greetingsService: IGreetingsService;  	public render(): React.ReactElement&lt;IHelloWorldProps&gt; { 		let hello = this.greetingsService.sayHello('Yannick'); 		 		return ( 			&lt;div className={styles.helloWorld}&gt; 				&lt;div className={styles.container}&gt; 					&lt;div className={styles.row}&gt; 						&lt;div className={styles.column}&gt; 							&lt;span className={styles.title}&gt;Welcome to Dependency Injection!&lt;/span&gt; 							&lt;p&gt;{this.props.description}&lt;/p&gt; 							&lt;p className={styles.subTitle}&gt; 								Result from service: {hello}. 							&lt;/p&gt; 						&lt;/div&gt; 					&lt;/div&gt; 				&lt;/div&gt; 			&lt;/div&gt; 		);   } }\n</code> Isn't it elegant code ? All the code of this PoC could be found <a href="https://github.com/ypcode/spfx-lab/tree/master/spfx-elegant-di">here</a>. Please give your feedback and thoughts about it !   Cheers, Yannick</p>
+<p>So far, we ease up the problem of the ServiceScope reference to pass in to each consumer code.
+Inspired by serveral Frameworks and techniques I've been using, I would like to simply declare the services I need and use them seamlessly.
+In TypeScript, we can use decorators to annotate some code and execute some logic in a declarative way.
+The idea was, when I annotate a field of a class with <strong>@inject()</strong> decorator, it calls the inject method of the DependenciesManager.
+Some tricky part with the SharePoint Framework is that decorators will be evaluated before the <strong>ServiceScope</strong> is actually ready and available.
+I then need to go the other way around. The decorators will add the references they are applied to in an array.
+In The Dependencies Manager, when the ServiceScope is configured, all the references will be assigned with the appropriate service instance. An elegant dependency injection might look like</p>
+<pre><code class="language-typescript">import * as React from 'react';
+import styles from './HelloWorld.module.scss';
+import { IHelloWorldProps } from './IHelloWorldProps';
+import { IGreetingsService, GreetingsServiceKey } from '../../../services/GreetingsService';
+import { inject } from '../../../di/DependenciesManager';
+
+export default class HelloWorld extends React.Component&lt;IHelloWorldProps, {}&gt; {
+  // We declare a field that will be injected with the GreetingsService registered instance
+  @inject(GreetingsServiceKey) private greetingsService: IGreetingsService;
+
+	public render(): React.ReactElement&lt;IHelloWorldProps&gt; {
+		let hello = this.greetingsService.sayHello('Yannick');
+		
+		return (
+			&lt;div className={styles.helloWorld}&gt;
+				&lt;div className={styles.container}&gt;
+					&lt;div className={styles.row}&gt;
+						&lt;div className={styles.column}&gt;
+							&lt;span className={styles.title}&gt;Welcome to Dependency Injection!&lt;/span&gt;
+							&lt;p&gt;{this.props.description}&lt;/p&gt;
+							&lt;p className={styles.subTitle}&gt;
+								Result from service: {hello}.
+							&lt;/p&gt;
+						&lt;/div&gt;
+					&lt;/div&gt;
+				&lt;/div&gt;
+			&lt;/div&gt;
+		);
+  }
+}
+</code></pre>
+<p>Isn't it elegant code ? All the code of this PoC could be found <a href="https://github.com/ypcode/spfx-lab/tree/master/spfx-elegant-di">here</a>. Please give your feedback and thoughts about it !  </p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>
