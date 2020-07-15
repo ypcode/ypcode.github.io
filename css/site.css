@@ -76,6 +76,12 @@ body {
   color: #9e1e28;
 }
 
+.post-summary {
+  margin-top: 10px;
+  margin-bottom: 2px;
+  font-size: small;
+}
+
 .post-keywords {
   font-size: x-small;
   font-variant: small-caps;
