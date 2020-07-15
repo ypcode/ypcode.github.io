@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="ASP.NET WebForms vs MVC" />
+            <meta property="og:description" content="Let's compare ASP.NET WebForms and MVC and see what are my opinions about it" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2014/07/aspnet-webforms-vs-mvc" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151108" />
+        <meta property="og:image" content="/images/2014/07/aspnet-logo-180.png?r=202007151110" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2014-07-31 22:43:43Z" />
         <meta property="article:modified_time" content="2014-07-31 22:43:43Z" />
@@ -68,9 +69,10 @@
                 <meta property="article:tag" content="Webforms" />
                 <meta property="article:tag" content="MVC" />
         <meta name="twitter:title" content="ASP.NET WebForms vs MVC" />
+            <meta name="twitter:description" content="Let's compare ASP.NET WebForms and MVC and see what are my opinions about it" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2014/07/aspnet-webforms-vs-mvc" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151108" />
+            <meta name="twitter:image" content="/images/2014/07/aspnet-logo-180.png?r=202007151110" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="ASP.NET, Webforms, MVC" />
         <meta name="twitter:site" content="@yp_code" />
@@ -198,15 +200,23 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151108" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2014/07/aspnet-logo-180.png?r=202007151110" alt="ASP.NET WebForms vs MVC" />
         </div>
    
     <div class="content">
-        <p>Hello Everybody, I post this new article to discuss a topic dear to my web developer's heart and mind.  My personnal and experienced opinion on the two main ASP.NET development approaches. The initial single ASP.NET WebForms pattern and the more recent ASP.NET MVC approach.I will enumerate the main advantages and drawbacks of both approaches. I will then give you my preference and explicit my opinions. <a href="/images/2014/07/aspnet-logo-180.png"><img src="http://ypcode.files.wordpress.com/2014/07/aspnet-logo-180.png" alt="aspnet-logo-180" /></a>  </p>
+        <p>Hello Everybody,</p>
+<p>I post this new article to discuss a topic dear to my web developer's heart and mind.
+My personnal and experienced opinion on the two main ASP.NET development approaches.
+The initial single ASP.NET WebForms pattern and the more recent ASP.NET MVC approach.
+I will enumerate the main advantages and drawbacks of both approaches.
+I will then give you my preference and explicit my opinions.</p>
+<p><img src="/images/2014/07/aspnet-logo-180.png" alt="aspnet-logo-180" />  </p>
 <h1 id="asp.net-webforms">ASP.NET WebForms</h1>
 <p>WebForms is the original pattern introduced with the first versions of ASP.NET.</p>
 <h2 id="page-oriented">Page oriented</h2>
-<p>WebForms pattern is page oriented, it means that a page is accessed by entering a URL in the browser, and this page is responsible for executing the whole logic necessary for processing the request from the user.  The page is an ASPX file containing some HTML and ASP.NET specific XML elements. This ASPX file is usually bound to a code behind file (C# or VB.NET).</p>
+<p>WebForms pattern is page oriented, it means that a page is accessed by entering a URL in the browser, and this page is responsible for executing the whole logic necessary for processing the request from the user.  
+The page is an ASPX file containing some HTML and ASP.NET specific XML elements.
+This ASPX file is usually bound to a code behind file (C# or VB.NET).</p>
 <h3 id="benefits">Benefits</h3>
 <ul>
 <li>The main benefit of the page oriented aspect is that the developer can <strong>clearly identify the part of the application</strong> that will be reached by the user.</li>
@@ -285,7 +295,7 @@
 <li>ASP.NET MVC is very structured and the structure must be rigorously respected which means it can require a bit more effort to have something functionnal</li>
 </ul>
 <h2 id="conventions-based">Conventions based</h2>
-<p>ASP.NET MVC is based on a series of conventions such as naming. Controllers classes should be in a <em><strong>Controllers</strong></em> directory and each controller class should be named <strong><em>SomethingController</em></strong> with the <em><strong>-Controller</strong></em> suffix. The views should be located in a folder with the controller name and this folder should be located in the <em><strong>Views</strong></em> directory. The URL for an action will look like this: _http://mysite/Test/MyAction _for calling the action <em>MyAction</em> of the controller <em>TestController</em>. ASP.NET MVC propose a route handling system that allow to map some URL pattern to the appropriates controllers and actions.</p>
+<p>ASP.NET MVC is based on a series of conventions such as naming. Controllers classes should be in a <strong>Controllers</strong> directory and each controller class should be named <strong>SomethingController</strong> with the <strong>-Controller</strong> suffix. The views should be located in a folder with the controller name and this folder should be located in the <strong>Views</strong> directory. The URL for an action will look like this: <em>http://mysite/Test/MyAction</em> for calling the action <em>MyAction</em> of the controller <em>TestController</em>. ASP.NET MVC propose a route handling system that allow to map some URL pattern to the appropriates controllers and actions.</p>
 <h3 id="benefits-5">Benefits</h3>
 <ul>
 <li>The structure of the application and the project is very well defined, and will be very easy to maintain or upgrade.</li>
@@ -295,7 +305,7 @@
 <li>Again, the developer will have to be much more rigorous to respect all the conventions</li>
 </ul>
 <h2 id="razor-view-engine">Razor View Engine</h2>
-<p>A view engine is a component responsible for rendering a view according to some context and model, until ASP.NET MVC 3, the default view engine was classical ASPX page with which the developer had to write some ASPX code and had the possibility to use classical ASPX components and controls. With ASP.NET MVC 4 came a new default view engine, Razor. It is much closer to the standard HTML. The developer has to write some .cshtml (or .vbhtml) files that contains regular HTML only (no custom tags such as &lt;asp:TextBox ...) and has the possibility to write some C# or VB.NET code for dynamic content. By the way, WebForms view engine is still available for developers who still want to use it.</p>
+<p>A view engine is a component responsible for rendering a view according to some context and model, until ASP.NET MVC 3, the default view engine was classical ASPX page with which the developer had to write some ASPX code and had the possibility to use classical ASPX components and controls. With ASP.NET MVC 4 came a new default view engine, Razor. It is much closer to the standard HTML. The developer has to write some .cshtml (or .vbhtml) files that contains regular HTML only (no custom tags such as &lt;asp:TextBox  /&gt; ...) and has the possibility to write some C# or VB.NET code for dynamic content. By the way, WebForms view engine is still available for developers who still want to use it.</p>
 <h3 id="benefits-6">Benefits</h3>
 <ul>
 <li>The developer will know more accurately at development time what will be contained in the HTML result.</li>
@@ -321,7 +331,10 @@
 <li>How could it be a drawback here? Who can do more can do less! ;)</li>
 </ul>
 <h1 id="my-thoughts-and-experience">My thoughts and experience</h1>
-<p>Well, You probably got it! I obviously prefer ASP.NET MVC! Why? Because, real web developers with real skills and knowledge of the technologies will be able to develop an app with MVC. They will know exactly what is happening in their application and know how it works and why it works like this. A good developer should design his application thinking forward about maintenance, upgrade and reusability of his components and not just &quot;get it work!&quot;. Unfortunately, it is too easy to go that way with WebForms, and it is my main criticism about it. A few times ago, someone told me &quot;<em>A boar can not jump high and far at the same time</em>&quot;, this is true, an application cannot last a long time if it is not designed to do so. Let's share your opinions and experiences about this topic !   Hope to read you soon, Kind regards, Yannick</p>
+<p>Well, You probably got it! I obviously prefer ASP.NET MVC! Why? Because, real web developers with real skills and knowledge of the technologies will be able to develop an app with MVC. They will know exactly what is happening in their application and know how it works and why it works like this. A good developer should design his application thinking forward about maintenance, upgrade and reusability of his components and not just &quot;get it work!&quot;. Unfortunately, it is too easy to go that way with WebForms, and it is my main criticism about it. A few times ago, someone told me &quot;<em>A boar can not jump high and far at the same time</em>&quot;, this is true, an application cannot last a long time if it is not designed to do so. Let's share your opinions and experiences about this topic !  </p>
+<p>Hope to read you soon,</p>
+<p>Kind regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>
