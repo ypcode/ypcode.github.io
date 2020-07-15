@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
+            <meta property="og:description" content="I built a base component that I share with you so you can customize it easily to have your own Wizard in your SPFx applications" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/10/reusable-wizard-spfx-react" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+        <meta property="og:image" content="/images/2019/10/wizard.png?r=202007150404" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-10-31 14:29:20Z" />
         <meta property="article:modified_time" content="2019-10-31 14:29:20Z" />
@@ -75,9 +76,10 @@
                 <meta property="article:tag" content="TypeScript" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
+            <meta name="twitter:description" content="I built a base component that I share with you so you can customize it easily to have your own Wizard in your SPFx applications" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/10/reusable-wizard-spfx-react" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+            <meta name="twitter:image" content="/images/2019/10/wizard.png?r=202007150404" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JS, Office 365, Office UI Fabric, SharePoint, SharePoint Framework, SharePoint Online, SPFx, TypeScript, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -205,11 +207,12 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151244" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/10/wizard.png?r=202007150404" alt="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint guys, Today, I am going to show and share how we can build a reusable and flexible wizard component we will be able to use in our SPFx solutions ! Actually, it is a component that can be used in any React application but I'll show it using a SPFx solution since all the boilerplate is already in there (moreover my intent was to use it in SPFx solution so... :D)</p>
+        <p>Hi SharePoint guys,</p>
+<p>Today, I am going to show and share how we can build a reusable and flexible wizard component we will be able to use in our SPFx solutions ! Actually, it is a component that can be used in any React application but I'll show it using a SPFx solution since all the boilerplate is already in there (moreover my intent was to use it in SPFx solution so... :D)</p>
 <h2 id="the-purpose">The purpose</h2>
 <p>As in many applications, we might need to guide our users through steps in order to fill in information in a consistent way, the solution I am going to demonstrate here is a way to have a generic component that will take care of the Wizard behavior instead of rewriting it each time we need something similar. In this blog post, I am going to share the whole code and demonstrate the logic and how to use it.</p>
 <h2 id="the-implementation">The implementation</h2>
@@ -222,9 +225,500 @@
 <li>A &quot;Finish&quot; button if we are at the last step of the wizard.</li>
 </ul>
 <h3 id="enum-flags">Enum flags</h3>
-<p>We need to provide a list of individual steps and identify them uniquely. In order to simplify the logic and try to make it as generic as it can be, I'll use a TypeScript enum flags, it is a concept I used a lot in C#, and when suitable, I use it in TypeScript as well, we declare an enum and set the numeric value of each enum member as a binary single bit mask value <img src="/images/2019/10/enum_flags.png" alt="enum_flags" /> We could have written in the following form to emphasize the used binary bits<img src="/images/2019/10/enum_flags_binary.png?w=600" alt="enum_flags_binary" />         Notice the &quot;None&quot; value set to 0, that value will never be used, and a Wizard step cannot be identified by 0, because the bitwise operators (bit shifts) won't work with all 0s :)</p>
+<p>We need to provide a list of individual steps and identify them uniquely. In order to simplify the logic and try to make it as generic as it can be, I'll use a TypeScript enum flags, it is a concept I used a lot in C#, and when suitable, I use it in TypeScript as well, we declare an enum and set the numeric value of each enum member as a binary single bit mask value</p>
+<p><img src="/images/2019/10/enum_flags.png" alt="enum_flags" /></p>
+<p>We could have written in the following form to emphasize the used binary bits</p>
+<p><img src="/images/2019/10/enum_flags_binary.png" alt="enum_flags_binary" />        </p>
+<p>Notice the &quot;None&quot; value set to 0, that value will never be used, and a Wizard step cannot be identified by 0, because the bitwise operators (bit shifts) won't work with all 0s :)</p>
 <h2 id="show-me-the-code">Show me the code !</h2>
-<p>In order to have a component easy to reuse and have intellisense in VS Code, I chose to write an abstract component with a generic parameter that will hold the type our steps enum. You can take the code of this abstract component as is and put it somewhere in your solution, unless you need to improve it or adapt it, you would probably not need to change this code. However, feel free to take a look at the code to see how the bitwise operators are helping here :) For instance, you can put the following code in a **components/ **folder under your SPFx <strong>src/</strong> folder in a file <strong><em>Wizard.tsx</em></strong> [See the code on Github Gist](<code>\nimport * as React from &quot;react&quot;; import { ActionButton } from &quot;office-ui-fabric-react/lib/Button&quot;; import { Pivot, PivotItem, IPivotItemProps } from &quot;office-ui-fabric-react/lib/Pivot&quot;; import styles from &quot;./Wizard.module.scss&quot;;  export interface IWizardStepProps&lt;TStep extends number&gt; extends IPivotItemProps {     step: TStep;     caption: string; }  export class WizardStep&lt;TStep extends number&gt; extends React.Component&lt;IWizardStepProps&lt;TStep&gt;, {}&gt; {  }  export interface IWizardStepValidationResult {     isValidStep: boolean;     errorMessage?: string; }  export interface IWizardProps&lt;TStep extends number&gt; {     defaultCurrentStep?: TStep;     onValidateStep?: (currentStep: TStep) =&gt; IWizardStepValidationResult | Promise&lt;IWizardStepValidationResult&gt;;     onCompleted?: () =&gt; void;     onCancel?: () =&gt; void;     nextButtonLabel?: string;     previousButtonLabel?: string;     cancelButtonLabel?: string;     finishButtonLabel?: string;     validatingMessage?: string;     mainCaption?: string; }  export interface IWizardState&lt;TStep extends number&gt; {     currentStep: TStep;     completedSteps: TStep;     errorMessage: string;     isValidatingStep: boolean; }  const DEFAULT_NEXT_BUTTON_LABEL = &quot;Next&quot;; const DEFAULT_PREVIOUS_BUTTON_LABEL = &quot;Previous&quot;; const DEFAULT_FINISH_BUTTON_LABEL = &quot;Finish&quot;; const DEFAULT_CANCEL_BUTTON_LABEL = &quot;Cancel&quot;; const DEFAULT_VALIDATING_MESSAGE = &quot;Validating step...&quot;;  export abstract class BaseWizard&lt;TStep extends number&gt; extends React.Component&lt;IWizardProps&lt;TStep&gt;, IWizardState&lt;TStep&gt;&gt; {      constructor(props: IWizardProps&lt;TStep&gt;) {         super(props);          this.state = {             currentStep: props.defaultCurrentStep || this.firstStep,             completedSteps: null,             errorMessage: null,             isValidatingStep: false         };     }      private renderSteps() {         const stepChildren = React.Children.toArray(this.props.children)             .filter((reactChild: React.ReactElement) =&gt; reactChild.type == WizardStep &amp;&amp; reactChild.props.step);          if (stepChildren.length == 0) {             throw new Error(&quot;The specified wizard steps are not valid&quot;);         }          return stepChildren             .map((reactChild: React.ReactElement) =&gt; {                 return &lt;PivotItem key={`WizardStep__${reactChild.props.step}`}                     itemKey={reactChild.props.step.toString()}                     headerText={reactChild.props.caption}                     headerButtonProps={{}} &gt;                     {reactChild.props.children}                 &lt;/PivotItem&gt;;             });     }      private get firstStep(): TStep {         const stepValues = React.Children.toArray(this.props.children)             .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)             .map((c: React.ReactElement) =&gt; c.props.step as number);         if (stepValues.length &lt; 1) {             throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);         }         return Math.min(...stepValues) as TStep;     }      private get lastStep(): TStep {         const stepValues = React.Children.toArray(this.props.children)             .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)             .map((c: React.ReactElement) =&gt; c.props.step as number);         if (stepValues.length &lt; 1) {             throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);         }         return Math.max(...stepValues) as TStep;     }      private _validateWithCallback = (validationCallback: (validationResult: IWizardStepValidationResult) =&gt; void) =&gt; {          if (!validationCallback) {             return;         }          const validationResult = this._validateStep(this.state.currentStep);         if (typeof (validationResult as Promise&lt;IWizardStepValidationResult&gt;).then === &quot;function&quot;) {             this.setState({                 isValidatingStep: true,                 errorMessage: null             });             const promiseResult = validationResult as Promise&lt;IWizardStepValidationResult&gt;;             promiseResult.then(result =&gt; {                 validationCallback(result);             }).catch(error =&gt; {                 if (error as string) {                     validationCallback({                         isValidStep: false,                         errorMessage: error                     });                 }             });         }         else {             const directResult = validationResult as IWizardStepValidationResult;             if (!directResult) {                 throw new Error(&quot;The validation result has unexpected format.&quot;);             }             validationCallback(directResult);         }     }      private _goToStep = (step: TStep, completedSteps?: TStep, skipValidation: boolean = false) =&gt; {          if (!skipValidation) {             this._validateWithCallback(result =&gt; {                 if (result.isValidStep) {                      this.setState({                         currentStep: step,                         completedSteps,                         errorMessage: null,                         isValidatingStep: false                     });                 } else {                     this.setState({                         errorMessage: result.errorMessage,                         isValidatingStep: false                     });                 }             });         } else {             this.setState({ currentStep: step, completedSteps });         }     }      private _validateStep = (step: TStep) =&gt; {         if (this.props.onValidateStep) {             return this.props.onValidateStep(step);         }          return {             isValidStep: true,             errorMessage: null         };     }      private get hasNextStep(): boolean {         return this.state.currentStep &lt; this.lastStep;     }      private get hasPreviousStep(): boolean {         return this.state.currentStep &gt; this.firstStep;     }      private _goToNextStep = () =&gt; {         let completedWizardSteps = (this.state.completedSteps | this.state.currentStep) as TStep;         const nextStep = ((this.state.currentStep as number) &lt;&lt; 1) as TStep;         console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; next step: &quot;, nextStep);         this._goToStep(nextStep, completedWizardSteps);     }      private _goToPreviousStep = () =&gt; {         const previousStep = ((this.state.currentStep as number) &gt;&gt; 1) as TStep;         console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; previous step: &quot;, previousStep);         this._goToStep(previousStep, null, true);     }       private _cancel = () =&gt; {         if (this.props.onCancel) {             this.props.onCancel();         }     }      private _finish = () =&gt; {         this._validateWithCallback((result) =&gt; {             if (result.isValidStep) {                 if (this.props.onCompleted) {                     this.props.onCompleted();                 }             } else {                 this.setState({                     errorMessage: result.errorMessage,                     isValidatingStep: false                 });             }         });     }      private get cancelButton(): JSX.Element {         return &lt;ActionButton iconProps={{ iconName: &quot;Cancel&quot; }} text={this.props.cancelButtonLabel || DEFAULT_CANCEL_BUTTON_LABEL} onClick={this._cancel} /&gt;;     }      private get previousButton(): JSX.Element {         if (this.hasPreviousStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;ChevronLeft&quot; }} text={this.props.previousButtonLabel || DEFAULT_PREVIOUS_BUTTON_LABEL} onClick={this._goToPreviousStep} /&gt;;         }          return null;     }      private get nextButton(): JSX.Element {         if (this.hasNextStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;ChevronRight&quot; }} text={this.props.nextButtonLabel || DEFAULT_NEXT_BUTTON_LABEL} onClick={this._goToNextStep} /&gt;;         }          return null;     }      private get finishButton(): JSX.Element {         if (!this.hasNextStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;Save&quot; }} text={this.props.finishButtonLabel || DEFAULT_FINISH_BUTTON_LABEL} onClick={this._finish} /&gt;;         }          return null;     }      public render(): React.ReactElement&lt;IWizardProps&lt;TStep&gt;&gt; {         return &lt;div className={styles.wizardComponent}&gt;             {this.props.mainCaption &amp;&amp; &lt;h1&gt;{this.props.mainCaption}&lt;/h1&gt;}             &lt;Pivot selectedKey={this.state.currentStep.toString()}&gt;                 {this.renderSteps()}             &lt;/Pivot&gt;             {this.state.isValidatingStep &amp;&amp; &lt;div&gt;{this.props.validatingMessage || DEFAULT_VALIDATING_MESSAGE}&lt;/div&gt;}             {this.state.errorMessage &amp;&amp; &lt;div className={styles.error}&gt;{this.state.errorMessage}&lt;/div&gt;}              &lt;div className={styles.row}&gt;                 &lt;div className={`${styles.halfColumn} ${styles.lefted}`}&gt;                     {this.cancelButton}                 &lt;/div&gt;                 &lt;div className={`${styles.halfColumn} ${styles.righted}`}&gt;                     {this.previousButton}                     {this.nextButton}                     {this.finishButton}                 &lt;/div&gt;             &lt;/div&gt;           &lt;/div&gt;;     } }\n</code>) <code>\nimport * as React from &quot;react&quot;; import { ActionButton } from &quot;office-ui-fabric-react/lib/Button&quot;; import { Pivot, PivotItem, IPivotItemProps } from &quot;office-ui-fabric-react/lib/Pivot&quot;; import styles from &quot;./Wizard.module.scss&quot;;  export interface IWizardStepProps&lt;TStep extends number&gt; extends IPivotItemProps {     step: TStep;     caption: string; }  export class WizardStep&lt;TStep extends number&gt; extends React.Component&lt;IWizardStepProps&lt;TStep&gt;, {}&gt; {  }  export interface IWizardStepValidationResult {     isValidStep: boolean;     errorMessage?: string; }  export interface IWizardProps&lt;TStep extends number&gt; {     defaultCurrentStep?: TStep;     onValidateStep?: (currentStep: TStep) =&gt; IWizardStepValidationResult | Promise&lt;IWizardStepValidationResult&gt;;     onCompleted?: () =&gt; void;     onCancel?: () =&gt; void;     nextButtonLabel?: string;     previousButtonLabel?: string;     cancelButtonLabel?: string;     finishButtonLabel?: string;     validatingMessage?: string;     mainCaption?: string; }  export interface IWizardState&lt;TStep extends number&gt; {     currentStep: TStep;     completedSteps: TStep;     errorMessage: string;     isValidatingStep: boolean; }  const DEFAULT_NEXT_BUTTON_LABEL = &quot;Next&quot;; const DEFAULT_PREVIOUS_BUTTON_LABEL = &quot;Previous&quot;; const DEFAULT_FINISH_BUTTON_LABEL = &quot;Finish&quot;; const DEFAULT_CANCEL_BUTTON_LABEL = &quot;Cancel&quot;; const DEFAULT_VALIDATING_MESSAGE = &quot;Validating step...&quot;;  export abstract class BaseWizard&lt;TStep extends number&gt; extends React.Component&lt;IWizardProps&lt;TStep&gt;, IWizardState&lt;TStep&gt;&gt; {      constructor(props: IWizardProps&lt;TStep&gt;) {         super(props);          this.state = {             currentStep: props.defaultCurrentStep || this.firstStep,             completedSteps: null,             errorMessage: null,             isValidatingStep: false         };     }      private renderSteps() {         const stepChildren = React.Children.toArray(this.props.children)             .filter((reactChild: React.ReactElement) =&gt; reactChild.type == WizardStep &amp;&amp; reactChild.props.step);          if (stepChildren.length == 0) {             throw new Error(&quot;The specified wizard steps are not valid&quot;);         }          return stepChildren             .map((reactChild: React.ReactElement) =&gt; {                 return &lt;PivotItem key={`WizardStep__${reactChild.props.step}`}                     itemKey={reactChild.props.step.toString()}                     headerText={reactChild.props.caption}                     headerButtonProps={{}} &gt;                     {reactChild.props.children}                 &lt;/PivotItem&gt;;             });     }      private get firstStep(): TStep {         const stepValues = React.Children.toArray(this.props.children)             .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)             .map((c: React.ReactElement) =&gt; c.props.step as number);         if (stepValues.length &lt; 1) {             throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);         }         return Math.min(...stepValues) as TStep;     }      private get lastStep(): TStep {         const stepValues = React.Children.toArray(this.props.children)             .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)             .map((c: React.ReactElement) =&gt; c.props.step as number);         if (stepValues.length &lt; 1) {             throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);         }         return Math.max(...stepValues) as TStep;     }      private _validateWithCallback = (validationCallback: (validationResult: IWizardStepValidationResult) =&gt; void) =&gt; {          if (!validationCallback) {             return;         }          const validationResult = this._validateStep(this.state.currentStep);         if (typeof (validationResult as Promise&lt;IWizardStepValidationResult&gt;).then === &quot;function&quot;) {             this.setState({                 isValidatingStep: true,                 errorMessage: null             });             const promiseResult = validationResult as Promise&lt;IWizardStepValidationResult&gt;;             promiseResult.then(result =&gt; {                 validationCallback(result);             }).catch(error =&gt; {                 if (error as string) {                     validationCallback({                         isValidStep: false,                         errorMessage: error                     });                 }             });         }         else {             const directResult = validationResult as IWizardStepValidationResult;             if (!directResult) {                 throw new Error(&quot;The validation result has unexpected format.&quot;);             }             validationCallback(directResult);         }     }      private _goToStep = (step: TStep, completedSteps?: TStep, skipValidation: boolean = false) =&gt; {          if (!skipValidation) {             this._validateWithCallback(result =&gt; {                 if (result.isValidStep) {                      this.setState({                         currentStep: step,                         completedSteps,                         errorMessage: null,                         isValidatingStep: false                     });                 } else {                     this.setState({                         errorMessage: result.errorMessage,                         isValidatingStep: false                     });                 }             });         } else {             this.setState({ currentStep: step, completedSteps });         }     }      private _validateStep = (step: TStep) =&gt; {         if (this.props.onValidateStep) {             return this.props.onValidateStep(step);         }          return {             isValidStep: true,             errorMessage: null         };     }      private get hasNextStep(): boolean {         return this.state.currentStep &lt; this.lastStep;     }      private get hasPreviousStep(): boolean {         return this.state.currentStep &gt; this.firstStep;     }      private _goToNextStep = () =&gt; {         let completedWizardSteps = (this.state.completedSteps | this.state.currentStep) as TStep;         const nextStep = ((this.state.currentStep as number) &lt;&lt; 1) as TStep;         console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; next step: &quot;, nextStep);         this._goToStep(nextStep, completedWizardSteps);     }      private _goToPreviousStep = () =&gt; {         const previousStep = ((this.state.currentStep as number) &gt;&gt; 1) as TStep;         console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; previous step: &quot;, previousStep);         this._goToStep(previousStep, null, true);     }       private _cancel = () =&gt; {         if (this.props.onCancel) {             this.props.onCancel();         }     }      private _finish = () =&gt; {         this._validateWithCallback((result) =&gt; {             if (result.isValidStep) {                 if (this.props.onCompleted) {                     this.props.onCompleted();                 }             } else {                 this.setState({                     errorMessage: result.errorMessage,                     isValidatingStep: false                 });             }         });     }      private get cancelButton(): JSX.Element {         return &lt;ActionButton iconProps={{ iconName: &quot;Cancel&quot; }} text={this.props.cancelButtonLabel || DEFAULT_CANCEL_BUTTON_LABEL} onClick={this._cancel} /&gt;;     }      private get previousButton(): JSX.Element {         if (this.hasPreviousStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;ChevronLeft&quot; }} text={this.props.previousButtonLabel || DEFAULT_PREVIOUS_BUTTON_LABEL} onClick={this._goToPreviousStep} /&gt;;         }          return null;     }      private get nextButton(): JSX.Element {         if (this.hasNextStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;ChevronRight&quot; }} text={this.props.nextButtonLabel || DEFAULT_NEXT_BUTTON_LABEL} onClick={this._goToNextStep} /&gt;;         }          return null;     }      private get finishButton(): JSX.Element {         if (!this.hasNextStep) {             return &lt;ActionButton iconProps={{ iconName: &quot;Save&quot; }} text={this.props.finishButtonLabel || DEFAULT_FINISH_BUTTON_LABEL} onClick={this._finish} /&gt;;         }          return null;     }      public render(): React.ReactElement&lt;IWizardProps&lt;TStep&gt;&gt; {         return &lt;div className={styles.wizardComponent}&gt;             {this.props.mainCaption &amp;&amp; &lt;h1&gt;{this.props.mainCaption}&lt;/h1&gt;}             &lt;Pivot selectedKey={this.state.currentStep.toString()}&gt;                 {this.renderSteps()}             &lt;/Pivot&gt;             {this.state.isValidatingStep &amp;&amp; &lt;div&gt;{this.props.validatingMessage || DEFAULT_VALIDATING_MESSAGE}&lt;/div&gt;}             {this.state.errorMessage &amp;&amp; &lt;div className={styles.error}&gt;{this.state.errorMessage}&lt;/div&gt;}              &lt;div className={styles.row}&gt;                 &lt;div className={`${styles.halfColumn} ${styles.lefted}`}&gt;                     {this.cancelButton}                 &lt;/div&gt;                 &lt;div className={`${styles.halfColumn} ${styles.righted}`}&gt;                     {this.previousButton}                     {this.nextButton}                     {this.finishButton}                 &lt;/div&gt;             &lt;/div&gt;           &lt;/div&gt;;     } }\n</code> Along that TSX file, you will probably need a bit of css to make it look a bit (just a bit) nicer. Add that <strong><em>Wizard.module.scss</em></strong> file <a href="https://gist.github.com/ypcode/d8d1b6ae64846935cf4788252e0a1f34">See code on Github Gist</a> <a href="https://gist.github.com/ypcode/d8d1b6ae64846935cf4788252e0a1f34">https://gist.github.com/ypcode/d8d1b6ae64846935cf4788252e0a1f34</a> With these pieces of code in your solution, you are ready now to use your own Wizard ! in your SPFx React component, you need to do the following, declare the steps with one shifted bit for each step, and then declare a new React component extending the BaseWizard with your own enum <a href="https://gist.github.com/ypcode/25f69452d0266551001225bba1239347">https://gist.github.com/ypcode/25f69452d0266551001225bba1239347</a> In the render method of your host React component you can then write the following, building all your step within a WizardStep element with the step property set to its step identifier, if the step is not specified, an error will be raised while rendering... <a href="https://gist.github.com/ypcode/d30cb5a0d446bfe1bef8885afc80398e">https://gist.github.com/ypcode/d30cb5a0d446bfe1bef8885afc80398e</a> You'll probably have noticed the <em><strong>onValidateStep</strong></em> callback property that can either return the validation result directly or a promise resolving the validation result, it will allow to handle async calls during validation. See the below animation to have an idea of what that component will allow you to do. <img src="/images/2019/10/demo01.gif" alt="demo01" /> Hopefully, you'll find this little reusable component useful ! You can find the whole solution on the <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-wizard-component">Github repo here</a>. At the moment, it is not shipped it as a ready to use component, but feel free to do so :) Also, if you have any idea of improvement or notice some issue, please, notify me on the Github repo ! Cheers ! Yannick</p>
+<p>In order to have a component easy to reuse and have intellisense in VS Code, I chose to write an abstract component with a generic parameter that will hold the type our steps enum. You can take the code of this abstract component as is and put it somewhere in your solution, unless you need to improve it or adapt it, you would probably not need to change this code.
+However, feel free to take a look at the code to see how the bitwise operators are helping here :)</p>
+<p>For instance, you can put the following code in a <strong>components/</strong> folder under your SPFx <strong>src/</strong> folder in a file <strong>Wizard.tsx</strong></p>
+<pre><code class="language-typescript">import * as React from &quot;react&quot;;
+import { ActionButton } from &quot;office-ui-fabric-react/lib/Button&quot;;
+import { Pivot, PivotItem, IPivotItemProps } from &quot;office-ui-fabric-react/lib/Pivot&quot;;
+import styles from &quot;./Wizard.module.scss&quot;;
+
+export interface IWizardStepProps&lt;TStep extends number&gt; extends IPivotItemProps {
+    step: TStep;
+    caption: string;
+}
+
+export class WizardStep&lt;TStep extends number&gt; extends React.Component&lt;IWizardStepProps&lt;TStep&gt;, {}&gt; {
+
+}
+
+export interface IWizardStepValidationResult {
+    isValidStep: boolean;
+    errorMessage?: string;
+}
+
+export interface IWizardProps&lt;TStep extends number&gt; {
+    defaultCurrentStep?: TStep;
+    onValidateStep?: (currentStep: TStep) =&gt; IWizardStepValidationResult | Promise&lt;IWizardStepValidationResult&gt;;
+    onCompleted?: () =&gt; void;
+    onCancel?: () =&gt; void;
+    nextButtonLabel?: string;
+    previousButtonLabel?: string;
+    cancelButtonLabel?: string;
+    finishButtonLabel?: string;
+    validatingMessage?: string;
+    mainCaption?: string;
+}
+
+export interface IWizardState&lt;TStep extends number&gt; {
+    currentStep: TStep;
+    completedSteps: TStep;
+    errorMessage: string;
+    isValidatingStep: boolean;
+}
+
+const DEFAULT_NEXT_BUTTON_LABEL = &quot;Next&quot;;
+const DEFAULT_PREVIOUS_BUTTON_LABEL = &quot;Previous&quot;;
+const DEFAULT_FINISH_BUTTON_LABEL = &quot;Finish&quot;;
+const DEFAULT_CANCEL_BUTTON_LABEL = &quot;Cancel&quot;;
+const DEFAULT_VALIDATING_MESSAGE = &quot;Validating step...&quot;;
+
+export abstract class BaseWizard&lt;TStep extends number&gt; extends React.Component&lt;IWizardProps&lt;TStep&gt;, IWizardState&lt;TStep&gt;&gt; {
+
+    constructor(props: IWizardProps&lt;TStep&gt;) {
+        super(props);
+
+        this.state = {
+            currentStep: props.defaultCurrentStep || this.firstStep,
+            completedSteps: null,
+            errorMessage: null,
+            isValidatingStep: false
+        };
+    }
+
+    private renderSteps() {
+        const stepChildren = React.Children.toArray(this.props.children)
+            .filter((reactChild: React.ReactElement) =&gt; reactChild.type == WizardStep &amp;&amp; reactChild.props.step);
+
+        if (stepChildren.length == 0) {
+            throw new Error(&quot;The specified wizard steps are not valid&quot;);
+        }
+
+        return stepChildren
+            .map((reactChild: React.ReactElement) =&gt; {
+                return &lt;PivotItem key={`WizardStep__${reactChild.props.step}`}
+                    itemKey={reactChild.props.step.toString()}
+                    headerText={reactChild.props.caption}
+                    headerButtonProps={{}} &gt;
+                    {reactChild.props.children}
+                &lt;/PivotItem&gt;;
+            });
+    }
+
+    private get firstStep(): TStep {
+        const stepValues = React.Children.toArray(this.props.children)
+            .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)
+            .map((c: React.ReactElement) =&gt; c.props.step as number);
+        if (stepValues.length &lt; 1) {
+            throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);
+        }
+        return Math.min(...stepValues) as TStep;
+    }
+
+    private get lastStep(): TStep {
+        const stepValues = React.Children.toArray(this.props.children)
+            .filter((c: React.ReactElement) =&gt; c.props.step as number &gt; 0)
+            .map((c: React.ReactElement) =&gt; c.props.step as number);
+        if (stepValues.length &lt; 1) {
+            throw new Error(&quot;The specified step values are invalid. First step value must be higher than 0&quot;);
+        }
+        return Math.max(...stepValues) as TStep;
+    }
+
+    private _validateWithCallback = (validationCallback: (validationResult: IWizardStepValidationResult) =&gt; void) =&gt; {
+
+        if (!validationCallback) {
+            return;
+        }
+
+        const validationResult = this._validateStep(this.state.currentStep);
+        if (typeof (validationResult as Promise&lt;IWizardStepValidationResult&gt;).then === &quot;function&quot;) {
+            this.setState({
+                isValidatingStep: true,
+                errorMessage: null
+            });
+            const promiseResult = validationResult as Promise&lt;IWizardStepValidationResult&gt;;
+            promiseResult.then(result =&gt; {
+                validationCallback(result);
+            }).catch(error =&gt; {
+                if (error as string) {
+                    validationCallback({
+                        isValidStep: false,
+                        errorMessage: error
+                    });
+                }
+            });
+        }
+        else {
+            const directResult = validationResult as IWizardStepValidationResult;
+            if (!directResult) {
+                throw new Error(&quot;The validation result has unexpected format.&quot;);
+            }
+            validationCallback(directResult);
+        }
+    }
+
+    private _goToStep = (step: TStep, completedSteps?: TStep, skipValidation: boolean = false) =&gt; {
+
+        if (!skipValidation) {
+            this._validateWithCallback(result =&gt; {
+                if (result.isValidStep) {
+
+                    this.setState({
+                        currentStep: step,
+                        completedSteps,
+                        errorMessage: null,
+                        isValidatingStep: false
+                    });
+                } else {
+                    this.setState({
+                        errorMessage: result.errorMessage,
+                        isValidatingStep: false
+                    });
+                }
+            });
+        } else {
+            this.setState({ currentStep: step, completedSteps });
+        }
+    }
+
+    private _validateStep = (step: TStep) =&gt; {
+        if (this.props.onValidateStep) {
+            return this.props.onValidateStep(step);
+        }
+
+        return {
+            isValidStep: true,
+            errorMessage: null
+        };
+    }
+
+    private get hasNextStep(): boolean {
+        return this.state.currentStep &lt; this.lastStep;
+    }
+
+    private get hasPreviousStep(): boolean {
+        return this.state.currentStep &gt; this.firstStep;
+    }
+
+    private _goToNextStep = () =&gt; {
+        let completedWizardSteps = (this.state.completedSteps | this.state.currentStep) as TStep;
+        const nextStep = ((this.state.currentStep as number) &lt;&lt; 1) as TStep;
+        console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; next step: &quot;, nextStep);
+        this._goToStep(nextStep, completedWizardSteps);
+    }
+
+    private _goToPreviousStep = () =&gt; {
+        const previousStep = ((this.state.currentStep as number) &gt;&gt; 1) as TStep;
+        console.log(&quot;Current step: &quot;, this.state.currentStep, &quot; previous step: &quot;, previousStep);
+        this._goToStep(previousStep, null, true);
+    }
+
+
+    private _cancel = () =&gt; {
+        if (this.props.onCancel) {
+            this.props.onCancel();
+        }
+    }
+
+    private _finish = () =&gt; {
+        this._validateWithCallback((result) =&gt; {
+            if (result.isValidStep) {
+                if (this.props.onCompleted) {
+                    this.props.onCompleted();
+                }
+            } else {
+                this.setState({
+                    errorMessage: result.errorMessage,
+                    isValidatingStep: false
+                });
+            }
+        });
+    }
+
+    private get cancelButton(): JSX.Element {
+        return &lt;ActionButton iconProps={{ iconName: &quot;Cancel&quot; }} text={this.props.cancelButtonLabel || DEFAULT_CANCEL_BUTTON_LABEL} onClick={this._cancel} /&gt;;
+    }
+
+    private get previousButton(): JSX.Element {
+        if (this.hasPreviousStep) {
+            return &lt;ActionButton iconProps={{ iconName: &quot;ChevronLeft&quot; }} text={this.props.previousButtonLabel || DEFAULT_PREVIOUS_BUTTON_LABEL} onClick={this._goToPreviousStep} /&gt;;
+        }
+
+        return null;
+    }
+
+    private get nextButton(): JSX.Element {
+        if (this.hasNextStep) {
+            return &lt;ActionButton iconProps={{ iconName: &quot;ChevronRight&quot; }} text={this.props.nextButtonLabel || DEFAULT_NEXT_BUTTON_LABEL} onClick={this._goToNextStep} /&gt;;
+        }
+
+        return null;
+    }
+
+    private get finishButton(): JSX.Element {
+        if (!this.hasNextStep) {
+            return &lt;ActionButton iconProps={{ iconName: &quot;Save&quot; }} text={this.props.finishButtonLabel || DEFAULT_FINISH_BUTTON_LABEL} onClick={this._finish} /&gt;;
+        }
+
+        return null;
+    }
+
+    public render(): React.ReactElement&lt;IWizardProps&lt;TStep&gt;&gt; {
+        return &lt;div className={styles.wizardComponent}&gt;
+            {this.props.mainCaption &amp;&amp; &lt;h1&gt;{this.props.mainCaption}&lt;/h1&gt;}
+            &lt;Pivot selectedKey={this.state.currentStep.toString()}&gt;
+                {this.renderSteps()}
+            &lt;/Pivot&gt;
+            {this.state.isValidatingStep &amp;&amp; &lt;div&gt;{this.props.validatingMessage || DEFAULT_VALIDATING_MESSAGE}&lt;/div&gt;}
+            {this.state.errorMessage &amp;&amp; &lt;div className={styles.error}&gt;{this.state.errorMessage}&lt;/div&gt;}
+
+            &lt;div className={styles.row}&gt;
+                &lt;div className={`${styles.halfColumn} ${styles.lefted}`}&gt;
+                    {this.cancelButton}
+                &lt;/div&gt;
+                &lt;div className={`${styles.halfColumn} ${styles.righted}`}&gt;
+                    {this.previousButton}
+                    {this.nextButton}
+                    {this.finishButton}
+                &lt;/div&gt;
+            &lt;/div&gt;
+
+
+        &lt;/div&gt;;
+    }
+}
+</code></pre>
+<p>Along that TSX file, you will probably need a bit of css to make it look a bit (just a bit) nicer.</p>
+<p>Add that <strong>Wizard.module.scss</strong> file</p>
+<pre><code class="language-scss">@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.wizardComponent {
+  
+  .row {
+    @include ms-Grid-row;
+    padding: 20px;
+  }
+
+  .column {
+    @include ms-Grid-col;
+    @include ms-sm12;
+  }
+
+  .halfColumn {
+    @include ms-Grid-col;
+    @include ms-sm6;
+  }
+
+  .fullWidthColumn {
+    @include ms-Grid-col;
+    @include ms-sm12;
+  }
+
+  .title {
+    @include ms-font-xl;
+    @include ms-fontColor-white;
+  }
+
+  .subTitle {
+    @include ms-font-l;
+    @include ms-fontColor-white;
+  }
+
+  .description {
+    @include ms-font-l;
+    @include ms-fontColor-white;
+  }
+
+  .lefted {
+    text-align: left;
+  }
+
+  .righted {
+    text-align: right;
+  }
+
+  .error {
+    margin: 20px;
+    padding: 15px;
+    font-size: larger;
+    font-weight: bold;
+    background-color: $ms-color-red;
+    color: $ms-color-white;
+  }
+
+  .button {
+    // Our button
+    text-decoration: none;
+    height: 32px;
+
+    // Primary Button
+    min-width: 80px;
+    background-color: $ms-color-themePrimary;
+    border-color: $ms-color-themePrimary;
+    color: $ms-color-white;
+
+    // Basic Button
+    outline: transparent;
+    position: relative;
+    font-family: &quot;Segoe UI WestEuropean&quot;,&quot;Segoe UI&quot;,-apple-system,BlinkMacSystemFont,Roboto,&quot;Helvetica Neue&quot;,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    font-size: $ms-font-size-m;
+    font-weight: $ms-font-weight-regular;
+    border-width: 0;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+    padding: 0 16px;
+
+    .label {
+      font-weight: $ms-font-weight-semibold;
+      font-size: $ms-font-size-m;
+      height: 32px;
+      line-height: 32px;
+      margin: 0 4px;
+      vertical-align: top;
+      display: inline-block;
+    }
+  }
+}
+</code></pre>
+<p>With these pieces of code in your solution, you are ready now to use your own Wizard !
+in your SPFx React component, you need to do the following, declare the steps with one shifted bit for each step, and then declare a new
+React component extending the BaseWizard with your own enum</p>
+<pre><code class="language-typescript">//...
+export enum MyWizardSteps {
+  None        = 0b0000,
+  FirstStep   = 0b0001,
+  SecondStep  = 0b0010,
+  ThirdStep   = 0b0100,
+  LastStep    = 0b1000
+}
+
+export class MyWizard extends BaseWizard&lt;MyWizardSteps&gt; {}
+//...
+</code></pre>
+<p>In the render method of your host React component you can then write the following, building all your step within a WizardStep element with the step property set to its step identifier, if the step is not specified, an error will be raised while rendering...</p>
+<pre><code class="language-typescript">import { BaseWizard, WizardStep, IWizardStepValidationResult } from &quot;../../../common/components/Wizard&quot;;
+//...
+
+
+ private _closeWizard(completed: boolean = false) {
+   this.setState({
+     isWizardOpened: false,
+     statusMessage: completed ? &quot;The wizard has been completed&quot; : &quot;The wizard has been canceled&quot;,
+     statusType: completed ? &quot;OK&quot; : &quot;KO&quot;
+   });
+
+   setTimeout(() =&gt; {
+     this.setState({
+       statusMessage: null,
+       statusType: null
+     });
+   }, 3000);
+ }
+
+ private _onValidateStep(step: MyWizardSteps): IWizardStepValidationResult | Promise&lt;IWizardStepValidationResult&gt; {
+
+   let isValid = true;
+   switch (step) {
+     case MyWizardSteps.FirstStep:
+       isValid = this.state.firstStepInput == 'first';
+       return {
+         isValidStep: isValid,
+         errorMessage: !isValid ? &quot;Your input to first step is invalid&quot; : null
+       };
+     case MyWizardSteps.ThirdStep:
+
+       return new Promise((resolve) =&gt; {
+         isValid = this.state.thirdStepInput == 'third';
+         setTimeout(() =&gt; {
+           resolve({
+             isValidStep: isValid,
+             errorMessage: !isValid ? &quot;Your input to third step is invalid&quot; : null
+           });
+         }, 3000);
+       });
+     case MyWizardSteps.LastStep:
+       this.setState({
+         wizardValidatingMessage: 'Validating all the information you entered...'
+       });
+       return new Promise((resolve) =&gt; {
+         isValid = this.state.thirdStepInput == 'third';
+         setTimeout(() =&gt; {
+           resolve({
+             isValidStep: isValid,
+             errorMessage: !isValid ? &quot;One of your input is invalid&quot; : null
+           });
+           this.setState({
+             wizardValidatingMessage: null
+           });
+         }, 3000);
+       });
+     default:
+       return { isValidStep: true };
+   }
+ }
+
+
+ private _renderMyWizard() {
+
+   return &lt;MyWizard
+     mainCaption=&quot;My Wizard&quot;
+     onCancel={() =&gt; this._closeWizard(false)}
+     onCompleted={() =&gt; this._closeWizard(true)}
+     onValidateStep={(step) =&gt; this._onValidateStep(step)}
+     validatingMessage={this.state.wizardValidatingMessage}
+   &gt;
+     &lt;WizardStep caption=&quot;My first step&quot; step={MyWizardSteps.FirstStep}&gt;
+       &lt;div className={styles.wizardStep}&gt;
+         &lt;h1&gt;Hello from first step&lt;/h1&gt;
+         &lt;TextField
+           value={this.state.firstStepInput}
+           placeholder=&quot;Type 'first' to validate the step&quot;
+           onChanged={(v) =&gt; this.setState({ firstStepInput: v })}&gt;&lt;/TextField&gt;
+       &lt;/div&gt;
+     &lt;/WizardStep&gt;
+
+     &lt;WizardStep caption=&quot;My second step&quot; step={MyWizardSteps.SecondStep}&gt;
+       &lt;div className={styles.wizardStep}&gt;
+         &lt;h1&gt;Hello from second step&lt;/h1&gt;
+       &lt;/div&gt;
+     &lt;/WizardStep&gt;
+
+     &lt;WizardStep caption=&quot;My third step&quot; step={MyWizardSteps.ThirdStep}&gt;
+       &lt;div className={styles.wizardStep}&gt;
+         &lt;h1&gt;Hello from third step&lt;/h1&gt;
+         &lt;TextField
+           value={this.state.thirdStepInput}
+           placeholder=&quot;Type 'third' to validate the step (async validation)&quot;
+           onChanged={(v) =&gt; this.setState({ thirdStepInput: v })}&gt;&lt;/TextField&gt;
+       &lt;/div&gt;
+     &lt;/WizardStep&gt;
+
+     &lt;WizardStep caption=&quot;My final step&quot; step={MyWizardSteps.LastStep}&gt;
+       &lt;div className={styles.wizardStep}&gt;
+         &lt;h1&gt;Hello from final step&lt;/h1&gt;
+       &lt;/div&gt;
+     &lt;/WizardStep&gt;
+   &lt;/MyWizard&gt;;
+ }
+</code></pre>
+<p>You'll probably have noticed the <em><strong>onValidateStep</strong></em> callback property that can either return the validation result directly or a promise resolving the validation result, it will allow to handle async calls during validation.</p>
+<p>See the below animation to have an idea of what that component will allow you to do.</p>
+<p><img src="/images/2019/10/demo01.gif" alt="demo01" /></p>
+<p>Hopefully, you'll find this little reusable component useful!
+You can find the whole solution on the <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-wizard-component">Github repo here</a>.</p>
+<p>At the moment, it is not shipped it as a ready to use component, but feel free to do so :)
+Also, if you have any idea of improvement or notice some issue, please, notify me on the Github repo !</p>
+<p>Cheers !</p>
+<p>Yannick</p>
 
     </div>
 </div>

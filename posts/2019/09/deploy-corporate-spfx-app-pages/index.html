@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Deploy corporate SPFx app pages" />
+            <meta property="og:description" content="Check out how to deploy a corporate SPFx app part page to your SharePoint" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/09/deploy-corporate-spfx-app-pages" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+        <meta property="og:image" content="/images/2019/09/scriptexec.png?r=202007150404" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-09-23 05:30:34Z" />
         <meta property="article:modified_time" content="2019-09-23 05:30:34Z" />
@@ -79,9 +80,10 @@
                 <meta property="article:tag" content="Tenant" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="Deploy corporate SPFx app pages" />
+            <meta name="twitter:description" content="Check out how to deploy a corporate SPFx app part page to your SharePoint" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/09/deploy-corporate-spfx-app-pages" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+            <meta name="twitter:image" content="/images/2019/09/scriptexec.png?r=202007150404" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JSON, Office 365, PnP, PowerShell, SharePoint, SharePoint Framework, SharePoint Online, SharePointFullPage, SingleWebPartAppPage, SPA, SPFx, Tenant, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -209,22 +211,81 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151244" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/09/scriptexec.png?r=202007150404" alt="Deploy corporate SPFx app pages" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint devs ! Today I am going to tackle a need many of us, SPFx developers, will face some day. Deploy a SPFx app, but not a WebPart, not an extension, a <strong>Single Page App</strong>. Okay.. What's the deal, is it not deployed the same way, you might say ? Well, it is, but that might actually be an issue, if you don't want it to be added or edited by end users. Let's get into it !</p>
+        <p>Hi SharePoint devs !</p>
+<p>Today I am going to tackle a need many of us, SPFx developers, will face some day. Deploy a SPFx app, but not a WebPart, not an extension, a <strong>Single Page App</strong>. Okay.. What's the deal, is it not deployed the same way, you might say ? Well, it is, but that might actually be an issue, if you don't want it to be added or edited by end users. Let's get into it !</p>
 <h1 id="how-to-develop-a-single-webpart-app-page-in-spfx">How to develop a Single WebPart app page in SPFx ?</h1>
-<p>It is actually really simple, there is 1 attribute in the manifest to modify, and that's it ! For this article I created a brand new SPFx WebPart solution (no-framework) in which I only changed some CSS for rendering purpose, slightly changed the manifest, but, really, there isn't any other changes. Let's check the WebPart manifest file <code>\n{   &quot;$schema&quot;: &quot;https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json&quot;,   &quot;id&quot;: &quot;85c66304-0802-417a-a753-de96fea19565&quot;,   &quot;alias&quot;: &quot;MySinglePageAppWebPart&quot;,   &quot;componentType&quot;: &quot;WebPart&quot;,    // The &quot;*&quot; signifies that the version should be taken from the package.json   &quot;version&quot;: &quot;*&quot;,   &quot;manifestVersion&quot;: 2,    // If true, the component can only be installed on sites where Custom Script is allowed.   // Components that allow authors to embed arbitrary script code should set this to true.   // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f   &quot;requiresCustomScript&quot;: false,   &quot;hiddenFromToolbox&quot;: true,   &quot;supportedHosts&quot;: [&quot;SharePointWebPart&quot;],    &quot;preconfiguredEntries&quot;: [{     &quot;groupId&quot;: &quot;5c03119e-3074-46fd-976b-c60198311f70&quot;, // Other     &quot;group&quot;: { &quot;default&quot;: &quot;Other&quot; },     &quot;title&quot;: { &quot;default&quot;: &quot;MySPA&quot; },     &quot;description&quot;: { &quot;default&quot;: &quot;A Single Page Application developed with SPFx&quot; },     &quot;officeFabricIconFontName&quot;: &quot;Page&quot;,     &quot;properties&quot;: {       &quot;description&quot;: &quot;Hello dear user&quot;     }   }] }\n</code> If you take a look at line 16 <strong>supportedHosts</strong>, in VS Code, for instance, you will see that you can add other entries, such as <em>SharePointFullPage</em> , this setting will allow you to &quot;embed&quot; your WebPart in a dedicated page (with only this WebPart and nothing else). If we give it a try, let's add this entry, bundle and package solution, deploy it to app catalog. Now we see, If I add a new page from the command bar on the home page* I can see this <img src="/images/2019/09/newpage.png" alt="newpage" /> <img src="/images/2019/09/apppagepicker.png" alt="apppagepicker.png" />   * <em>on the home page <strong>only</strong>, it looks like it is the only location from where we can get to the page templates picker, either the new button from the site pages library or the link from the up right corner gear will directly create an article page</em> If I click it, I have indeed a full page with only my WebPart ! Great ! However, the creator of the page has to provide:</p>
+<p>It is actually really simple, there is 1 attribute in the manifest to modify, and that's it ! For this article I created a brand new SPFx WebPart solution (no-framework) in which I only changed some CSS for rendering purpose, slightly changed the manifest, but, really, there isn't any other changes. Let's check the WebPart manifest file</p>
+<pre><code class="language-jsonc">{
+    &quot;$schema&quot;: &quot;https://developer.microsoft.com/json-schemas/spfx/client-side-web-part-manifest.schema.json&quot;,
+    &quot;id&quot;: &quot;85c66304-0802-417a-a753-de96fea19565&quot;,
+    &quot;alias&quot;: &quot;MySinglePageAppWebPart&quot;,
+    &quot;componentType&quot;: &quot;WebPart&quot;,
+    // The &quot;*&quot; signifies that the version should be taken from the package.json   
+    &quot;version&quot;: &quot;*&quot;,
+    &quot;manifestVersion&quot;: 2,
+    // If true, the component can only be installed on sites where Custom Script is allowed.   
+    // Components that allow authors to embed arbitrary script code should set this to true.   
+    // https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f   
+    &quot;requiresCustomScript&quot;: false,
+    &quot;hiddenFromToolbox&quot;: true,
+    &quot;supportedHosts&quot;: [
+        &quot;SharePointWebPart&quot;
+    ],
+    &quot;preconfiguredEntries&quot;: [
+        {
+            &quot;groupId&quot;: &quot;5c03119e-3074-46fd-976b-c60198311f70&quot;, // Other     
+            &quot;group&quot;: {
+                &quot;default&quot;: &quot;Other&quot;
+            },
+            &quot;title&quot;: {
+                &quot;default&quot;: &quot;MySPA&quot;
+            },
+            &quot;description&quot;: {
+                &quot;default&quot;: &quot;A Single Page Application developed with SPFx&quot;
+            },
+            &quot;officeFabricIconFontName&quot;: &quot;Page&quot;,
+            &quot;properties&quot;: {
+                &quot;description&quot;: &quot;Hello dear user&quot;
+            }
+        }
+    ]
+}
+</code></pre>
+<p>If you take a look at line 16 <strong>supportedHosts</strong>, in VS Code, for instance, you will see that you can add other entries, such as <em>SharePointFullPage</em> , this setting will allow you to &quot;embed&quot; your WebPart in a dedicated page (with only this WebPart and nothing else). If we give it a try, let's add this entry, bundle and package solution, deploy it to app catalog.
+Now we see, If I add a new page from the command bar on the home page* I can see this</p>
+<p><img src="/images/2019/09/newpage.png" alt="newpage" />
+<img src="/images/2019/09/apppagepicker.png" alt="apppagepicker.png" />  </p>
+<ul>
+<li>on the home page <strong>only</strong>, it looks like it is the only location from where we can get to the page templates picker, either the new button from the site pages library or the link from the up right corner gear will directly create an article page
+If I click it, I have indeed a full page with only my WebPart ! Great !</li>
+</ul>
+<p>However, the creator of the page has to provide:</p>
 <ul>
 <li>The title of the page: pretty obvious</li>
-<li>But also the <strong>configuration of the page !</strong> In some scenarios, that totally makes sense... But in others, that is something we might want to get rid of ! Moreover, not only the creator but all the users with Edit permission (meaning the Members by default on Modern team sites) on the page will be able to update the configuration. It is quite a consistent behavior in SharePoint, and basically, I would not want it to be different because all of the inconsistencies it would cause...</li>
+<li>But also the <strong>configuration of the page !</strong></li>
 </ul>
+<p>In some scenarios, that totally makes sense...
+But in others, that is something we might want to get rid of !
+Moreover, not only the creator but all the users with Edit permission (meaning the Members by default on Modern team sites) on the page will be able to update the configuration.</p>
+<p>It is quite a consistent behavior in SharePoint, and basically, I would not want it to be different because all of the inconsistencies it would cause...</p>
 <p>So it is as simple as changing 1 parameter in the manifest to convert a WebPart into an application page.</p>
 <h1 id="deploy-corporate-applications-on-intranet">Deploy corporate applications on Intranet</h1>
-<p>All that said, a scenario that many organizations will probably require is to have corporate applications installed directly in their intranet, and it will be more than likely out of question that regular users are able to change anything in the application configuration. It will probably also be required that regular users are not able to add new instances of the application... From the page templates picker, Members will be able to do that as well. Regarding this very last point, I was actually expecting the <em><strong>hiddenFromToolbox</strong></em> flag in the manifest can make the app page hidden from the page templates picker but it doesn't... After a bit of searching through <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/single-part-app-pages">the official docs</a> and <a href="https://github.com/SharePoint/sp-dev-docs/issues/3832">GitHub issues</a>. I realized the only way to achieve my need is actually to create a regular Modern page, add My WebPart to it, and then update the modern page layout. Moreover, to make sure, no regular user can alter my application page, I will make sure that only owners (or any other wanted group) has full control on the page, all other will only have read permissions (It is classical SharePoint permissions management).</p>
+<p>All that said, a scenario that many organizations will probably require is to have corporate applications installed directly in their intranet, and it will be more than likely out of question that regular users are able to change anything in the application configuration.
+It will probably also be required that regular users are not able to add new instances of the application...
+From the page templates picker, Members will be able to do that as well. Regarding this very last point, I was actually expecting the <em><strong>hiddenFromToolbox</strong></em> flag in the manifest can make the app page hidden from the page templates picker but it doesn't...</p>
+<p>After a bit of searching through <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/single-part-app-pages">the official docs</a> and <a href="https://github.com/SharePoint/sp-dev-docs/issues/3832">GitHub issues</a>.</p>
+<p>I realized the only way to achieve my need is actually to create a regular Modern page, add My WebPart to it, and then update the modern page layout.</p>
+<p>Moreover, to make sure, no regular user can alter my application page, I will make sure that only owners (or any other wanted group) has full control on the page, all other will only have read permissions (It is classical SharePoint permissions management).</p>
 <h1 id="a-pnp-powershell-script-to-deploy-my-single-page-application">A PnP PowerShell script to deploy my Single Page application</h1>
-<p>First of all, to make sure my app page cannot be added by any editors of the sites, I will remove the supported host we added earlier, the WebPart manifest will be exactly like the one shown above. You'll probably notice that in that manifest, the WebPart is then a regular WebPart (it is important for the PnP PowerShell script to work),  I also added the flag &quot;hiddenFromToolbox&quot; set to true to make sure we cannot add our application as a WebPart on any other page. From the SPFx solution side, it is the only thing to take care of, so <strong><em>basically have a regular WebPart solution, with the &quot;hiddenFromToolbox&quot; flag set.</em></strong> Let's then write the script! Obviously PnP PowerShell will be our ally here ! The steps of the scripts will be :</p>
+<p>First of all, to make sure my app page cannot be added by any editors of the sites, I will remove the supported host we added earlier, the WebPart manifest will be exactly like the one shown above.</p>
+<p>You'll probably notice that in that manifest, the WebPart is then a regular WebPart (it is important for the PnP PowerShell script to work),  I also added the flag &quot;hiddenFromToolbox&quot; set to true to make sure we cannot add our application as a WebPart on any other page. From the SPFx solution side, it is the only thing to take care of, so <strong>basically have a regular WebPart solution, with the &quot;hiddenFromToolbox&quot; flag set.</strong></p>
+<p>Let's then write the script!
+Obviously PnP PowerShell will be our ally here !
+The steps of the scripts will be :</p>
 <ol>
 <li>Connect to site with PnP PowerShell.</li>
 <li>Will Get or Create the page we want to be our application page.</li>
@@ -233,9 +294,102 @@
 <li>Leave only the full control permissions for owners of the site.</li>
 <li>Change the layout of the modern page to &quot;<strong><em>SingleWebPartAppPage</em></strong>&quot; and publish the page.</li>
 </ol>
-<p>This script has been tested on a fresh Modern Team Site, the permissions to update might be different if you already customized them. <code>\nparam(     [Parameter(Mandatory = $true)]     [string]$web,     [Parameter(Mandatory = $true)]     [string]$pageName,     [Parameter(Mandatory = $true)]     [string]$appName,     $appConfig,     $pnpCredentials )  Write-Host &quot;Ensure connection to SharePoint site...&quot; -ForegroundColor Yellow try {     $ctx = Get-PnPContext -ErrorAction Ignore     If ($null -eq $ctx) {         If ($null -eq $pnpCredentials) {             Connect-PnPOnline $web         }         Else {             Connect-PnPOnline $web -Credentials $pnpCredentials         }     }     Write-Host &quot;Connected to SharePoint site.&quot; -ForegroundColor Green } catch {     throw &quot;Cannot connect to SharePoint site $web...&quot; }   # Ensure page name ends with .aspx if (!$pageName.EndsWith(&quot;.aspx&quot;)) {     $pageName = $(&quot;$pageName.aspx&quot;) }  try {     # Check if the page already exists     Write-Host &quot;Checking if $pageName already exists...&quot; -ForegroundColor Yellow     $page = Get-PnPClientSidePage -Identity $pageName -ErrorAction Ignore     If ($null -eq $page) {         # If the page does not exist, create it         Write-Host &quot;Creating page $pageName...&quot; -ForegroundColor Cyan         $page = Add-PnPClientSidePage -Name $pageName         Write-Host &quot;Page $pageName has been successfully created.&quot; -ForegroundColor Green     }     Else {         Write-Host &quot;Page $pageName does exist.&quot; -ForegroundColor Green     } } catch {     throw &quot;Page cannot be found and could not be created.&quot; }   # Try to get the component from available components $appComponent = Get-PnPAvailableClientSideComponents -Page $page -Component $appName If ($null -eq $appComponent) {     Throw &quot;The component $appName could not be found in the tenant. Please install it first&quot; }  # Ensure the app configuration if not specified if ($null -eq $appConfig) {     $appConfig = @{ }; }  try {     Write-Host &quot;Adding client side component $appName to page...&quot; -ForegroundColor Yellow     # Add the component (WebPart) to the page     Add-PnPClientSideWebPart -Page $page -Component $appComponent -WebPartProperties $appConfig -OutVariable $addWpOut     Write-Host &quot;Client side component successfully added.&quot; -ForegroundColor Green } catch {     throw &quot;Client side component could not be added to page...&quot; }   try {     Write-Host &quot;Removing Edit permissions from application page for members...&quot; -ForegroundColor Yellow     # Set the edit permissions for the app page only for owners (Set read only for members)     $members = Get-PnPGroup -AssociatedMemberGroup     $appPageListItem = Get-PnPListItem -List &quot;Site Pages&quot;  -Query &quot;&lt;View&gt;&lt;Query&gt;&lt;Where&gt;&lt;Eq&gt;&lt;FieldRef Name='FileLeafRef'/&gt;&lt;Value Type='Text'&gt;$pageName&lt;/Value&gt;&lt;/Eq&gt;&lt;/Where&gt;&lt;/Query&gt;&lt;/View&gt;&quot;     Set-PnPListItemPermission -List &quot;Site Pages&quot; -Identity $appPageListItem.Id -Group $members -RemoveRole Edit -AddRole Read -OutVariable $setPageOut     Write-Host &quot;Permissions successfully applied to application page&quot; -ForegroundColor Green } catch {     throw &quot;Cannot change permissions for application page...&quot; }  try {     Write-Host &quot;Changing page layout type to single WebPart app page and publishing...&quot; -ForegroundColor Yellow     # Publish the page and change the layout to Single WebPart App page     Set-PnPClientSidePage -Identity $page -LayoutType SingleWebPartAppPage -Publish -OutVariable $publishedOut     Write-Host &quot;Layout successfully changed and page successfully published&quot; -ForegroundColor Green } catch {     throw &quot;The application page could not be published...&quot; }  Write-Host &quot;Corporate single page application has been deployed to $web&quot; -ForegroundColor Green\n</code> <img src="/images/2019/09/scriptexec.png" alt="scriptexec.png" /> The owners of the site will see <img src="/images/2019/09/spa_edit.png" alt="spa_edit.png" /> While any other users will see <img src="/images/2019/09/spa_read.png" alt="spa_read.png" /></p>
+<p>This script has been tested on a fresh Modern Team Site, the permissions to update might be different if you already customized them.</p>
+<pre><code class="language-powershell">param(     
+  [Parameter(Mandatory = $true)]     
+  [string]$web,    
+  [Parameter(Mandatory = $true)]     
+  [string]$pageName,     
+  [Parameter(Mandatory = $true)]     
+  [string]$appName,     
+  $appConfig,     
+  $pnpCredentials 
+)  
+Write-Host &quot;Ensure connection to SharePoint site...&quot; -ForegroundColor Yellow 
+try {     
+  $ctx = Get-PnPContext -ErrorAction Ignore     
+  If ($null -eq $ctx) {         
+    If ($null -eq $pnpCredentials) {             
+      Connect-PnPOnline $web         
+    } Else {             
+      Connect-PnPOnline $web -Credentials $pnpCredentials         
+    }     
+  }     
+  Write-Host &quot;Connected to SharePoint site.&quot; -ForegroundColor Green 
+} catch {     
+  throw &quot;Cannot connect to SharePoint site $web...&quot; 
+}   
+# Ensure page name ends with .aspx 
+if (!$pageName.EndsWith(&quot;.aspx&quot;)) {     
+  $pageName = $(&quot;$pageName.aspx&quot;) 
+}  
+
+try {     
+  # Check if the page already exists     
+  Write-Host &quot;Checking if $pageName already exists...&quot; -ForegroundColor Yellow     
+  $page = Get-PnPClientSidePage -Identity $pageName -ErrorAction Ignore     
+  If ($null -eq $page) {         
+    # If the page does not exist, create it         
+    Write-Host &quot;Creating page $pageName...&quot; -ForegroundColor Cyan         
+    $page = Add-PnPClientSidePage -Name $pageName         
+    Write-Host &quot;Page $pageName has been successfully created.&quot; -ForegroundColor Green     
+  } Else {         
+    Write-Host &quot;Page $pageName does exist.&quot; -ForegroundColor Green     
+  } 
+} catch {     
+  throw &quot;Page cannot be found and could not be created.&quot; 
+}   
+
+# Try to get the component from available components 
+$appComponent = Get-PnPAvailableClientSideComponents -Page $page -Component $appName 
+If ($null -eq $appComponent) {     
+  Throw &quot;The component $appName could not be found in the tenant. Please install it first&quot; 
+}  
+
+# Ensure the app configuration if not specified 
+if ($null -eq $appConfig) {     
+  $appConfig = @{ }; 
+}  
+
+try {     
+  Write-Host &quot;Adding client side component $appName to page...&quot; -ForegroundColor Yellow     
+  # Add the component (WebPart) to the page     
+  Add-PnPClientSideWebPart -Page $page -Component $appComponent -WebPartProperties $appConfig -OutVariable $addWpOut     
+  Write-Host &quot;Client side component successfully added.&quot; -ForegroundColor Green 
+} catch {     
+  throw &quot;Client side component could not be added to page...&quot; 
+}   
+
+try {     
+  Write-Host &quot;Removing Edit permissions from application page for members...&quot; -ForegroundColor Yellow     
+  # Set the edit permissions for the app page only for owners (Set read only for members)     
+  $members = Get-PnPGroup -AssociatedMemberGroup     
+  $appPageListItem = Get-PnPListItem -List &quot;Site Pages&quot;  -Query &quot;&lt;View&gt;&lt;Query&gt;&lt;Where&gt;&lt;Eq&gt;&lt;FieldRef Name='FileLeafRef'/&gt;&lt;Value Type='Text'&gt;$pageName&lt;/Value&gt;&lt;/Eq&gt;&lt;/Where&gt;&lt;/Query&gt;&lt;/View&gt;&quot;     
+  Set-PnPListItemPermission -List &quot;Site Pages&quot; -Identity $appPageListItem.Id -Group $members -RemoveRole Edit -AddRole Read -OutVariable $setPageOut     
+  Write-Host &quot;Permissions successfully applied to application page&quot; -ForegroundColor Green 
+} catch {     
+  throw &quot;Cannot change permissions for application page...&quot; 
+}  
+
+try {     
+  Write-Host &quot;Changing page layout type to single WebPart app page and publishing...&quot; -ForegroundColor Yellow     
+  # Publish the page and change the layout to Single WebPart App page     
+  Set-PnPClientSidePage -Identity $page -LayoutType SingleWebPartAppPage -Publish -OutVariable $publishedOut     
+  Write-Host &quot;Layout successfully changed and page successfully published&quot; -ForegroundColor Green 
+} catch {     
+  throw &quot;The application page could not be published...&quot; }  
+  Write-Host &quot;Corporate single page application has been deployed to $web&quot; -ForegroundColor Green
+}
+</code></pre>
+<p><img src="/images/2019/09/scriptexec.png" alt="scriptexec.png" /></p>
+<p>The owners of the site will see</p>
+<p><img src="/images/2019/09/spa_edit.png" alt="spa_edit.png" /></p>
+<p>While any other users will see</p>
+<p><img src="/images/2019/09/spa_read.png" alt="spa_read.png" /></p>
 <h1 id="conclusion">Conclusion</h1>
-<p>As usual, PnP PowerShell helps us here and we have a quite simple solution. However, I would have preferred a more straightforward procedure for achieving this, The flag in the supportedHosts is great, but, IMHO, it is still not sufficient for us, developers and solutions providers to seamlessly install corporate applications, if, by default, end-users can interfere with it. I hope you found this post useful, and please, let me know any feedback you might have on this ! Cheers ! Yannick</p>
+<p>As usual, PnP PowerShell helps us here and we have a quite simple solution. However, I would have preferred a more straightforward procedure for achieving this, The flag in the supportedHosts is great, but, IMHO, it is still not sufficient for us, developers and solutions providers to seamlessly install corporate applications, if, by default, end-users can interfere with it. I hope you found this post useful, and please, let me know any feedback you might have on this !</p>
+<p>Cheers!</p>
+<p>Yannick</p>
 
     </div>
 </div>

@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Build a SharePoint Webhook with Node.js" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/01/build-sharepoint-webhook-nodejs" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+        <meta property="og:image" content="/images/common/sharepoint.png?r=202007150404" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-01-19 09:23:51Z" />
         <meta property="article:modified_time" content="2017-01-19 09:23:51Z" />
@@ -77,7 +77,7 @@
         <meta name="twitter:title" content="Build a SharePoint Webhook with Node.js" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/01/build-sharepoint-webhook-nodejs" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+            <meta name="twitter:image" content="/images/common/sharepoint.png?r=202007150404" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, Express.js, JavaScript, JS, Node.js, SharePoint, SharePoint Online, Web Development, Webhook" />
         <meta name="twitter:site" content="@yp_code" />
@@ -205,20 +205,26 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151244" alt="code image" />
+            <img class="content-item-featured-image" src="/images/common/sharepoint.png?r=202007150404" alt="Build a SharePoint Webhook with Node.js" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint guys, <img src="/images/2017/01/sharepoint-logo-800x164.png" alt="sharepoint-logo-800x164" />In the past few weeks, I focused on Node.js and how to leverage this awesome technology to build stuff in the SharePoint area. It is really a great opportunity to better understand what is behind the scene in SharePoint provider-hosted addins. During my experimentation, I implemented a node module to help handling SharePoint common tasks (such as authentication and REST requests, ...). But this will be the topic of a future blog post ! Today, we will discuss something else. Great fresh news for the Office 365 &amp; SharePoint developers community,</p>
+        <p>Hi SharePoint guys,</p>
+<p>In the past few weeks, I focused on Node.js and how to leverage this awesome technology to build stuff in the SharePoint area. 
+It is really a great opportunity to better understand what is behind the scene in SharePoint provider-hosted addins.
+During my experimentation, I implemented a node module to help handling SharePoint common tasks (such as authentication and REST requests, ...).
+But this will be the topic of a future blog post ! Today, we will discuss something else. Great fresh news for the Office 365 &amp; SharePoint developers community,</p>
 <blockquote>
 <p>SharePoint Webhooks are now Generally Available !</p>
 <hr />
 <h5 id="httpsdev.office.comblogssharepoint-webhooks-is-now-generally-available-build-service-oriented-processes-in-sharepoint"><a href="https://dev.office.com/blogs/sharepoint-webhooks-is-now-generally-available-build-service-oriented-processes-in-sharepoint">https://dev.office.com/blogs/sharepoint-webhooks-is-now-generally-available-build-service-oriented-processes-in-sharepoint</a></h5>
 </blockquote>
 <h2 id="what-is-a-webhook">What is a Webhook ?</h2>
-<p>Webhooks tend to become a standard since most of the biggest platforms on the Web ( GitHub, Facebook, Wordpress, VisualStudioOnline, DropBox, PayPal, ...) leverage them. In a few words, a Webhook is a simple HTTP callback triggered by an event on a system.</p>
+<p>Webhooks tend to become a standard since most of the biggest platforms on the Web ( GitHub, Facebook, Wordpress, VisualStudioOnline, DropBox, PayPal, ...) leverage them.
+In a few words, a Webhook is a simple HTTP callback triggered by an event on a system.</p>
 <h3 id="yes.a-new-name-for-remote-event-receivers">Yes... a new name for Remote Event Receivers !</h3>
-<p>**Not at all! **Even if the Remote Event Receivers and Webhooks allow to trigger a process after an event, RER and Webhooks do not offer the same capabilities and specificities.</p>
+<p><strong>Not at all!</strong>
+Even if the Remote Event Receivers and Webhooks allow to trigger a process after an event, RER and Webhooks do not offer the same capabilities and specificities.</p>
 <h4 id="webhooks">Webhooks</h4>
 <ul>
 <li>Webhooks are simple HTTP POST handlers</li>
@@ -246,39 +252,217 @@
 </ul>
 <h3 id="lets-start">Let's start !</h3>
 <ol>
-<li>Let's start Ngrok to get your temporary public URL: <strong>&gt; ngrok http 3000 --host-header=localhost:3000</strong> Copy the given HTTPS url. <img src="/images/2017/01/ngrok-public-url.png" alt="ngrok-public-url" /></li>
-<li>In SharePoint, register a new App (<a href="http://tenant.sharepoint.com/">http://tenant.sharepoint.com/</a><path>/_layouts/15/appregnew.aspx)
+<li>Let's start Ngrok to get your temporary public URL:</li>
+</ol>
+<pre><code class="language-bash">ngrok http 3000 --host-header=localhost:3000
+</code></pre>
+<p>Copy the given HTTPS url.</p>
+<p><img src="/images/2017/01/ngrok-public-url.png" alt="ngrok-public-url" /></p>
+<ol start="2">
+<li><p>In SharePoint, register a new App (<a href="http://tenant.sharepoint.com/">http://tenant.sharepoint.com/</a><path>/_layouts/15/appregnew.aspx)</p>
 <ol>
 <li>Paste the public url as the Redirect URI, and paste the domain (Note: It doesn't really matter since we will stick to app-only in this sample app. However, it would be necessary in a app+user context since SharePoint has to post the app context to your app)</li>
-<li>Click the <strong>Create</strong> button and copy the Client ID and Client Secret in a safe location. <img src="/images/2017/01/registered-webhook-app.png" alt="Registered Webhook App.png" /></li>
-<li>Make sure your app has sufficient and app-only policy enabled permissions
+<li>Click the <strong>Create</strong> button and copy the Client ID and Client Secret in a safe location.</li>
+</ol>
+<p><img src="/images/2017/01/registered-webhook-app.png" alt="Registered Webhook App.png" /></p>
+<ol start="3">
+<li><p>Make sure your app has sufficient and app-only policy enabled permissions</p>
 <ul>
 <li>Go to http://tenant.sharepoint.com/<path>/_layouts/15/appinv.aspx</li>
 <li>Copy/Paste the Client Id into the field App Id (1)</li>
 <li>Click the Lookup button (2)</li>
-<li>Copy/Paste the permissions XML into the text area (3) [code language=&quot;xml&quot;] &lt;AppPermissionRequests AllowAppOnlyPolicy=&quot;true&quot;<AppPermissionRequest Scope="http://sharepoint/content/sitecollection" Right="FullControl" /> </AppPermissionRequests> [/code] <img src="/images/2017/01/app-permissions.png" alt="App-permissions.png" /></li>
+<li>Copy/Paste the permissions XML into the text area (3)</li>
+</ul>
+<pre><code class="language-xml"> &lt;AppPermissionRequests AllowAppOnlyPolicy=&quot;true&quot;&lt;AppPermissionRequest Scope=&quot;http://sharepoint/content/sitecollection&quot; Right=&quot;FullControl&quot; /&gt; &lt;/AppPermissionRequests&gt;
+</code></pre>
+<p><img src="/images/2017/01/app-permissions.png" alt="App-permissions.png" /></p>
+<ul>
 <li>Click the &quot;Create&quot; button to apply the permissions</li>
 </ul>
 </li>
 </ol>
 </li>
-<li>Create a workspace directory on your local dev environment</li>
-<li>In your directory, from the terminal, type <strong>&gt; npm install express-generator -g &gt; express</strong></li>
-<li>In the generated package.json file, add the following dependencies [code language=&quot;json&quot;] &quot;node-fetch&quot;: &quot;^1.6.3&quot;, &quot;spaddin-helper&quot;: &quot;git+https://github.com/ypcode/node-spaddin-helper.git&quot; [/code] (Notice the spaddin-helper which is my node module currently hosted in my github repo)</li>
-<li>Install the modules <strong>&gt; npm install --save</strong></li>
-<li>Besides the <strong>app.js</strong> file, create a <strong>config.js</strong> file with the following content : [code language=&quot;javascript&quot;] var config = { ClientId : &quot;<your client Id>&quot;, ClientSecret : &quot;<your client secret>&quot;, SPHostUrl : &quot;<your SharePoint site url>&quot;, WebhooksUrl: &quot;<your ngrok public url>/webhooks&quot; }; module.exports = config; [/code] (Replace the values by yours)</li>
-<li>In the <strong>app.js</strong> file, add the following lines (for example at line 10) [code language=&quot;javascript&quot;] var config = require(&quot;./config&quot;); var sp = require(&quot;spaddin-helper&quot;); sp.SharePointAddinConfiguration.init(config.ClientId, config.ClientSecret); [/code]</li>
+<li><p>Create a workspace directory on your local dev environment</p>
+</li>
+<li><p>In your directory, from the terminal, type</p>
+</li>
 </ol>
+<pre><code class="language-bash">npm install express-generator -g &gt; express
+</code></pre>
+<ol start="5">
+<li>In the generated package.json file, add the following dependencies</li>
+</ol>
+<pre><code class="language-json">...
+&quot;node-fetch&quot;: &quot;^1.6.3&quot;, 
+&quot;spaddin-helper&quot;: &quot;git+https://github.com/ypcode/node-spaddin-helper.git&quot; 
+...
+</code></pre>
+<p>(Notice the spaddin-helper which is my node module currently hosted in my github repo)</p>
+<ol start="6">
+<li>Install the modules</li>
+</ol>
+<pre><code class="language-bash">npm install --save
+</code></pre>
+<ol start="7">
+<li>Besides the <strong>app.js</strong> file, create a <strong>config.js</strong> file with the following content :</li>
+</ol>
+<pre><code class="language-javascript">var config = { 
+  ClientId : &quot;&lt;your client Id&gt;&quot;, 
+  ClientSecret : &quot;&lt;your client secret&gt;&quot;, 
+  SPHostUrl : &quot;&lt;your SharePoint site url&gt;&quot;, 
+  WebhooksUrl: &quot;&lt;your ngrok public url&gt;/webhooks&quot; 
+}; 
+module.exports = config;
+</code></pre>
+<p>(Replace the values by yours)</p>
+<ol start="8">
+<li>In the <strong>app.js</strong> file, add the following lines (for example at line 10)</li>
+</ol>
+<pre><code class="language-javascript">var config = require(&quot;./config&quot;); 
+var sp = require(&quot;spaddin-helper&quot;); 
+sp.SharePointAddinConfiguration.init(config.ClientId, config.ClientSecret); 
+</code></pre>
 <h3 id="test-our-app">Test our app</h3>
-<p error:="" error="">To make sure our app is properly configured, we can try to display a simple property from our SharePoint site. CAUTION: Since we are in App-Only mode, we cannot query users information. For instance, you can replace the content of the <strong>routes/index.js</strong> file by the following [code language=&quot;javascript&quot;] var express = require('express'); var router = express.Router(); var sp = require(&quot;spaddin-helper&quot;); var config = require(&quot;../config&quot;); /* GET home page. */ router.get('/', function(req, res, next) { let ctx = new sp.SharePointContext(config.SPHostUrl); ctx.createAppOnlyClientForSPHost().then(client =&gt; { client.retrieve('_api/web/Title') .then(data =&gt; { let webTitle = data.d; res.render('index', { title: &quot;WebHook on site &quot; + webTitle }); }).catch((error) =&gt; { res.render('error', ); }); }); }); module.exports = router; [/code] <img src="/images/2017/01/webhooknodeapprunning.png" alt="WebhookNodeAppRunning.png" />You can run your app by executing the <strong>npm start</strong> command, try to reach the public (ngrok) URL of your site: We are now ready to continue with the Webhook matters</p>
+<p>To make sure our app is properly configured, we can try to display a simple property from our SharePoint site.
+CAUTION: Since we are in App-Only mode, we cannot query users information.
+For instance, you can replace the content of the <strong>routes/index.js</strong> file by the following</p>
+<pre><code class="language-javascript">var express = require('express'); 
+var router = express.Router(); 
+var sp = require(&quot;spaddin-helper&quot;); 
+var config = require(&quot;../config&quot;); 
+/* GET home page. */ 
+router.get('/', function(req, res, next) { 
+  let ctx = new sp.SharePointContext(config.SPHostUrl); 
+  ctx.createAppOnlyClientForSPHost().then(client =&gt; { 
+    client.retrieve('_api/web/Title') 
+    .then(data =&gt; { 
+      let webTitle = data.d; 
+      res.render('index', { title: &quot;WebHook on site &quot; + webTitle }); 
+    })
+    .catch((error) =&gt; { res.render('error', { error: error }); }); 
+  }); 
+}); 
+
+module.exports = router; 
+</code></pre>
+<p><img src="/images/2017/01/webhooknodeapprunning.png" alt="WebhookNodeAppRunning.png" /></p>
+<p>You can run your app by executing the <strong>npm start</strong> command, try to reach the public (ngrok) URL of your site: We are now ready to continue with the Webhook matters</p>
 <h2 id="subscribe-a-webhook">Subscribe a Webhook</h2>
 <p>Currently, the only way to subscribe to a SharePoint Webhook is through a call to the SharePoint REST API.</p>
 <h3 id="how-does-it-work">How does it work ?</h3>
-<p>You have to issue a HTTP POST request to <site>/_api/web/lists('id-of-list')/subscriptions with the following body (Content-Type should be JSON): [code language=&quot;javascript&quot;] { resource: &quot;<webUrl>/_api/web/lists('list-of-id')&quot;, notificationUrl: &quot;https://yourserver/foo/bar/&quot;, expirationDateTime: &quot;2017-06-01T00:00:00+00:00&quot; } [/code] When receiving the subscription request, SharePoint will try to validate your Webhook by sending it a POST request with a query string parameter called &quot;validationtoken&quot; that has a random value, your endpoint should respond to this request with the random value in the body.</p>
+<p>You have to issue a HTTP POST request to <site>/_api/web/lists('id-of-list')/subscriptions with the following body (Content-Type should be JSON):</p>
+<pre><code class="language-json">{ 
+  &quot;resource&quot;: &quot;&lt;webUrl&gt;/\_api/web/lists('list-of-id')&quot;, 
+  &quot;notificationUrl&quot;: &quot;https://yourserver/foo/bar/&quot;, 
+  &quot;expirationDateTime&quot;: &quot;2017-06-01T00:00:00+00:00&quot; 
+} 
+</code></pre>
+<p>When receiving the subscription request, SharePoint will try to validate your Webhook by sending it a POST request with a query string parameter called &quot;validationtoken&quot; that has a random value, your endpoint should respond to this request with the random value in the body.</p>
 <h3 id="in-our-node-app">In our Node app</h3>
-<p listId="" error:error="">We will build a basic UI that allows to subscribe a Webhook to a specific list. Let's add the UI, in the <strong>routes/index.js</strong> file, add the following right after the / route handler [code language=&quot;javascript&quot;] router.get('/subscriptions', (req, res) =&gt; { let ctx = new sp.SharePointContext(config.SPHostUrl); ctx.createAppOnlyClientForSPHost().then(client =&gt; { let vm = { lists: [] }; // We retrieve all the lists of the current web client.retrieve('_api/web/lists?<span class="math" listId="">\(select=Title,Id') .then(data =&gt; { // Add the results to the ViewModel vm.lists = data.d.results; }).then(() =&gt; { res.render('subscriptions', vm); }).catch((error) =&gt; { res.render('error', {error:error}); }); }); }); \[/code\] In this route handler, we retrieve all the lists of the current web and pass them to the view. Let's add this view. Add a new file **subscriptions.jade** in the **views** folder with the following content \[code language=&quot;javascript&quot;\] extends layout block content h1 SharePoint Webhook subscriptions form(action=&quot;/subscriptions&quot;, method=&quot;POST&quot;) if subscriptionCreated div Subscription has been requested for list #{listId} else div select(name=&quot;listId&quot;) each list in lists option(value=list.Id) #{list.Title} input(type=&quot;submit&quot;,name=&quot;submit&quot;,value=&quot;submit&quot;) \[/code\] We have now to implement the backend for this UI, in the **routes/index.js** file, add the following \[code language=&quot;javascript&quot;\] router.post('/subscriptions', (req, res) =&gt; { let ctx = new sp.SharePointContext(config.SPHostUrl); // We verify the listId POST argument let listId = req.body.listId; if (!listId) { res.send(400); // Bad request return; } ctx.createAppOnlyClientForSPHost().then(client =&gt; { // Content Type is not ODATA but regular JSON client.odataVerbose = false; client.create(`\_api/web/lists('\)</span>')/subscriptions<code>,{ resource: ctx.SPHostUrl + </code>_api/web/lists('$')`, notificationUrl: config.WebhooksUrl, expirationDateTime: &quot;2017-02-18T00:00:00+00:00&quot; }) .then((resp) =&gt; { let error = resp[&quot;odata.error&quot;]; if (error) { res.render('error', {message: error.message.value ,error:{status:<cite>,stack:</cite>}}); } else { res.render(&quot;subscriptions&quot;, {subscriptionCreated:true, listId: listId}); } }) .catch((error) =&gt; { res.render('error', ); }); }); }); [/code] And we have the subscriptions  basic (and UGLY ;) ) UI. <img src="/images/2017/01/webhooksubscriptionsview.png" alt="webhooksubscriptionsview" /> With this in place, we almost have everything to subscribe the Webhook. Remember I mentionned above that the Webhook endpoint has to be validated on registration, this is achieved by a reply from the Webhook to SharePoint</p>
+<p>We will build a basic UI that allows to subscribe a Webhook to a specific list.
+Let's add the UI, in the <strong>routes/index.js</strong> file, add the following right after the / route handler</p>
+<p error:error="">[code language=&quot;javascript&quot;] router.get('/subscriptions', (req, res) =&gt; { let ctx = new sp.SharePointContext(config.SPHostUrl); ctx.createAppOnlyClientForSPHost().then(client =&gt; { let vm = { lists: [] }; // We retrieve all the lists of the current web client.retrieve('_api/web/lists?$select=Title,Id') .then(data =&gt; { // Add the results to the ViewModel vm.lists = data.d.results; }).then(() =&gt; { res.render('subscriptions', vm); }).catch((error) =&gt; { res.render('error', ); }); }); }); [/code]</p>
+<p>In this route handler, we retrieve all the lists of the current web and pass them to the view. Let's add this view. Add a new file <strong>subscriptions.jade</strong> in the <strong>views</strong> folder with the following content</p>
+<pre><code class="language-pug">extends layout 
+block content 
+  h1 SharePoint Webhook subscriptions 
+  form(action=&quot;/subscriptions&quot;, method=&quot;POST&quot;) 
+    if subscriptionCreated 
+      div Subscription has been requested for list #{listId} 
+    else 
+      div select(name=&quot;listId&quot;) 
+        each list in lists 
+          option(value=list.Id) #{list.Title} 
+        input(type=&quot;submit&quot;,name=&quot;submit&quot;,value=&quot;submit&quot;) 
+</code></pre>
+<p>We have now to implement the backend for this UI, in the <strong>routes/index.js</strong> file, add the following</p>
+<pre><code class="language-javascript"> router.post('/subscriptions', (req, res) =&gt; { 
+   let ctx = new sp.SharePointContext(config.SPHostUrl); 
+   // We verify the listId POST argument 
+   let listId = req.body.listId; 
+   if (!listId) { 
+     res.send(400); 
+     // Bad request 
+     return; 
+    } 
+    ctx.createAppOnlyClientForSPHost().then(client =&gt; { 
+      // Content Type is not ODATA but regular JSON 
+      client.odataVerbose = false; 
+      client.create(`\_api/web/lists('${listId}')/subscriptions`,{ 
+        resource: ctx.SPHostUrl + `\_api/web/lists('${listId}')`, 
+        notificationUrl: config.WebhooksUrl, 
+        expirationDateTime: &quot;2017-02-18T00:00:00+00:00&quot; 
+        }) 
+        .then((resp) =&gt; { 
+          let error = resp\[&quot;odata.error&quot;\]; 
+          if (error) { 
+            res.render('error', {
+              message: error.message.value,
+              error:{status:&quot;&quot;,stack:&quot;&quot;}
+            }); 
+          } else { 
+            res.render(&quot;subscriptions&quot;, {
+              subscriptionCreated:true, 
+              listId: listId
+              }); 
+          } 
+        }) 
+        .catch((error) =&gt; { 
+          res.render('error', {error:error}); 
+        }); 
+    }); 
+  });
+</code></pre>
+<p>And we have the subscriptions basic (and UGLY ;) ) UI.</p>
+<p><img src="/images/2017/01/webhooksubscriptionsview.png" alt="webhooksubscriptionsview" /></p>
+<p>With this in place, we almost have everything to subscribe the Webhook. Remember I mentionned above that the Webhook endpoint has to be validated on registration, this is achieved by a reply from the Webhook to SharePoint</p>
 <h2 id="the-webhook-endpoint">The Webhook endpoint</h2>
-<p data.subscriptionId="" data.clientState="" data.expirationDateTime="" data.resource="" data.siteUrl="" data.webId="">The Webhook endpoint is responsible for the notification handling as well as its self validation during the subscription process. As already stated, it is nothing more than a handler to a HTTP POST request. To stay clean, we will implement a dedicated route for the WebHook business. In the <strong>routes</strong> folder, add a <strong>webhooks.js</strong> file and put the following content in it : [code language=&quot;javascript&quot;] var express = require('express'); var router = express.Router(); const handleNotification = (data) =&gt; { console.log(&quot;<mark><mark><mark><mark><mark><mark>NOTIFICATION</mark></mark></mark></mark></mark></mark>==&quot;); console.log(`Subscription: $`); console.log(`Client State: $`); console.log(`Expiration: $`); console.log(`Resource: $`); console.log(`Site Url: $`); console.log(`Web ID: $`); console.log(&quot;=<mark><mark><mark><mark><mark>/NOTIFICATION====&quot;); }; // Webhook handler router.post('/', (req, res) =&gt; { // Validate if new subscription if (req.query.validationtoken) { // Return a text/plain Success response // with the validationtoken query string parameter res.setHeader(&quot;Content-Type&quot;, &quot;text/plain&quot;); res.send(200, req.query.validationtoken); return; } let payload = req.body.value; if (!payload) { res.send(400, &quot;Bad Request&quot;); return; } if (Array.isArray(payload)) { payload.forEach(notification =&gt; { handleNotification(notification); }); } else { handleNotification(payload); } res.send(200, &quot;OK&quot;); }); module.exports = router; [/code] The code above will validate the Webhook in the case of a subscription validation, otherwise it will process the notification, in our case, it will simply output the notification content in the console. The final thing to do is to configure this route in our <strong>app.js</strong> file</mark></mark></mark></mark></mark></p>
+<p>The Webhook endpoint is responsible for the notification handling as well as its self validation during the subscription process.
+As already stated, it is nothing more than a handler to a HTTP POST request.
+To stay clean, we will implement a dedicated route for the WebHook business.
+In the <strong>routes</strong> folder, add a <strong>webhooks.js</strong> file and put the following content in it :</p>
+<pre><code class="language-javascript"> var express = require('express'); 
+ var router = express.Router(); 
+ const handleNotification = (data) =&gt; { 
+   console.log(&quot;============NOTIFICATION==============&quot;); 
+   console.log(`Subscription: ${data.subscriptionId}`); 
+   console.log(`Client State: ${data.clientState}`); 
+   console.log(`Expiration: ${data.expirationDateTime}`); 
+   console.log(`Resource: ${data.resource}`); 
+   console.log(`Site Url: ${data.siteUrl}`); 
+   console.log(`Web ID: ${data.webId}`); 
+   console.log(&quot;===========/NOTIFICATION==============&quot;); 
+  }; 
+  
+  // Webhook handler 
+  router.post('/', (req, res) =&gt; { 
+    // Validate if new subscription 
+    if (req.query.validationtoken) { 
+      // Return a text/plain Success response 
+      // with the validationtoken query string parameter 
+      res.setHeader(&quot;Content-Type&quot;, &quot;text/plain&quot;); 
+      res.send(200, req.query.validationtoken); 
+      return; 
+    } 
+    
+    let payload = req.body.value; 
+    if (!payload) { 
+      res.send(400, &quot;Bad Request&quot;); 
+      return; 
+    } 
+    
+    if (Array.isArray(payload)) { 
+      payload.forEach(notification =&gt; { 
+        handleNotification(notification); 
+      }); 
+    } else { 
+      handleNotification(payload); 
+    } 
+    res.send(200, &quot;OK&quot;); }); 
+    
+    module.exports = router; 
+</code></pre>
+<p>The code above will validate the Webhook in the case of a subscription validation, otherwise it will process the notification, in our case, it will simply output the notification content in the console. The final thing to do is to configure this route in our <strong>app.js</strong> file</p>
 <ul>
 <li>Replace the line 9 <em>var users = require('./routes/users');)</em> by <em>var webhooks = require('./routes/webhooks');</em></li>
 <li>Replace the line 28 <em>app.use('/users', users);</em> by <em>app.use('/webhooks', webhooks);</em></li>
@@ -292,7 +476,12 @@
 <li>Test modifying list items in this list</li>
 <li>See the incoming notifications in your debug console <img src="/images/2017/01/webhook_notifications.png" alt="webhook_notifications.png" /></li>
 </ul>
-<p>Here we go, a simple SharePoint Webhook implemented in Node.js. <img src="/images/2017/01/github1.png" alt="github" /> You can check out the complete sample implementation here: <a href="https://github.com/ypcode/samples/tree/master/sp-webhooks-sample-pub">https://github.com/ypcode/samples/tree/master/sp-webhooks-sample-pub</a> Hope you enjoyed reading this, please give your feedback ! Yannick</p>
+<p>Here we go, a simple SharePoint Webhook implemented in Node.js.</p>
+<p><img src="/images/2017/01/github1.png" alt="github" /></p>
+<p>You can check out the complete sample implementation here: <a href="https://github.com/ypcode/samples/tree/master/sp-webhooks-sample-pub">https://github.com/ypcode/samples/tree/master/sp-webhooks-sample-pub</a></p>
+<p>Hope you enjoyed reading this,
+please give your feedback !</p>
+<p>Yannick</p>
 
     </div>
 </div>

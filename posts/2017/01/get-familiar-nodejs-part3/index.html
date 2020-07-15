@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Get familar with Node.js - Part 3: Express.js" />
+            <meta property="og:description" content="Let's quickly build a real server world web application with one of the most popular Node.js framework" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/01/get-familiar-nodejs-part3" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-01-05 15:50:02Z" />
         <meta property="article:modified_time" content="2017-01-05 15:50:02Z" />
@@ -70,9 +71,10 @@
                 <meta property="article:tag" content="Node.js" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="Get familar with Node.js - Part 3: Express.js" />
+            <meta name="twitter:description" content="Let's quickly build a real server world web application with one of the most popular Node.js framework" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/01/get-familiar-nodejs-part3" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150404" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Express.js, JavaScript, JS, Node.js, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -200,23 +202,50 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151244" alt="code image" />
+            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150404" alt="code image" />
         </div>
    
     <div class="content">
         <p>Hi Devs, This post is part of a series of articles introducing Node.js.</p>
 <ul>
-<li><a href="https://ypcode.wordpress.com/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1 : the basics</a></li>
-<li><a href="https://ypcode.wordpress.com/2017/01/02/get-familar-with-node-js-part-2-npm/">Part 2 : NPM</a></li>
+<li><a href="/posts/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1 : the basics</a></li>
+<li><a href="/posts/2017/01/02/get-familar-with-node-js-part-2-npm/">Part 2 : NPM</a></li>
 <li>Part 3 : Express.js (This tutorial)</li>
-<li><a href="https://ypcode.wordpress.com/2017/01/06/get-familiar-with-node-js-part-4-productivity-tools/">Part 4 : Productivity Tools</a></li>
+<li><a href="/posts/2017/01/06/get-familiar-with-node-js-part-4-productivity-tools/">Part 4 : Productivity Tools</a></li>
 </ul>
 <p>In this post, we will see how to easily build a ready-to-use web application using Node.js and the Express framework.</p>
 <h2 id="what-is-express.js">What is Express.js ?</h2>
-<p>Express.js is a framework that take care of much of the boilerplate of web application development. It also leverages the concept of <strong>middleware</strong>. With this framework, you can easily handle some common tasks like <strong>serving static files</strong> or <strong>handling routing logic</strong>. It also rules, via the <strong>express-generator</strong>, a structure for your project.</p>
+<p>Express.js is a framework that take care of much of the boilerplate of web application development.
+It also leverages the concept of <strong>middleware</strong>.
+With this framework, you can easily handle some common tasks like <strong>serving static files</strong> or <strong>handling routing logic</strong>.
+It also rules, via the <strong>express-generator</strong>, a structure for your project.</p>
 <h2 id="a-simple-express-application">A simple Express application</h2>
-<p>We have first to install Express within our project like any other NPM package. Create a new folder for your project and type the following commands : <strong>&gt; cd .\myexpressapp01</strong> <strong>&gt; npm init --yes</strong> <strong>&gt; npm install express --save</strong> <img src="/images/2017/01/myexpressapp01_struct01.png" alt="myexpressapp01_struct01" />This will prepare your Node project and install express and all its dependencies. If you take a look in the node_modules folder, you will see a lot of external modules have been installed.</p>
-<p>in a index.js file, copy/paste the following code snippet: [code language=&quot;javascript&quot;] // Using the Express Framework const express = require('express'); // Instantiate an Express app let app = express(); // Define the (only) HTTP request handler app.get('/', (req, res, next) =&gt; { res.send(&quot;Hello World!&quot;); }); // The HTTP server listens on port 3000 const port = 3000; app.listen(port, () =&gt; { // A callback function executed when the server IS actually listening console.log(&quot;Now listening on port &quot; + port); }); [/code] <img src="/images/2016/12/nodefirstserverresult.png" alt="nodefirstserverresult" />The code above runs a simple HTTP server listening on port 3000, basically the same thing as the server sample in my previous post <a href="https://ypcode.wordpress.com/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1: the basics</a>. However, there is a slight difference when you try to reach any URL under localhost:3000 other than the root.</p>
+<p>We have first to install Express within our project like any other NPM package.
+Create a new folder for your project and type the following commands :</p>
+<pre><code class="language-bash">cd myexpressapp01
+npm init --yes
+npm install express --save 
+</code></pre>
+<p><img src="/images/2017/01/myexpressapp01_struct01.png" alt="myexpressapp01_struct01" /></p>
+<p>This will prepare your Node project and install express and all its dependencies.
+If you take a look in the node_modules folder, you will see a lot of external modules have been installed.</p>
+<p>in a index.js file, copy/paste the following code snippet:</p>
+<pre><code class="language-javascript"> // Using the Express Framework 
+ const express = require('express'); 
+ // Instantiate an Express app 
+ let app = express(); 
+ // Define the (only) HTTP request handler 
+ app.get('/', (req, res, next) =&gt; { res.send(&quot;Hello World!&quot;); }); 
+ // The HTTP server listens on port 3000 
+ const port = 3000; 
+ app.listen(port, () =&gt; { 
+   // A callback function executed when the server IS actually listening 
+   console.log(&quot;Now listening on port &quot; + port); 
+  });
+</code></pre>
+<p><img src="/images/2016/12/nodefirstserverresult.png" alt="nodefirstserverresult" /></p>
+<p>The code above runs a simple HTTP server listening on port 3000, basically the same thing as the server sample in my previous post</p>
+<p><a href="/posts/2016/12/14/get-familar-with-node-js-part-1-the-basics/">Part 1: the basics</a>. However, there is a slight difference when you try to reach any URL under localhost:3000 other than the root.</p>
 <p>Basic Node App</p>
 <p>Express App</p>
 <p><img src="/images/2017/01/node_miscpath.png" alt="node_miscpath" /></p>
@@ -257,7 +286,7 @@
 <li><strong>views</strong>: a folder dedicated to contain the view files (HTML or other view format like <em>jade</em>).</li>
 <li><strong>app.js</strong> is the main source code file of our app and contains already generated code that handles static file serving, some predefined routes (to be customized) and references some utility like body parser, cookie parser, a logger,...</li>
 <li><strong>bin</strong>: is the folder that contains the startup point of the application (it comes from the Unix world). it contains a single <strong>www</strong> file which is actually a javascript file that will be executed by the node runtime. It actually handles some environment configuration. (really useful when multiple runtime environments (Dev, Test, Prod,...)</li>
-<li><strong>package.json</strong> the package.json file of our project (<a href="https://ypcode.wordpress.com/2017/01/02/get-familar-with-node-js-part-2-npm/">cf Part 2</a>)  preconfigured with a start command <img src="/images/2017/01/expressapp-packagejson.png" alt="expressapp-packagejson" /></li>
+<li><strong>package.json</strong> the package.json file of our project (<a href="/posts/2017/01/02/get-familar-with-node-js-part-2-npm/">cf Part 2</a>)  preconfigured with a start command <img src="/images/2017/01/expressapp-packagejson.png" alt="expressapp-packagejson" /></li>
 </ul>
 <p>This application is ready-to-use and can already be executed: <strong>&gt; npm start</strong> Try to access <a href="http://localhost:3000">http://localhost:3000</a> from your browser, and you will see some HTTP logging in the terminal. <img src="/images/2017/01/expressapp-firstuse.png" alt="expressapp-firstuse.png" /></p>
 <h3 id="a-quick-word-about-jade">A quick word about Jade</h3>

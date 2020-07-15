@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Convert CAML List Schema to Site Scripts" />
+            <meta property="og:description" content="Use a small tool I wrote to create a site script from a List schema XML" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2018/04/convert-caml-list-schema-to-site-scripts" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+        <meta property="og:image" content="/images/2018/04/promoted.png?r=202007150404" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2018-04-15 22:27:57Z" />
         <meta property="article:modified_time" content="2018-04-15 22:27:57Z" />
@@ -69,9 +70,10 @@
                 <meta property="article:tag" content="SharePoint Online" />
                 <meta property="article:tag" content="Site Designs" />
         <meta name="twitter:title" content="Convert CAML List Schema to Site Scripts" />
+            <meta name="twitter:description" content="Use a small tool I wrote to create a site script from a List schema XML" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2018/04/convert-caml-list-schema-to-site-scripts" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007151244" />
+            <meta name="twitter:image" content="/images/2018/04/promoted.png?r=202007150404" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Office 365, SharePoint, SharePoint Online, Site Designs" />
         <meta name="twitter:site" content="@yp_code" />
@@ -199,14 +201,33 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007151244" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2018/04/promoted.png?r=202007150404" alt="Convert CAML List Schema to Site Scripts" />
         </div>
    
     <div class="content">
-        <p>Hi guys, Recently Microsoft released upgraded capabilities for Site Designs and Site Scripts on SharePoint Online If you want to know more about SPO Site Designs, <a href="https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-design-overview">check out the following docs</a>. You can also check out the <a href="https://ypcode.wordpress.com/2018/03/26/site-designs-studio-1-0/">Site Designs Studio</a>, a tool I built for editing Site Designs and Site Scripts from a user-friendly interface.</p>
+        <p>Hi guys,</p>
+<p>Recently Microsoft released upgraded capabilities for Site Designs and Site Scripts on SharePoint Online
+If you want to know more about SPO Site Designs, <a href="https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-design-overview">check out the following docs</a>. You can also check out the <a href="/posts/2018/03/site-designs-studio-1_0/">Site Designs Studio</a>, a tool I built for editing Site Designs and Site Scripts from a user-friendly interface.</p>
 <h2 id="add-field-as-xml">Add field as XML</h2>
-<p>One of these recently added capabilities allow to add fields to lists from their XML schema. Relying on this feature, we can know easily convert existing lists and libraries schema to a Site Script. This will allow a kind of template extraction from existing lists. <img src="/images/2018/04/sitescript-json.png" alt="sitescript.json" /> Actually, I built a small .NET Core tool that will do that for you, you will need to install the .NET Core runtime if you don't already have it. First of all, you will need the list XML schema, to get it you can use the following API endpoint (replacing <strong>yourtenant</strong> and <strong>yoursite</strong> by the appropriate values): <em>**<a href="https://yourtenant.sharepoint.com/sites/yoursite/%5C_api/lists/getbytitle(%27name%5C_of%5C_your%5C_list%27)/SchemaXml%C2%A0">https://yourtenant.sharepoint.com/sites/yoursite/\_api/lists/getbytitle('name\_of\_your\_list')/SchemaXml </a>**</em> Copy/Paste the entire CAML of the <List > element and paste it into a new file Download the archive <a href="https://github.com/ypcode/caml2sitescript/raw/master/SiteScriptConverter.zip">here</a>, extract its content and from a PowerShell console, call the following command: <em><strong>PS&gt;  .\ConvertListSchemaToSiteScript.ps1 -ListSchemaXml schema.xml -Output output.json</strong></em> Alternatively, if you want to run this tool from a non-Windows system, with the .NET Core runtime installed, you can execute the following command</p>
-<p><em><strong>&gt; dotnet YPCode.CAML2SiteDesigns.CLI.dll convert-list-schema -s  schema.xml -o output.json</strong></em></p>
+<p>One of these recently added capabilities allow to add fields to lists from their XML schema.
+Relying on this feature, we can know easily convert existing lists and libraries schema to a Site Script.
+This will allow a kind of template extraction from existing lists.</p>
+<p><img src="/images/2018/04/sitescript-json.png" alt="sitescript.json" /></p>
+<p>Actually, I built a small .NET Core tool that will do that for you, you will need to install the .NET Core runtime if you don't already have it.</p>
+<ul>
+<li><p>First of all, you will need the list XML schema, to get it you can use the following API endpoint (replacing <strong>yourtenant</strong> and <strong>yoursite</strong> by the appropriate values): **<a href="https://yourtenant.sharepoint.com/sites/yoursite/%5C_api/lists/getbytitle(%27name%5C_of%5C_your%5C_list%27)/SchemaXml%C2%A0">https://yourtenant.sharepoint.com/sites/yoursite/\_api/lists/getbytitle('name\_of\_your\_list')/SchemaXml </a>**
+Copy/Paste the entire CAML of the <List > element and paste it into a new file</p>
+</li>
+<li><p>Download the archive <a href="https://github.com/ypcode/caml2sitescript/raw/master/SiteScriptConverter.zip">here</a></p>
+</li>
+<li><p>extract its content and from a PowerShell console, call the following command:</p>
+</li>
+</ul>
+<pre><code class="language-powershell">.\\ConvertListSchemaToSiteScript.ps1 -ListSchemaXml schema.xml -Output output.json
+</code></pre>
+<p>Alternatively, if you want to run this tool from a non-Windows system, with the .NET Core runtime installed, you can execute the following command</p>
+<pre><code class="language-bash">dotnet YPCode.CAML2SiteDesigns.CLI.dll convert-list-schema -s  schema.xml -o output.json
+</code></pre>
 <p>And here we go, we have now our site script JSON generated in the file output.json</p>
 <p><img src="/images/2018/04/promoted.png" alt="Promoted.png" /></p>
 <p>Currently this tool only support title, description and fields of the list, Content Types and Views are not supported just yet. If you want to take a look at the code, check out the <a href="https://github.com/ypcode/caml2sitescript">GitHub repo</a>.</p>
