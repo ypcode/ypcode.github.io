@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SPFx - scoped context services" />
+            <meta property="og:description" content="Let's talk about services scopes to a particular context" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/08/spfx-scoped-context-services" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+        <meta property="og:image" content="/images/2019/08/workbench_webparts_instances.png?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-08-19 12:02:51Z" />
         <meta property="article:modified_time" content="2019-08-19 12:02:51Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SPFx extensions" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="SPFx - scoped context services" />
+            <meta name="twitter:description" content="Let's talk about services scopes to a particular context" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/08/spfx-scoped-context-services" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+            <meta name="twitter:image" content="/images/2019/08/workbench_webparts_instances.png?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JS, SharePoint, SharePoint Framework, SPFx, SPFx extensions, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,15 +203,20 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160439" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/08/workbench_webparts_instances.png?r=202007160951" alt="SPFx - scoped context services" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint devs, In this post, I would like to share with you a pattern I like to use in my SPFx solutions and the concerns I want to address.</p>
+        <p>Hi SharePoint devs,</p>
+<p>In this post, I would like to share with you a pattern I like to use in my SPFx solutions and the concerns I want to address.</p>
 <h1 id="spfx-services-and-servicescope">SPFx Services and ServiceScope</h1>
 <p>SharePoint Framework has a service locator implementation through the ServiceScope class, it allows the IoC (Inversion of Control) in your code, that means that you delegate the creation of your service instances to a dedicated part of your code (commonly on startup) and you only consume these service instances wherever you need them, you can then centralize their initialization and configuration and avoid the need of to re-instantiate them anywhere you might need.</p>
 <h2 id="why-would-it-be-a-problem">Why would it be a problem?</h2>
-<p>Well, it would work to recreate the service instances every time you need them! But besides the fact that, at runtime, you will most likely consume extra memory for exact object duplicates, at design time, you will need to pass the references to all the dependencies your services might require. For instance, information from the page context will commonly be used in a SPFx solution. If you develop your solution with a library like React, (It might be a bit different if you use Redux...) you will need to pass the references to every child component. It means that your components would be overloaded with a ton of misc properties you could simply ignore until the very one to use them. While I'll focus on a React sample here, the same concern applies to almost any kind of library or framework or architecture using multiple layers you might want to use. Instead, with this approach, the only property your component will need (for that service purpose) is the ServiceScope instance !</p>
+<p>Well, it would work to recreate the service instances every time you need them! But besides the fact that, at runtime, you will most likely consume extra memory for exact object duplicates, at design time, you will need to pass the references to all the dependencies your services might require. For instance, information from the page context will commonly be used in a SPFx solution.
+If you develop your solution with a library like React, (It might be a bit different if you use Redux...) you will need to pass the references to every child component.
+It means that your components would be overloaded with a ton of misc properties you could simply ignore until the very one to use them.
+While I'll focus on a React sample here, the same concern applies to almost any kind of library or framework or architecture using multiple layers you might want to use.
+Instead, with this approach, the only property your component will need (for that service purpose) is the ServiceScope instance !</p>
 <h2 id="what-about-simply-passing-the-webpartcontextcomponentcontext-instance">What about simply passing the WebPartContext/ComponentContext instance ?</h2>
 <p>One can disagree with me about that, but I really don't like this approach of passing the whole context as argument to services or as property to components for the following reasons</p>
 <ol>
@@ -219,11 +226,16 @@
 <li>Whenever we need a value computed on several component-context properties, we need to rebuild it and then redo exactly the same thing, duplicates or codes, more redundant and error-prone... I'd rather do it once, and reuse it anywhere needed.</li>
 </ol>
 <h1 id="servicescope-root-scope-and-child-scopes">ServiceScope: root Scope and child scopes</h1>
-<p>A few months ago, I posted an <a href="https://ypcode.wordpress.com/2019/01/25/spfx-webpart-scoped-service/">article</a> explaining the availability of root scopes and child scopes in SPFx solutions, The root scope is the default instance existing by default at scopes the whole page and has the reference to various built-in services. In SPFx, when you declare a service (e.g. create a service key), it gets instantiated in the root scope by default. It is a reason why any SPFx service should have a default implementation. You can override these default instances in child scopes.</p>
+<p>A few months ago, I posted an <a href="/posts/2019/01/25/spfx-webpart-scoped-service/">article</a> explaining the availability of root scopes and child scopes in SPFx solutions, The root scope is the default instance existing by default at scopes the whole page and has the reference to various built-in services.
+In SPFx, when you declare a service (e.g. create a service key), it gets instantiated in the root scope by default. It is a reason why any SPFx service should have a default implementation. You can override these default instances in child scopes.</p>
 <h2 id="child-parent-scopes">Child / Parent Scopes</h2>
 <p>Child scopes are actually &quot;inheriting&quot; everything from their parent and also have their own overridden specifics. That means that all services we don't specifically override will be the instances from the parent scope. So far, I've not seen any relevant case for having 2 levels of child scopes, but, it should work... In practice, in my solutions, the parent scope have always been the root scope !</p>
 <h2 id="consume-services-from-services">Consume services from services</h2>
-<p>In order to keep your code maintainable and testable, ideally, you should implement your services in a way that that they are responsible only for their own relatively small and generic tasks. It probably requires a bit more work and structure in the first place, but you will be grateful to yourself and your team whenever you have to debug it or modify it later because a single block is not doing a big amount of various unrelated actions. That way, the services you'll use in your client code will most likely be built on several lower-level tasks wired up together and can then focus only on what it is responsible for. An SPFx service instance always receives the reference to its service scope in its constructor. Every service can then consume any other service available in the same scope! All that said, let's now talk about the real focus of this post.</p>
+<p>In order to keep your code maintainable and testable, ideally, you should implement your services in a way that that they are responsible only for their own relatively small and generic tasks.
+It probably requires a bit more work and structure in the first place, but you will be grateful to yourself and your team whenever you have to debug it or modify it later because a single block is not doing a big amount of various unrelated actions.
+That way, the services you'll use in your client code will most likely be built on several lower-level tasks wired up together and can then focus only on what it is responsible for.
+An SPFx service instance always receives the reference to its service scope in its constructor.
+Every service can then consume any other service available in the same scope! All that said, let's now talk about the real focus of this post.</p>
 <h1 id="page-scoped-and-component-scoped-contexts">Page-scoped and Component-scoped contexts</h1>
 <p>Indeed, some of the context information belongs to the page globally:</p>
 <ul>
@@ -237,9 +249,13 @@
 <li>Component properties</li>
 <li>...</li>
 </ul>
-<p>One way or another you would need to pass these kind of information in order to implement properly some features (Calling REST API, make some grouping, filtering,...). If you define these as arguments to your service method, your code will become more complex to maintain because every method have then a lot of arguments, then you need to pass along making sure there is no mistake in every calls! Moreover, that will make your code much less readable... A solution to that can be to wrap all our required dependencies in dedicated service instances we will consume.  That will help avoid spreading the same values all over our solution as arguments to almost all methods !</p>
+<p>One way or another you would need to pass these kind of information in order to implement properly some features (Calling REST API, make some grouping, filtering,...).
+If you define these as arguments to your service method, your code will become more complex to maintain because every method have then a lot of arguments, then you need to pass along making sure there is no mistake in every calls! Moreover, that will make your code much less readable...
+A solution to that can be to wrap all our required dependencies in dedicated service instances we will consume. 
+That will help avoid spreading the same values all over our solution as arguments to almost all methods !</p>
 <h2 id="enough-muggle-language-i-want-some-code">Enough Muggle language ! I want some code !</h2>
-<p>Let's remember we'll need to take care of the scope, any service instance that will hold component specific should be created in a child scope whilst the more generic or global services can be defined in the root scope. Here is an example of 4 small services I will use in a WebPart built with React</p>
+<p>Let's remember we'll need to take care of the scope, any service instance that will hold component specific should be created in a child scope whilst the more generic or global services can be defined in the root scope.
+Here is an example of 4 small services I will use in a WebPart built with React</p>
 <ol>
 <li><strong>PageContextService</strong> - responsible for holding all the required properties relevant for the whole page</li>
 <li><strong>ComponentContextService</strong> - responsible for holding all the required properties relevant for the current component ONLY</li>
@@ -248,15 +264,429 @@
 </ol>
 <p> </p>
 <h3 id="pagecontextservice">PageContextService</h3>
-<p>This service has a configure() method that should be called at startup of the component, the other are only the properties from the page context we want to &quot;expose&quot;. This service is global to the page, so it can remain located in the root scope and we will ensure that it is configured properly. <code>\nimport { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;; import { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;;  export interface IPageContextService {     configure(spfxComponentContext: BaseComponentContext): void;     webAbsoluteUrl: string;     // TODO Expose any needed page scoped property     // NOTE Avoid simply exposing the whole page context     // Exposing only the needed information in that service allows to have better control     // and better understanding of what's really page specific or not     // It also mitigates risk of unexpected behavior in OTB API }  export class PageContextService implements IPageContextService {      private _webAbsoluteUrl: string;     private _configured: boolean = false;      constructor(private serviceScope: ServiceScope) {      }      public configure(spfxComponentContext: BaseComponentContext): void {        // Note this service should be reconfigured at each call of the configure() method        // Because the SPA context of SharePoint might involve changes in page context          if (!spfxComponentContext) {             throw new Error(&quot;The SPFx component context is not specified.&quot;);         }           const webAbsoluteUrlFromContext = spfxComponentContext.pageContext &amp;&amp; spfxComponentContext.pageContext.web &amp;&amp; spfxComponentContext.pageContext.web.absoluteUrl;         if (webAbsoluteUrlFromContext &amp;&amp; webAbsoluteUrlFromContext != this._webAbsoluteUrl) {             this._webAbsoluteUrl = webAbsoluteUrlFromContext;         }          this._configured = (this._webAbsoluteUrl &amp;&amp; true) || false;     }      public get webAbsoluteUrl(): string {         if (!this._configured) {             throw new Error(&quot;The Page Context Service has not been properly configured.&quot;);         }          return this._webAbsoluteUrl;     } }  export const PageContextServiceKey = ServiceKey.create&lt;IPageContextService&gt;(&quot;ypcode::PageContextService&quot;, PageContextService);\n</code></p>
+<p>This service has a configure() method that should be called at startup of the component, the other are only the properties from the page context we want to &quot;expose&quot;.
+This service is global to the page, so it can remain located in the root scope and we will ensure that it is configured properly.</p>
+<pre><code class="language-typescript">import { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;;
+import { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+
+export interface IPageContextService {
+    configure(spfxComponentContext: BaseComponentContext): void;
+    webAbsoluteUrl: string;
+    // TODO Expose any needed page scoped property
+    // NOTE Avoid simply exposing the whole page context
+    // Exposing only the needed information in that service allows to have better control
+    // and better understanding of what's really page specific or not
+    // It also mitigates risk of unexpected behavior in OTB API
+}
+
+export class PageContextService implements IPageContextService {
+
+    private _webAbsoluteUrl: string;
+    private _configured: boolean = false;
+
+    constructor(private serviceScope: ServiceScope) {
+
+    }
+
+    public configure(spfxComponentContext: BaseComponentContext): void {
+       // Note this service should be reconfigured at each call of the configure() method
+       // Because the SPA context of SharePoint might involve changes in page context
+
+        if (!spfxComponentContext) {
+            throw new Error(&quot;The SPFx component context is not specified.&quot;);
+        }
+
+
+        const webAbsoluteUrlFromContext = spfxComponentContext.pageContext &amp;&amp; spfxComponentContext.pageContext.web &amp;&amp; spfxComponentContext.pageContext.web.absoluteUrl;
+        if (webAbsoluteUrlFromContext &amp;&amp; webAbsoluteUrlFromContext != this._webAbsoluteUrl) {
+            this._webAbsoluteUrl = webAbsoluteUrlFromContext;
+        }
+
+        this._configured = (this._webAbsoluteUrl &amp;&amp; true) || false;
+    }
+
+    public get webAbsoluteUrl(): string {
+        if (!this._configured) {
+            throw new Error(&quot;The Page Context Service has not been properly configured.&quot;);
+        }
+
+        return this._webAbsoluteUrl;
+    }
+}
+
+export const PageContextServiceKey = ServiceKey.create&lt;IPageContextService&gt;(&quot;ypcode::PageContextService&quot;, PageContextService);
+</code></pre>
 <h3 id="componentcontextservice">ComponentContextService</h3>
-<p>As the previous, this service has a configure() method that should be called at startup of the component, the other are only the properties specific to the component instance we want to &quot;expose&quot;, it includes here the instance Id as well as the WebPart properties (we also could have mapped each single property to only expose the one we want). Notice in the configure() method I set a watch guard to avoid that the current instance of the service is configured more than once by mistake, that will ensure that we use a component-specific instance from the child scope. <code>\nimport { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;; import { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;; import { ISpContextServiceLabWebPartProps } from &quot;../webparts/spContextServiceLab/SpContextServiceLabWebPart&quot;;  export interface IComponentContextService {     configure(spfxComponentContext: BaseComponentContext, properties: ISpContextServiceLabWebPartProps,force?:boolean): void;     instanceId: string;     properties: ISpContextServiceLabWebPartProps;     // TODO Expose any needed component specific property     // NOTE Avoid simply exposing the whole WebPart/Component context     // Exposing only the needed information in that service allows to have better control     // and better understanding of what's really component specific or not     // It also mitigates risk of unexpected behavior in OTB API }  export class ComponentContextService implements IComponentContextService {      private _instanceId: string = null;     private _properties: ISpContextServiceLabWebPartProps = null;     private _configured: boolean = false;      constructor(private serviceScope: ServiceScope) { }      public configure(spfxComponentContext: BaseComponentContext, properties: ISpContextServiceLabWebPartProps, force:boolean=false): void {          if (this._configured &amp;&amp; !force) {             throw new Error(&quot;The ComponentContext Service has already been configured. Please review the configure() call&quot;);         }          this._instanceId = (spfxComponentContext &amp;&amp; spfxComponentContext.instanceId) || null;         this._properties = properties;         this._configured = (this._instanceId &amp;&amp; this._properties &amp;&amp; true) || false;     }      public get instanceId(): string {         if (!this._configured) {             throw new Error(&quot;The Component Context Service has not been properly configured.&quot;);         }          return this._instanceId;     }      public get properties(): ISpContextServiceLabWebPartProps {         if (!this._configured) {             throw new Error(&quot;The Component Context Service has not been properly initialized.&quot;);         }          return this._properties;     } }  export const ComponentContextServiceKey = ServiceKey.create&lt;IComponentContextService&gt;(&quot;ypcode::ComponentContextService&quot;, ComponentContextService);\n</code></p>
+<p>As the previous, this service has a configure() method that should be called at startup of the component, the other are only the properties specific to the component instance we want to &quot;expose&quot;, it includes here the instance Id as well as the WebPart properties (we also could have mapped each single property to only expose the one we want). Notice in the configure() method I set a watch guard to avoid that the current instance of the service is configured more than once by mistake, that will ensure that we use a component-specific instance from the child scope.</p>
+<pre><code class="language-typescript">import { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;;
+import { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+import { ISpContextServiceLabWebPartProps } from &quot;../webparts/spContextServiceLab/SpContextServiceLabWebPart&quot;;
+
+export interface IComponentContextService {
+    configure(spfxComponentContext: BaseComponentContext, properties: ISpContextServiceLabWebPartProps,force?:boolean): void;
+    instanceId: string;
+    properties: ISpContextServiceLabWebPartProps;
+    // TODO Expose any needed component specific property
+    // NOTE Avoid simply exposing the whole WebPart/Component context
+    // Exposing only the needed information in that service allows to have better control
+    // and better understanding of what's really component specific or not
+    // It also mitigates risk of unexpected behavior in OTB API
+}
+
+export class ComponentContextService implements IComponentContextService {
+
+    private _instanceId: string = null;
+    private _properties: ISpContextServiceLabWebPartProps = null;
+    private _configured: boolean = false;
+
+    constructor(private serviceScope: ServiceScope) { }
+
+    public configure(spfxComponentContext: BaseComponentContext, properties: ISpContextServiceLabWebPartProps, force:boolean=false): void {
+
+        if (this._configured &amp;&amp; !force) {
+            throw new Error(&quot;The ComponentContext Service has already been configured. Please review the configure() call&quot;);
+        }
+
+        this._instanceId = (spfxComponentContext &amp;&amp; spfxComponentContext.instanceId) || null;
+        this._properties = properties;
+        this._configured = (this._instanceId &amp;&amp; this._properties &amp;&amp; true) || false;
+    }
+
+    public get instanceId(): string {
+        if (!this._configured) {
+            throw new Error(&quot;The Component Context Service has not been properly configured.&quot;);
+        }
+
+        return this._instanceId;
+    }
+
+    public get properties(): ISpContextServiceLabWebPartProps {
+        if (!this._configured) {
+            throw new Error(&quot;The Component Context Service has not been properly initialized.&quot;);
+        }
+
+        return this._properties;
+    }
+}
+
+export const ComponentContextServiceKey = ServiceKey.create&lt;IComponentContextService&gt;(&quot;ypcode::ComponentContextService&quot;, ComponentContextService);
+</code></pre>
 <h3 id="listsservice">ListsService</h3>
-<p>This one is a generic service for fetching SharePoint list information, we can leave it at the root scope. <code>\nimport { IList } from &quot;../models/IList&quot;; import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;; import { ComponentContextServiceKey } from &quot;./ComponentContextService&quot;; import { SPHttpClient } from &quot;@microsoft/sp-http&quot;; import { PageContextServiceKey } from &quot;./PageContextService&quot;;  export interface IListService {     getListByTitle(listTitle: string): Promise&lt;IList&gt;; }  export class ListService implements IListService {      constructor(private serviceScope: ServiceScope) {     }      public getListByTitle(listTitle: string): Promise&lt;IList&gt; {          return new Promise&lt;IList&gt;((resolve, reject) =&gt; {             // Ensure the service scope is completely configured before we can consume any service             this.serviceScope.whenFinished(() =&gt; {                 const pageContext = this.serviceScope.consume(PageContextServiceKey);                 const spHttpClient = this.serviceScope.consume(SPHttpClient.serviceKey);                 const url = `${pageContext.webAbsoluteUrl}/_api/web/lists/getbytitle('${escape(listTitle)}')`;                 spHttpClient.get(url, SPHttpClient.configurations.v1)                     .then(r =&gt; r.json())                     .then(l =&gt; {                         resolve({                             id: l.Id,                             title: l.Title,                             itemsCount: l.ItemCount                         } as IList);                     });             });         });     } }  export const ListServiceKey = ServiceKey.create&lt;IListService&gt;(&quot;ypcode::ListService&quot;, ListService);\n</code></p>
+<p>This one is a generic service for fetching SharePoint list information, we can leave it at the root scope.</p>
+<pre><code class="language-typescript">import { IList } from &quot;../models/IList&quot;;
+import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;
+import { ComponentContextServiceKey } from &quot;./ComponentContextService&quot;;
+import { SPHttpClient } from &quot;@microsoft/sp-http&quot;;
+import { PageContextServiceKey } from &quot;./PageContextService&quot;;
+
+export interface IListService {
+    getListByTitle(listTitle: string): Promise&lt;IList&gt;;
+}
+
+export class ListService implements IListService {
+
+    constructor(private serviceScope: ServiceScope) {
+    }
+
+    public getListByTitle(listTitle: string): Promise&lt;IList&gt; {
+
+        return new Promise&lt;IList&gt;((resolve, reject) =&gt; {
+            // Ensure the service scope is completely configured before we can consume any service
+            this.serviceScope.whenFinished(() =&gt; {
+                const pageContext = this.serviceScope.consume(PageContextServiceKey);
+                const spHttpClient = this.serviceScope.consume(SPHttpClient.serviceKey);
+                const url = `${pageContext.webAbsoluteUrl}/_api/web/lists/getbytitle('${escape(listTitle)}')`;
+                spHttpClient.get(url, SPHttpClient.configurations.v1)
+                    .then(r =&gt; r.json())
+                    .then(l =&gt; {
+                        resolve({
+                            id: l.Id,
+                            title: l.Title,
+                            itemsCount: l.ItemCount
+                        } as IList);
+                    });
+            });
+        });
+    }
+}
+
+export const ListServiceKey = ServiceKey.create&lt;IListService&gt;(&quot;ypcode::ListService&quot;, ListService);
+</code></pre>
 <h3 id="documentsservice">DocumentsService</h3>
-<p>This service will be responsible for what we want to display in our WebPart, since it is dependent on the component specific service, we will need to provide a specific instance of it in the child scope. <code>\nimport { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;; import { ListServiceKey } from &quot;./ListsService&quot;; import { ComponentContextServiceKey } from &quot;./ComponentContextService&quot;; import { WebPartContext } from &quot;@microsoft/sp-webpart-base&quot;;  export interface IDocumentsService {     getDocumentsCount(): Promise&lt;number&gt;; }  export class DocumentsService implements IDocumentsService {     constructor(private serviceScope: ServiceScope) { }      public getDocumentsCount(): Promise&lt;number&gt; {         return new Promise&lt;number&gt;((resolve, reject) =&gt; {              // Ensure the service scope is completely configured before we can consume any service             this.serviceScope.whenFinished(() =&gt; {                 const listService = this.serviceScope.consume(ListServiceKey);                 const componentContextService = this.serviceScope.consume(ComponentContextServiceKey);                 const docLibName = componentContextService.properties.documentLibraryName;                 listService.getListByTitle(docLibName).then(list =&gt; {                     resolve(list.itemsCount);                 });             });         });     }   }  export const DocumentsServiceKey = ServiceKey.create&lt;IDocumentsService&gt;(&quot;ypcode::DocumentsService&quot;, DocumentsService);\n</code> Let's make sure we configure all this properly, I use to create some AppStartup class or even simple configure() method, under <strong>src/</strong> , in a <strong>startup/</strong> folder I created here a <strong>configure.ts</strong> file <a href="https://gist.github.com/ypcode/9bc9bbeed4d09593c7752fc12707694c">https://gist.github.com/ypcode/9bc9bbeed4d09593c7752fc12707694c</a> I'll let you read the comments in this code exhibit above to understand what we do. The idea is that we always create a child scope that will pertain to the component instance, all the services from the root scope will be accessible from it anyway. The &quot;tricky&quot; part is that all the services that depends on the component specific services should be instantiated in that new child scope. That is probably not the best since, some of them can be generic enough that they actually don't need to be duplicated, but since they are created with the service scope, it seems to be the only way. This configure() method has then to be called in the init event of the component (the WebPart) class, and a reference to the newly created child service scope should be kept This child scope reference can then be passed as property to the React component we use as you can see in the render() method. <a href="https://gist.github.com/ypcode/965940c7e536c23ddac1b3cff3d6c098">https://gist.github.com/ypcode/965940c7e536c23ddac1b3cff3d6c098</a> Let's check out what it looks like with a &quot;deep&quot; hierarchy of components <a href="https://gist.github.com/ypcode/1f5e5e910d4e821f4d0730c1289a39a3">https://gist.github.com/ypcode/1f5e5e910d4e821f4d0730c1289a39a3</a> As you can see, the only component property we need to pass all the way down to the fourth level component is the service scope. And even if the output itself is not much relevant without a look at the code, here is what it should display: <img src="/images/2019/08/workbench_webparts_instances.png" alt="workbench_webparts_instances" /> Each WebPart gets its own information from services. You can get the whole sample solution <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-context-services">here</a></p>
+<p>This service will be responsible for what we want to display in our WebPart, since it is dependent on the component specific service, we will need to provide a specific instance of it in the child scope.</p>
+<pre><code class="language-typescript">import { ServiceKey, ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+import { ListServiceKey } from &quot;./ListsService&quot;;
+import { ComponentContextServiceKey } from &quot;./ComponentContextService&quot;;
+import { WebPartContext } from &quot;@microsoft/sp-webpart-base&quot;;
+
+export interface IDocumentsService {
+    getDocumentsCount(): Promise&lt;number&gt;;
+}
+
+export class DocumentsService implements IDocumentsService {
+    constructor(private serviceScope: ServiceScope) { }
+
+    public getDocumentsCount(): Promise&lt;number&gt; {
+        return new Promise&lt;number&gt;((resolve, reject) =&gt; {
+
+            // Ensure the service scope is completely configured before we can consume any service
+            this.serviceScope.whenFinished(() =&gt; {
+                const listService = this.serviceScope.consume(ListServiceKey);
+                const componentContextService = this.serviceScope.consume(ComponentContextServiceKey);
+                const docLibName = componentContextService.properties.documentLibraryName;
+                listService.getListByTitle(docLibName).then(list =&gt; {
+                    resolve(list.itemsCount);
+                });
+            });
+        });
+    }
+
+
+}
+
+export const DocumentsServiceKey = ServiceKey.create&lt;IDocumentsService&gt;(&quot;ypcode::DocumentsService&quot;, DocumentsService);
+</code></pre>
+<p>Let's make sure we configure all this properly, I use to create some AppStartup class or even simple configure() method, under <strong>src/</strong> , in a <strong>startup/</strong> folder I created here a <strong>configure.ts</strong> file</p>
+<pre><code class="language-typescript">import { ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+import { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;;
+import { ComponentContextServiceKey, ComponentContextService } from &quot;../services/ComponentContextService&quot;;
+import { DocumentsServiceKey, DocumentsService } from &quot;../services/DocumentsService&quot;;
+import { PageContextServiceKey } from &quot;../services/PageContextService&quot;;
+import { ISpContextServiceLabWebPartProps } from &quot;../webparts/spContextServiceLab/SpContextServiceLabWebPart&quot;;
+
+export const configure = (componentContext: BaseComponentContext, properties: ISpContextServiceLabWebPartProps): Promise&lt;ServiceScope&gt; =&gt; {
+    const rootScope = componentContext.serviceScope;
+
+    return new Promise((resolve, reject) =&gt; {
+        try {
+            // The default implementation of all services (built-in AND custom) are available at root scope
+            // We should be extremely cautious of altering a root-scoped service 'state' from a specific component instance
+            // This might be not that important in the context of an app-part page        
+            // All services directly usable from root scope should not have any component-specific dependencies
+            const pageContextService = rootScope.consume(PageContextServiceKey);
+            pageContextService.configure(componentContext);
+
+            const scopedService = rootScope.startNewChild();
+            // TODO Here create and initialize the component scoped custom service instances
+            // TODO Initialize and configure scoped services based on component configuration
+
+            // The component-scoped context should be created here to ensure it will remain tied to the proper instance
+            const componentContextService = scopedService.createAndProvide(ComponentContextServiceKey, ComponentContextService);
+            componentContextService.configure(componentContext, properties);
+
+            // Create and provide new instances of services that uses component specific context (configuration, instance id, ...)
+            // (e.g. In this example the Documents service relies of the component configuration)
+            scopedService.createAndProvide(DocumentsServiceKey, DocumentsService);
+
+            // Finish the child scope initalization
+            scopedService.finish();
+
+            resolve(scopedService);
+
+        } catch (error) {
+            reject(error);
+        }
+    });
+};
+</code></pre>
+<p>I'll let you read the comments in this code exhibit above to understand what we do.
+The idea is that we always create a child scope that will pertain to the component instance, all the services from the root scope will be accessible from it anyway.
+The &quot;tricky&quot; part is that all the services that depends on the component specific services should be instantiated in that new child scope.
+That is probably not the best since, some of them can be generic enough that they actually don't need to be duplicated, but since they are created with the service scope, it seems to be the only way.
+This configure() method has then to be called in the init event of the component (the WebPart) class, and a reference to the newly created child service scope should be kept.
+This child scope reference can then be passed as property to the React component we use as you can see in the render() method.</p>
+<pre><code class="language-typescript">import * as React from 'react';
+import * as ReactDom from 'react-dom';
+import { Version, ServiceScope } from '@microsoft/sp-core-library';
+import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
+import {
+  IPropertyPaneConfiguration,
+  PropertyPaneTextField
+} from '@microsoft/sp-property-pane';
+
+import { FirstLevelSubComponent, IComponentProps } from './components/componentsHierarchy';
+import { configure } from '../../startup/configure';
+import { ComponentContextServiceKey } from '../../services/ComponentContextService';
+
+export interface ISpContextServiceLabWebPartProps {
+  documentLibraryName: string;
+}
+
+export default class SpContextServiceLabWebPart extends BaseClientSideWebPart&lt;ISpContextServiceLabWebPartProps&gt; {
+
+  private componentServiceScope: ServiceScope;
+
+  public onInit(): Promise&lt;void&gt; {
+    // Make sure to return a resolved promise when configuration is done
+    // This will ensure all services are properly configured so we can safely call serviceScope.consume() in any component 
+    return configure(this.context, this.properties)
+      .then(serviceScope =&gt; {
+        this.componentServiceScope = serviceScope;
+      }).catch(error =&gt; {
+        console.error('An error occured while trying to initialize WebPart', error);
+      });
+  }
+
+  public render(): void {
+    const element: React.ReactElement&lt;IComponentProps&gt; = React.createElement(
+      FirstLevelSubComponent,
+      {
+        serviceScope: this.componentServiceScope
+      }
+    );
+
+    ReactDom.render(element, this.domElement);
+  }
+
+  public onPropertyPaneFieldChanged(property: string, oldValue: any, newValue: any) {
+    // Update the value from configuration when changed
+    const componentContextService = this.componentServiceScope.consume(ComponentContextServiceKey);
+    componentContextService.properties[property] = newValue;
+    this.render();
+  }
+
+  protected onDispose(): void {
+    ReactDom.unmountComponentAtNode(this.domElement);
+  }
+
+  protected get dataVersion(): Version {
+    return Version.parse('1.0');
+  }
+
+  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    return {
+      pages: [
+        {
+          header: {
+            description: &quot;Settings&quot;
+          },
+          groups: [
+            {
+              groupName: &quot;Configuration&quot;,
+              groupFields: [
+                PropertyPaneTextField('documentLibraryName', {
+                  label: &quot;Name of the Documents library&quot;
+                }),
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  }
+}
+</code></pre>
+<p>Let's check out what it looks like with a &quot;deep&quot; hierarchy of components</p>
+<pre><code class="language-typescript">import * as React from &quot;react&quot;;
+import { ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+import { ListServiceKey } from &quot;../../../services/ListsService&quot;;
+import { IList } from &quot;../../../models/IList&quot;;
+import { DocumentsServiceKey } from &quot;../../../services/DocumentsService&quot;;
+import { ComponentContextServiceKey } from &quot;../../../services/ComponentContextService&quot;;
+import styles from &quot;./component.module.scss&quot;;
+
+export interface IComponentProps {
+    serviceScope: ServiceScope;
+}
+
+
+export class FourthLevelSubComponent extends React.Component&lt;IComponentProps, any&gt; {
+
+    constructor(props: IComponentProps) {
+        super(props);
+
+        this.state = {
+            listInfo: null as IList,
+            documentsCount: null,
+        };
+    }
+
+    private get instanceId(): string {
+        return this.props.serviceScope.consume(ComponentContextServiceKey).instanceId;
+    }
+
+    public componentWillMount() {
+
+        const listService = this.props.serviceScope.consume(ListServiceKey);
+        const componentContext = this.props.serviceScope.consume(ComponentContextServiceKey);
+
+        listService.getListByTitle(componentContext.properties.documentLibraryName)
+            .then(docLib =&gt; {
+                this.setState({
+                    listInfo: docLib
+                });
+            }).catch(error =&gt; {
+                console.log(&quot;Error: &quot;, error);
+            });
+    }
+
+    private _getDocumentsCount() {
+        const documentsService = this.props.serviceScope.consume(DocumentsServiceKey);
+        documentsService.getDocumentsCount()
+            .then(itemsCount =&gt; {
+                this.setState({
+                    documentsCount: itemsCount
+                });
+            });
+    }
+
+    public render() {
+        if (!this.state.listInfo) {
+            return &lt;div&gt;Loading...&lt;/div&gt;;
+        }
+
+        return &lt;div className={styles.component}&gt;
+            &lt;div className={styles.title}&gt;
+                WebPart: 
+                &lt;span className={styles.instanceIdFromService}&gt;
+                    {this.instanceId}
+                &lt;/span&gt;
+            &lt;/div&gt;
+            &lt;br /&gt;
+            &lt;br /&gt;
+            &lt;h3&gt;Loaded list&lt;/h3&gt;
+            ID: {this.state.listInfo.id}&lt;br /&gt;Title: {this.state.listInfo.title}
+            &lt;br /&gt;&lt;br /&gt;
+            &lt;button onClick={() =&gt; this._getDocumentsCount()}&gt;Get count of documents&lt;/button&gt;
+            &lt;br /&gt;
+            {(this.state.documentsCount || this.state.documentsCount == 0) &amp;&amp; &lt;div&gt;Count: {this.state.documentsCount}&lt;/div&gt;}
+        &lt;/div&gt;;
+    }
+}
+
+export class ThirdLevelSubComponent extends React.Component&lt;IComponentProps, any&gt; {
+    public render() {
+        return &lt;FourthLevelSubComponent serviceScope={this.props.serviceScope} /&gt;;
+    }
+}
+
+
+export class SecondLevelSubComponent extends React.Component&lt;IComponentProps, any&gt; {
+    public render() {
+        return &lt;ThirdLevelSubComponent serviceScope={this.props.serviceScope} /&gt;;
+    }
+
+}
+
+
+export class FirstLevelSubComponent extends React.Component&lt;IComponentProps, any&gt; {
+    public render() {
+        return &lt;SecondLevelSubComponent serviceScope={this.props.serviceScope} /&gt;;
+    }
+}
+</code></pre>
+<p>As you can see, the only component property we need to pass all the way down to the fourth level component is the service scope.
+And even if the output itself is not much relevant without a look at the code, here is what it should display: <img src="/images/2019/08/workbench_webparts_instances.png" alt="workbench_webparts_instances" /></p>
+<p>Each WebPart gets its own information from services.
+You can get the whole sample solution <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-context-services">here</a></p>
 <h1 id="conclusion">Conclusion</h1>
-<p>According to me, it makes everything more clear and maintainable to use only services like this. And I would prefer the services to be the only way of using all APIs in SPFx, that would make if much more consistent instead of having of context object and a properties object, and a HttpClient you can get a reference from the context etc, etc... <strong>Let's make it all services !!</strong> But hey, that approach described here, I think would help to have a better structure for maintainable solutions ! What do you think?? Please give your feed back on Twitter or here under in the comments ! Cheers, Yannick</p>
+<p>According to me, it makes everything more clear and maintainable to use only services like this.
+And I would prefer the services to be the only way of using all APIs in SPFx, that would make if much more consistent instead of having of context object and a properties object, and a HttpClient you can get a reference from the context etc, etc... <strong>Let's make it all services !!</strong></p>
+<p>But hey, that approach described here, I think would help to have a better structure for maintainable solutions!
+What do you think??</p>
+<p>Please give your feed back on Twitter or here under in the comments!</p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>

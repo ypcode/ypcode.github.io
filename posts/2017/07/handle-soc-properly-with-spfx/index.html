@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Handle separation of concerns (SoC) properly with the SharePoint Framework" />
+            <meta property="og:description" content="In this post, I discuss a topic dear to my developer's hear; Separation of Concerns" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/07/handle-soc-properly-with-spfx" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+        <meta property="og:image" content="/images/2017/07/soc.png?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-07-28 17:02:36Z" />
         <meta property="article:modified_time" content="2017-07-28 17:02:36Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SPFx" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="Handle separation of concerns (SoC) properly with the SharePoint Framework" />
+            <meta name="twitter:description" content="In this post, I discuss a topic dear to my developer's hear; Separation of Concerns" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/07/handle-soc-properly-with-spfx" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+            <meta name="twitter:image" content="/images/2017/07/soc.png?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, SharePoint, SharePoint Framework, SharePoint Online, SPFx, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,30 +203,716 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160439" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/07/soc.png?r=202007160951" alt="Handle separation of concerns (SoC) properly with the SharePoint Framework" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint Devs, In this post, I would like to tackle a notion very important to me as a code lover: the Separation of Concerns (SoC) and how we can implement this principle in a SharePoint Framework solution. For the example, we will re-use the Kanban SPFx WebPart I presented in this <a href="https://ypcode.wordpress.com/2017/07/13/implement-engaging-webpart-with-the-sharepoint-framework-and-jquery-ui/">post</a>. If you want to follow the steps of this article and do the changes by yourself, you can download or clone the github repo for this webpart <a href="https://github.com/ypcode/spfx-kanban/tree/master">here</a></p>
+        <p>Hi SharePoint Devs,</p>
+<p>In this post, I would like to tackle a notion very important to me as a code lover: the Separation of Concerns (SoC) and how we can implement this principle in a SharePoint Framework solution.
+For the example, we will re-use the Kanban SPFx WebPart I presented in this <a href="/posts/2017/07/13/implement-engaging-webpart-spfx-jquery-ui/">post</a>.
+If you want to follow the steps of this article and do the changes by yourself, you can download or clone the github repo for this webpart <a href="https://github.com/ypcode/spfx-kanban/tree/master">here</a></p>
 <h2 id="what-is-soc">What is SoC ?</h2>
-<p><img src="/images/2017/07/soc.png" alt="SoC" />SoC is a principle where the code is splitted into units each responsible for its own business (UI, Business, Data Access, ...), the units (or layers) encapsulate their internal business data and produce a result according to the input we pass to them. The units don't care about what's internal in other units, they only care about the result they get when they use the features of other units. Each unit is easier to maintain, to unit-test, and even entirely rewritten if needed. An application is then a set of units that communicate with each other. We remove all intricate dependencies we have to deal with when the concerns are not really separated (calls to data API directly in the UI code, changes to do in the UI whenever the data schema changes,  ...) Moreover, if you build your classes and services generic enough, you will be able to take it as they are to reuse in a totally different context.</p>
+<p><img src="/images/2017/07/soc.png" alt="SoC" /></p>
+<p>SoC is a principle where the code is splitted into units each responsible for its own business (UI, Business, Data Access, ...), the units (or layers) encapsulate their internal business data and produce a result according to the input we pass to them.
+The units don't care about what's internal in other units, they only care about the result they get when they use the features of other units. Each unit is easier to maintain, to unit-test, and even entirely rewritten if needed. An application is then a set of units that communicate with each other. We remove all intricate dependencies we have to deal with when the concerns are not really separated (calls to data API directly in the UI code, changes to do in the UI whenever the data schema changes,  ...)
+Moreover, if you build your classes and services generic enough, you will be able to take it as they are to reuse in a totally different context.</p>
 <h3 id="in-practice">In practice</h3>
-<p>In practice, it means we need to design and implement our units of code in a way that they will never depend on a actual implementation of any unit, because it means it would be very difficult to maintain or change in the future. Instead, units will only be aware of interfaces they have to deal with, they should never have a clue of what's going on internally in the units they consume. It is, actually, one of the pillars of OOP. From this point, I will talk about these units as <strong>Services</strong>. A service is nothing more than a unit of code dedicated to a specific concern, it is generally described by a public interface. So, to achieve that, in practice, we have to define public interfaces that will be known by any consumer of the services</p>
+<p>In practice, it means we need to design and implement our units of code in a way that they will never depend on a actual implementation of any unit, because it means it would be very difficult to maintain or change in the future. Instead, units will only be aware of interfaces they have to deal with, they should never have a clue of what's going on internally in the units they consume.
+It is, actually, one of the pillars of OOP. From this point, I will talk about these units as <strong>Services</strong>.
+A service is nothing more than a unit of code dedicated to a specific concern, it is generally described by a public interface.
+So, to achieve that, in practice, we have to define public interfaces that will be known by any consumer of the services</p>
 <h3 id="a-configurationservice-class">A ConfigurationService class</h3>
-<p>We want to remove all dependencies to the WebPart in our services. However,  the WebPart class handles something very important: the configuration via the Property Pane. Under a <strong>src/services/</strong> folder, let's create a class that will hold the configuration information. Let's also create its public interface: <code>\nimport { ServiceKey} from &quot;@microsoft/sp-core-library&quot;;  /**  * The Configuration Service public interface  */ export interface IConfigurationService {    tasksListId: string;    statusFieldInternalName: string; }  /**  * The default implementation of the Configuration service class  * It is a simple class with 2 public properties that represent the settings in the property pane  */ export default class ConfigurationService implements IConfigurationService {     public tasksListId: string;     public statusFieldInternalName: string; }  export const ConfigurationServiceKey = ServiceKey.create&lt;IConfigurationService&gt;(&quot;kanban:config&quot;, ConfigurationService);\n</code> You don't have to worry about the ServiceKey things for now. We have now to relay the configuration information  from the property pane to this service class. In the KanbanBoardWebPart class, add the following changes <a href="https://gist.github.com/ypcode/971f9293603e11bddd042112a054ff2b">https://gist.github.com/ypcode/971f9293603e11bddd042112a054ff2b</a></p>
+<p>We want to remove all dependencies to the WebPart in our services.
+However, the WebPart class handles something very important: the configuration via the Property Pane.
+Under a <strong>src/services/</strong> folder, let's create a class that will hold the configuration information.
+Let's also create its public interface:</p>
+<pre><code class="language-typescript">import { ServiceKey} from &quot;@microsoft/sp-core-library&quot;;
+
+/**
+ * The Configuration Service public interface
+ */
+export interface IConfigurationService {
+   tasksListId: string;
+   statusFieldInternalName: string;
+}
+
+/**
+ * The default implementation of the Configuration service class
+ * It is a simple class with 2 public properties that represent the settings in the property pane
+ */
+export default class ConfigurationService implements IConfigurationService {
+    public tasksListId: string;
+    public statusFieldInternalName: string;
+}
+
+export const ConfigurationServiceKey = ServiceKey.create&lt;IConfigurationService&gt;(&quot;kanban:config&quot;, ConfigurationService);
+</code></pre>
+<p>You don't have to worry about the ServiceKey things for now. We have now to relay the configuration information  from the property pane to this service class. In the KanbanBoardWebPart class, add the following changes</p>
+<pre><code class="language-typescript"> // Add this in the imports
+import {
+  IConfigurationService
+} from &quot;../../services&quot;;
+// ....
+// Add the following member to the KanbanBoardWebPart class
+private config: IConfigurationService = null;
+// ....
+// Add the following method to the KanbanBoardWebPart class
+public onPropertyPaneFieldChanged(propertyName: string, oldValue: string, newValue: string) {
+    this.config.statusFieldInternalName = this.properties.statusFieldName;
+    this.config.tasksListId = this.properties.tasksListId;
+  }
+
+// ...
+</code></pre>
 <h3 id="a-dataservice-class">A DataService class</h3>
-<p>In order to clearly separate the concerns, we have to move all the methods responsible for the data access from the WebPart UI class to a dedicated service class. In the <strong>src/services/</strong> folder let's add a <strong>DataService.ts</strong> file. We then move all the data related methods from the UI to that service. We also declare the public interface of the service. <code>\n import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;; import { firstOrDefault } from &quot;../helpers/CollectionHelper&quot;; import { IFieldInfo, IListInfo, ITask } from &quot;../models&quot;; import { IConfigurationService, ConfigurationServiceKey } from &quot;./ConfigurationService&quot;;  import pnp from &quot;sp-pnp-js&quot;;  export const ChoiceFieldType = &quot;Choice&quot;;  export interface IDataService {     /**      *  Get the statuses (the available choices) from the specified choice field      */     getStatuses(): Promise&lt;string[]&gt;;      /**      * Get the available lists in the current web      */     getAvailableLists(refresh?: boolean): Promise&lt;IListInfo[]&gt;;      /**      * Get the available choice fields for the specified list      */     getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt;;      /**      * Get the available choice fields from lists aleady loaded      */     getAvailableChoiceFieldsFromLoadedLists(): IFieldInfo[];      /**      * Get all tasks      */     getAllTasks(): Promise&lt;ITask[]&gt;;      /**      * Update the status to newStatus for the specified task      */     updateTaskStatus(taskId: number, newStatus: string): Promise&lt;void&gt;; }   export default class SharePointDataService implements IDataService {      private config: IConfigurationService = null;     private cachedAvailableLists: IListInfo[] = null;      constructor(serviceScope: ServiceScope) {         serviceScope.whenFinished(() =&gt; {             // Configure the required dependencies             this.config = serviceScope.consume(ConfigurationServiceKey);         });      }      public getStatuses(): Promise&lt;string[]&gt; {         return pnp.sp.web.lists.getById(this.config.tasksListId).fields             .getByInternalNameOrTitle(this.config.statusFieldInternalName)             .get()             .then((fieldInfo: IFieldInfo) =&gt; fieldInfo.Choices || []);     }      public getAvailableLists(refresh: boolean = false): Promise&lt;IListInfo[]&gt; {         if (!refresh &amp;&amp; this.cachedAvailableLists)             return new Promise&lt;IListInfo[]&gt;(resolve =&gt; resolve(this.cachedAvailableLists));          return pnp.sp.web.lists             .expand(&quot;Fields&quot;)             .select(&quot;Id&quot;, &quot;Title&quot;, &quot;Fields/Title&quot;, &quot;Fields/InternalName&quot;, &quot;Fields/TypeAsString&quot;)             .get()             .then(lists =&gt; {                 this.cachedAvailableLists = lists;                 return lists;             });     }      public getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt; {         return this.getAvailableLists(false).then(lists =&gt; {             let list = firstOrDefault(lists, l =&gt; l.Id == this.config.tasksListId);             if (!list)                 return [];              return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);         });     }      public getAvailableChoiceFieldsFromLoadedLists() {         if (!this.cachedAvailableLists)             return [];          let list = firstOrDefault(this.cachedAvailableLists, l =&gt; l.Id == this.config.tasksListId);         if (!list)             return [];          return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);     }       public updateTaskStatus(taskId: number, newStatus: string): Promise&lt;any&gt; {         // Set the value for the configured &quot;status&quot; field         let fieldsToUpdate = {};         fieldsToUpdate[this.config.statusFieldInternalName] = newStatus;          // Update the property on the list item         return pnp.sp.web.lists.getById(this.config.tasksListId).items.getById(taskId).update(fieldsToUpdate);     }      public getAllTasks(): Promise&lt;ITask[]&gt; {         return pnp.sp.web.lists.getById(this.config.tasksListId).items             .select(&quot;Id&quot;, &quot;Title&quot;, this.config.statusFieldInternalName)             .get()             .then((results: ITask[]) =&gt; results &amp;&amp; results.map(t =&gt; ({                 Id: t.Id,                 Title: t.Title,                 Status: t[this.config.statusFieldInternalName]             })));     } }  export const DataServiceKey = ServiceKey.create&lt;IDataService&gt;(&quot;kanban:data-service&quot;, SharePointDataService);\n</code> Again that ServiceKey and now ServiceScope, what are they ? These classes are the implementation in SPFx that allow the developer to leverage dependency injection. Instead of passing a reference to each single dependency, we pass the scope as argument to the unit and the unit calls a consume() method to get the service it needs. <em>With the line</em> <em><strong>export const DataServiceKey = ServiceKey.create<IDataService>(&quot;kanban:data-service&quot;, SharePointDataService);</strong></em> We declare the ServiceKey, the key that will identify the service within the scope Now that we implemented all the needed logic in the Service implementation, we have to adapt the WebPart class code to remove all the data accessing logic. We also need to consume the services, let's adapt the KanbanBoardWebPart class as follows : <a href="https://gist.github.com/ypcode/0ecd6fb8bef2895af897c76577ad88cc">https://gist.github.com/ypcode/0ecd6fb8bef2895af897c76577ad88cc</a> You can see now that the code of the WebPart class only contains things related to the UI. All the data fetching and updating is encapsulated within the service.</p>
+<p>In order to clearly separate the concerns, we have to move all the methods responsible for the data access from the WebPart UI class to a dedicated service class.
+In the <strong>src/services/</strong> folder let's add a <strong>DataService.ts</strong> file.
+We then move all the data related methods from the UI to that service. We also declare the public interface of the service.</p>
+<pre><code class="language-typescript">
+import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;
+import { firstOrDefault } from &quot;../helpers/CollectionHelper&quot;;
+import { IFieldInfo, IListInfo, ITask } from &quot;../models&quot;;
+import { IConfigurationService, ConfigurationServiceKey } from &quot;./ConfigurationService&quot;;
+
+import pnp from &quot;sp-pnp-js&quot;;
+
+export const ChoiceFieldType = &quot;Choice&quot;;
+
+export interface IDataService {
+    /**
+     *  Get the statuses (the available choices) from the specified choice field
+     */
+    getStatuses(): Promise&lt;string[]&gt;;
+
+    /**
+     * Get the available lists in the current web
+     */
+    getAvailableLists(refresh?: boolean): Promise&lt;IListInfo[]&gt;;
+
+    /**
+     * Get the available choice fields for the specified list
+     */
+    getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt;;
+
+    /**
+     * Get the available choice fields from lists aleady loaded
+     */
+    getAvailableChoiceFieldsFromLoadedLists(): IFieldInfo[];
+
+    /**
+     * Get all tasks
+     */
+    getAllTasks(): Promise&lt;ITask[]&gt;;
+
+    /**
+     * Update the status to newStatus for the specified task
+     */
+    updateTaskStatus(taskId: number, newStatus: string): Promise&lt;void&gt;;
+}
+
+
+export default class SharePointDataService implements IDataService {
+
+    private config: IConfigurationService = null;
+    private cachedAvailableLists: IListInfo[] = null;
+
+    constructor(serviceScope: ServiceScope) {
+        serviceScope.whenFinished(() =&gt; {
+            // Configure the required dependencies
+            this.config = serviceScope.consume(ConfigurationServiceKey);
+        });
+
+    }
+
+    public getStatuses(): Promise&lt;string[]&gt; {
+        return pnp.sp.web.lists.getById(this.config.tasksListId).fields
+            .getByInternalNameOrTitle(this.config.statusFieldInternalName)
+            .get()
+            .then((fieldInfo: IFieldInfo) =&gt; fieldInfo.Choices || []);
+    }
+
+    public getAvailableLists(refresh: boolean = false): Promise&lt;IListInfo[]&gt; {
+        if (!refresh &amp;&amp; this.cachedAvailableLists)
+            return new Promise&lt;IListInfo[]&gt;(resolve =&gt; resolve(this.cachedAvailableLists));
+
+        return pnp.sp.web.lists
+            .expand(&quot;Fields&quot;)
+            .select(&quot;Id&quot;, &quot;Title&quot;, &quot;Fields/Title&quot;, &quot;Fields/InternalName&quot;, &quot;Fields/TypeAsString&quot;)
+            .get()
+            .then(lists =&gt; {
+                this.cachedAvailableLists = lists;
+                return lists;
+            });
+    }
+
+    public getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt; {
+        return this.getAvailableLists(false).then(lists =&gt; {
+            let list = firstOrDefault(lists, l =&gt; l.Id == this.config.tasksListId);
+            if (!list)
+                return [];
+
+            return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);
+        });
+    }
+
+    public getAvailableChoiceFieldsFromLoadedLists() {
+        if (!this.cachedAvailableLists)
+            return [];
+
+        let list = firstOrDefault(this.cachedAvailableLists, l =&gt; l.Id == this.config.tasksListId);
+        if (!list)
+            return [];
+
+        return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);
+    }
+
+
+    public updateTaskStatus(taskId: number, newStatus: string): Promise&lt;any&gt; {
+        // Set the value for the configured &quot;status&quot; field
+        let fieldsToUpdate = {};
+        fieldsToUpdate[this.config.statusFieldInternalName] = newStatus;
+
+        // Update the property on the list item
+        return pnp.sp.web.lists.getById(this.config.tasksListId).items.getById(taskId).update(fieldsToUpdate);
+    }
+
+    public getAllTasks(): Promise&lt;ITask[]&gt; {
+        return pnp.sp.web.lists.getById(this.config.tasksListId).items
+            .select(&quot;Id&quot;, &quot;Title&quot;, this.config.statusFieldInternalName)
+            .get()
+            .then((results: ITask[]) =&gt; results &amp;&amp; results.map(t =&gt; ({
+                Id: t.Id,
+                Title: t.Title,
+                Status: t[this.config.statusFieldInternalName]
+            })));
+    }
+}
+
+export const DataServiceKey = ServiceKey.create&lt;IDataService&gt;(&quot;kanban:data-service&quot;, SharePointDataService);
+</code></pre>
+<p>Again that ServiceKey and now ServiceScope, what are they ? These classes are the implementation in SPFx that allow the developer to leverage dependency injection.
+Instead of passing a reference to each single dependency, we pass the scope as argument to the unit and the unit calls a consume() method to get the service it needs. <em>With the line</em> <em><strong>export const DataServiceKey = ServiceKey.create<IDataService>(&quot;kanban:data-service&quot;, SharePointDataService);</strong></em>
+We declare the ServiceKey, the key that will identify the service within the scope.
+Now that we implemented all the needed logic in the Service implementation, we have to adapt the WebPart class code to remove all the data accessing logic.
+We also need to consume the services, let's adapt the KanbanBoardWebPart class as follows:</p>
+<pre><code class="language-typescript">import { Version } from '@microsoft/sp-core-library';
+import {
+  BaseClientSideWebPart,
+  IPropertyPaneConfiguration,
+  PropertyPaneDropdown,
+} from '@microsoft/sp-webpart-base';
+import { SPComponentLoader } from '@microsoft/sp-loader';
+import styles from './KanbanBoard.module.scss';
+import * as strings from 'kanbanBoardStrings';
+import { IKanbanBoardWebPartProps } from './IKanbanBoardWebPartProps';
+import { AppStartup } from &quot;../../startup&quot;;
+
+// jQuery and jQuery UI Drag&amp;Drop extensions
+import * as $ from &quot;jquery&quot;;
+require(&quot;jquery-ui/ui/widgets/draggable&quot;);
+require(&quot;jquery-ui/ui/widgets/droppable&quot;);
+
+// Models
+import { ITask, IListInfo, IFieldInfo } from &quot;../../models/&quot;;
+
+// Services
+import {
+  IConfigurationService, ConfigurationServiceKey,
+  IDataService, DataServiceKey
+} from &quot;../../services&quot;;
+
+// Constants
+const LAYOUT_MAX_COLUMNS = 12;
+
+export default class KanbanBoardWebPart extends BaseClientSideWebPart&lt;IKanbanBoardWebPartProps&gt; {
+
+  private statuses: string[] = [];
+  private tasks: ITask[] = [];
+  private availableLists: IListInfo[] = [];
+  private availableChoiceFields: IFieldInfo[] = [];
+  private dataService: IDataService = null;
+  private config: IConfigurationService = null;
+
+  constructor() {
+    super();
+    SPComponentLoader.loadCss('https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.min.css');
+  }
+
+  public onInit(): Promise&lt;any&gt; {
+    return super.onInit()
+      // Set the global configuration of the application
+      // This is where we will define the proper services according to the context (Local, Test, Prod,...) 
+      // or according to specific settings
+      .then(_ =&gt; AppStartup.configure(this.context, this.properties))
+      // When configuration is done, we get the instances of the services we want to use
+      .then(serviceScope =&gt; {
+        this.dataService = serviceScope.consume(DataServiceKey);
+        this.config = serviceScope.consume(ConfigurationServiceKey);
+      })
+      // Then, we are able to use the methods of the services
+      // Load the available lists in the current site
+      .then(() =&gt; this.dataService.getAvailableLists())
+      .then((lists: IListInfo[]) =&gt; this.availableLists = lists);
+  }
+
+
+
+  public render(): void {
+
+    // Only if properly configured
+    if (this.properties.statusFieldName &amp;&amp; this.properties.tasksListId) {
+      // Load the data
+      this.dataService.getStatuses()
+        .then((statuses: string[]) =&gt; this.statuses = statuses)
+        .then(() =&gt; this.dataService.getAllTasks())
+        .then((tasks: ITask[]) =&gt; this.tasks = tasks)
+        // And then render
+        .then(() =&gt; this._renderBoard())
+        .catch(error =&gt; {
+          console.log(error);
+          console.log(&quot;An error occured while loading data...&quot;);
+        });
+    } else {
+      this.domElement.innerHTML = `&lt;div class=&quot;ms-MessageBar ms-MessageBar--warning&quot;&gt;${strings.PleaseConfigureWebPartMessage}&lt;/div&gt;`
+    }
+  }
+
+  private _getColumnSizeClassName(columnsCount: number): string {
+    if (columnsCount &lt; 1) {
+      console.log(&quot;Invalid number of columns&quot;);
+      return &quot;&quot;;
+    }
+
+    if (columnsCount &gt; LAYOUT_MAX_COLUMNS) {
+      console.log(&quot;Too many columns for responsive UI&quot;);
+      return &quot;&quot;;
+    }
+
+    let columnSize = Math.floor(LAYOUT_MAX_COLUMNS / columnsCount);
+
+    return &quot;ms-u-sm&quot; + (columnSize || 1);
+  }
+
+  /**
+   * Generates and inject the HTML of the Kanban Board
+   */
+  private _renderBoard(): void {
+    let columnSizeClass = this._getColumnSizeClassName(this.statuses.length);
+
+    // The begininning of the WebPart
+    let html = `
+    &lt;h1&gt;Hello World!&lt;/h1&gt;
+      &lt;div class=&quot;${styles.kanbanBoard}&quot;&gt;
+        &lt;div class=&quot;${styles.container}&quot;&gt;
+          &lt;div class=&quot;ms-Grid-row ${styles.row}&quot;&gt;`;
+
+    // For each status
+    this.statuses.forEach(status =&gt; {
+      // Append a new Office UI Fabric column with the appropriate width to the row
+      html += `&lt;div class=&quot;${styles.kanbanColumn} ms-Grid-col ${columnSizeClass}&quot; data-status=&quot;${status}&quot;&gt;
+                  &lt;h3 class=&quot;ms-fontColor-themePrimary&quot;&gt;${status}&lt;/h3&gt;`;
+      // Get all the tasks in the current status
+      let currentGroupTasks = this.tasks.filter(t =&gt; t.Status == status);
+      // Add a new tile for each task in the current column
+      currentGroupTasks.forEach(task =&gt; {
+        html += `&lt;div class=&quot;${styles.task}&quot; data-taskid=&quot;${task.Id}&quot;&gt;
+                        &lt;div class=&quot;ms-fontSize-xl&quot;&gt;${task.Title}&lt;/div&gt;
+                      &lt;/div&gt;`;
+      });
+      // Close the column element
+      html += `&lt;/div&gt;`;
+    });
+
+    // Ends the WebPart HTML
+    html += `&lt;/div&gt;
+        &lt;div class=&quot;ms-Grid-row ${styles.row}&quot;&gt;
+            &lt;div class=&quot;ms-Grid-col ms-u-sm12&quot;&gt;
+              &lt;a class=&quot;ms-Link linkAddTask&quot;&gt;Add Task&lt;/a&gt;
+            &lt;/div&gt;
+          &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;`;
+
+    // Apply the generated HTML to the WebPart DOM element
+    this.domElement.innerHTML = html;
+    // Make the kanbanColumn elements droppable areas
+    let webpart = this;
+    $(this.domElement).find(`.${styles.kanbanColumn}`).droppable({
+      tolerance: &quot;intersect&quot;,
+      accept: `.${styles.task}`,
+      activeClass: &quot;ui-state-default&quot;,
+      hoverClass: &quot;ui-state-hover&quot;,
+      drop: (event, ui) =&gt; {
+        // Here the code to execute whenever an element is dropped into a column
+        let taskItem = $(ui.draggable);
+        let source = taskItem.parent();
+        let previousStatus = source.data(&quot;status&quot;);
+        let taskId = taskItem.data(&quot;taskid&quot;);
+        let target = $(event.target);
+        let newStatus = target.data(&quot;status&quot;);
+        taskItem.appendTo(target);
+
+        // If the status has changed, apply the changes
+        if (previousStatus != newStatus) {
+          webpart.dataService.updateTaskStatus(taskId, newStatus);
+        }
+      }
+    });
+
+    // Make the task items draggable
+    $(this.domElement).find(`.${styles.task}`).draggable({
+      classes: {
+        &quot;ui-draggable-dragging&quot;: styles.dragging
+      },
+      opacity: 0.7,
+      helper: &quot;clone&quot;,
+      cursor: &quot;move&quot;,
+      revert: &quot;invalid&quot;
+    });
+  }
+
+  protected get dataVersion(): Version {
+    return Version.parse('1.0');
+  }
+
+  public onPropertyPaneFieldChanged(propertyName: string, oldValue: string, newValue: string) {
+    this.config.statusFieldInternalName = this.properties.statusFieldName;
+    this.config.tasksListId = this.properties.tasksListId;
+  }
+
+  protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+    return {
+      pages: [
+        {
+          header: {
+            description: strings.HeaderDescription
+          },
+          groups: [
+            {
+              groupName: strings.TasksConfigurationGroup,
+              groupFields: [
+                PropertyPaneDropdown('tasksListId', {
+                  label: strings.SourceTasksList,
+                  options: this.availableLists.map(l =&gt; ({
+                    key: l.Id,
+                    text: l.Title
+                  }))
+                }),
+                PropertyPaneDropdown('statusFieldName', {
+                  label: strings.StatusFieldInternalName,
+                  options: this.dataService.getAvailableChoiceFieldsFromLoadedLists().map(f =&gt; ({
+                    key: f.InternalName,
+                    text: f.Title
+                  }))
+                })
+              ]
+            }
+          ]
+        }
+      ]
+    };
+  }
+}
+</code></pre>
+<p>You can see now that the code of the WebPart class only contains things related to the UI. All the data fetching and updating is encapsulated within the service.</p>
 <h4 id="cool-my-concerns-are-separated-i-can-maintain-it-in-a-better-way-now">Cool ! My concerns are separated, I can maintain it in a better way now !</h4>
 <p>Exactly, if anything in the SharePoint data schema changes, you only have to adapt the DataService implementation, the UI will not change at all !</p>
 <h4 id="but-there-is-even-better-implementation-dedicated-to-current-environment">But there is even better: Implementation dedicated to current environment.</h4>
-<p>Let's take the case of Local Workbench or unit testing and the needed mock data. We create a mock implementation for the Data Service, it uses mock in-memory data, however it implements the exact same interface as the real service, that way, the UI layer will never even know whether it is in local workbench or in a real SharePoint page <code>\nimport { ServiceScope } from &quot;@microsoft/sp-core-library&quot;;  import { firstOrDefault } from &quot;../../helpers/CollectionHelper&quot;; import {     IDataService,     IConfigurationService,     ConfigurationServiceKey,     ChoiceFieldType } from &quot;../&quot;; import { IFieldInfo, IListInfo, ITask } from &quot;../../models&quot;;  const mockListsInfo: IListInfo[] = [     {         Id: &quot;##1&quot;,         Title: &quot;Tasks List 1&quot;,         Fields: [             {                 Title: &quot;Title&quot;,                 InternalName: &quot;Title&quot;,                 TypeAsString: &quot;Text&quot;             },             {                 Title: &quot;Task Status&quot;,                 InternalName: &quot;Status&quot;,                 TypeAsString: ChoiceFieldType,                 Choices: [&quot;Open&quot;, &quot;On going&quot;, &quot;Done&quot;, &quot;Canceled&quot;]             },             {                 Title: &quot;Priority&quot;,                 InternalName: &quot;Priority&quot;,                 TypeAsString: ChoiceFieldType,                 Choices: [&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;]             }         ]     },     {         Id: &quot;##2&quot;,         Title: &quot;Tasks List 2&quot;,         Fields: [             {                 Title: &quot;Title&quot;,                 InternalName: &quot;Title&quot;,                 TypeAsString: &quot;Text&quot;             },             {                 Title: &quot;Status&quot;,                 InternalName: &quot;Status&quot;,                 TypeAsString: ChoiceFieldType,                 Choices: [&quot;New&quot;, &quot;In Progress&quot;, &quot;Completed&quot;]             }         ]     } ];  const mockTasks = {     &quot;##1&quot;: [         {             Id: 1,             Title: &quot;Task 1 from list 1&quot;,             Status: &quot;Open&quot;,             Priority: &quot;Low&quot;         },         {             Id: 2,             Title: &quot;Task 2 from list 1&quot;,             Status: &quot;On going&quot;,             Priority: &quot;Medium&quot;         },         {             Id: 3,             Title: &quot;Task 3 from list 1&quot;,             Status: &quot;On going&quot;,             Priority: &quot;Medium&quot;         },         {             Id: 4,             Title: &quot;Task 4 from list 1&quot;,             Status: &quot;Done&quot;,             Priority: &quot;High&quot;         },         {             Id: 5,             Title: &quot;Task 5 from list 1&quot;,             Status: &quot;Canceled&quot;,             Priority: &quot;Low&quot;         },     ],     &quot;##2&quot;: [         {             Id: 1,             Title: &quot;Task 1 from list 2&quot;,             Status: &quot;New&quot;         },         {             Id: 2,             Title: &quot;Task 2 from list 2&quot;,             Status: &quot;New&quot;         },         {             Id: 3,             Title: &quot;Task 3 from list 2&quot;,             Status: &quot;In Progress&quot;         },         {             Id: 4,             Title: &quot;Task 4 from list 2&quot;,             Status: &quot;Canceled&quot;         },     ] };     export class MockDataService implements IDataService {     private config: IConfigurationService = null;      constructor(serviceScope: ServiceScope) {         serviceScope.whenFinished(() =&gt; {             // Configure the required dependencies             this.config = serviceScope.consume(ConfigurationServiceKey);         });      }       public getStatuses(): Promise&lt;string[]&gt; {         return new Promise&lt;string[]&gt;((resolve) =&gt; {             let list = firstOrDefault(mockListsInfo, ld =&gt; ld.Id == this.config.tasksListId);             if (!list) {                 resolve([]);                 return;             }              let choiceField = firstOrDefault(list.Fields, f =&gt; f.InternalName == this.config.statusFieldInternalName);             resolve((choiceField &amp;&amp; choiceField.Choices) || []);         });      }      public getAvailableLists(): Promise&lt;IListInfo[]&gt; {         return new Promise&lt;IListInfo[]&gt;((resolve) =&gt; {             resolve(mockListsInfo);         });     }      public getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt; {         return this.getAvailableLists().then(lists =&gt; {             let list = firstOrDefault(lists, l =&gt; l.Id == this.config.tasksListId);             if (!list)                 return [];              return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);         });     }      public getAvailableChoiceFieldsFromLoadedLists() {         let list = firstOrDefault(mockListsInfo, l =&gt; l.Id == this.config.tasksListId);         if (!list)             return [];          return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);     }      public updateTaskStatus(taskId: number, newStatus: string): Promise&lt;any&gt; {         return new Promise&lt;IListInfo[]&gt;((resolve) =&gt; {             let tasks: ITask[] = mockTasks[this.config.tasksListId];              // For each task of the list with the Id Task ID (Always only one!), update the status             tasks.filter(t =&gt; t.Id == taskId)                 .forEach(t =&gt; t.Status = newStatus);               resolve();         });     }      public getAllTasks(): Promise&lt;ITask[]&gt; {         return new Promise&lt;ITask[]&gt;((resolve) =&gt; {             let tasks: ITask[] = mockTasks[this.config.tasksListId]                 .map(t =&gt; ({                     Id: t.Id,                     Title: t.Title,                     Status: t[this.config.statusFieldInternalName]                 }));             resolve(tasks);         });     } }\n</code> We have now to tell the WebPart to use this implementation when it used in the local workbench or in unit testing. You might have noticed, in the <em>onInit()</em> method of the KanbanBoardWebPart class, I removed the SPFx PnP setup and I added some <em>AppStartup.configure()</em> call. What is that ? A great advantage of the SPFx <strong>ServiceScope</strong> class is that it holds the default implementation of the services. However, you are able to create child scopes that will contain specific implementation for some services, all the services that have no implementation at the child scope level will take it from its parent scope all the way up until the root ServiceScope. I have a AppStartup class that make all the required configuration and instantiate the appropriate services according to the context, all the consumers of the services will not know which implementation they use, they will just use it ! <a href="https://gist.github.com/ypcode/2b576f82eb6f5536a89226e46849e5e8">https://gist.github.com/ypcode/2b576f82eb6f5536a89226e46849e5e8</a> In my solution, the <em><strong>AppStartup</strong></em> class is the only one that knows about the current environment (Local, Test, SharePoint, ClassicSharePoint). I designed the class to be responsible of returning the appropriate scope of implementations according to the context. Take a look on the <em><strong>configureForLocalOrTestContext()</strong></em> method to check how to register specific implementation of a service for a given key. the <em><strong>configure()</strong></em> method that is called by the <em><strong>KanbanBoardWebPart</strong></em> class performs all the required startup configuration and returns the ServiceScope that will be used by all the layers of the application.</p>
+<p>Let's take the case of Local Workbench or unit testing and the needed mock data. We create a mock implementation for the Data Service, it uses mock in-memory data, however it implements the exact same interface as the real service, that way, the UI layer will never even know whether it is in local workbench or in a real SharePoint page</p>
+<pre><code class="language-typescript">import { ServiceScope } from &quot;@microsoft/sp-core-library&quot;;
+
+import { firstOrDefault } from &quot;../../helpers/CollectionHelper&quot;;
+import {
+    IDataService,
+    IConfigurationService,
+    ConfigurationServiceKey,
+    ChoiceFieldType
+} from &quot;../&quot;;
+import { IFieldInfo, IListInfo, ITask } from &quot;../../models&quot;;
+
+const mockListsInfo: IListInfo[] = [
+    {
+        Id: &quot;##1&quot;,
+        Title: &quot;Tasks List 1&quot;,
+        Fields: [
+            {
+                Title: &quot;Title&quot;,
+                InternalName: &quot;Title&quot;,
+                TypeAsString: &quot;Text&quot;
+            },
+            {
+                Title: &quot;Task Status&quot;,
+                InternalName: &quot;Status&quot;,
+                TypeAsString: ChoiceFieldType,
+                Choices: [&quot;Open&quot;, &quot;On going&quot;, &quot;Done&quot;, &quot;Canceled&quot;]
+            },
+            {
+                Title: &quot;Priority&quot;,
+                InternalName: &quot;Priority&quot;,
+                TypeAsString: ChoiceFieldType,
+                Choices: [&quot;Low&quot;, &quot;Medium&quot;, &quot;High&quot;]
+            }
+        ]
+    },
+    {
+        Id: &quot;##2&quot;,
+        Title: &quot;Tasks List 2&quot;,
+        Fields: [
+            {
+                Title: &quot;Title&quot;,
+                InternalName: &quot;Title&quot;,
+                TypeAsString: &quot;Text&quot;
+            },
+            {
+                Title: &quot;Status&quot;,
+                InternalName: &quot;Status&quot;,
+                TypeAsString: ChoiceFieldType,
+                Choices: [&quot;New&quot;, &quot;In Progress&quot;, &quot;Completed&quot;]
+            }
+        ]
+    }
+];
+
+const mockTasks = {
+    &quot;##1&quot;: [
+        {
+            Id: 1,
+            Title: &quot;Task 1 from list 1&quot;,
+            Status: &quot;Open&quot;,
+            Priority: &quot;Low&quot;
+        },
+        {
+            Id: 2,
+            Title: &quot;Task 2 from list 1&quot;,
+            Status: &quot;On going&quot;,
+            Priority: &quot;Medium&quot;
+        },
+        {
+            Id: 3,
+            Title: &quot;Task 3 from list 1&quot;,
+            Status: &quot;On going&quot;,
+            Priority: &quot;Medium&quot;
+        },
+        {
+            Id: 4,
+            Title: &quot;Task 4 from list 1&quot;,
+            Status: &quot;Done&quot;,
+            Priority: &quot;High&quot;
+        },
+        {
+            Id: 5,
+            Title: &quot;Task 5 from list 1&quot;,
+            Status: &quot;Canceled&quot;,
+            Priority: &quot;Low&quot;
+        },
+    ],
+    &quot;##2&quot;: [
+        {
+            Id: 1,
+            Title: &quot;Task 1 from list 2&quot;,
+            Status: &quot;New&quot;
+        },
+        {
+            Id: 2,
+            Title: &quot;Task 2 from list 2&quot;,
+            Status: &quot;New&quot;
+        },
+        {
+            Id: 3,
+            Title: &quot;Task 3 from list 2&quot;,
+            Status: &quot;In Progress&quot;
+        },
+        {
+            Id: 4,
+            Title: &quot;Task 4 from list 2&quot;,
+            Status: &quot;Canceled&quot;
+        },
+    ]
+};
+
+
+
+
+export class MockDataService implements IDataService {
+    private config: IConfigurationService = null;
+
+    constructor(serviceScope: ServiceScope) {
+        serviceScope.whenFinished(() =&gt; {
+            // Configure the required dependencies
+            this.config = serviceScope.consume(ConfigurationServiceKey);
+        });
+
+    }
+
+
+    public getStatuses(): Promise&lt;string[]&gt; {
+        return new Promise&lt;string[]&gt;((resolve) =&gt; {
+            let list = firstOrDefault(mockListsInfo, ld =&gt; ld.Id == this.config.tasksListId);
+            if (!list) {
+                resolve([]);
+                return;
+            }
+
+            let choiceField = firstOrDefault(list.Fields, f =&gt; f.InternalName == this.config.statusFieldInternalName);
+            resolve((choiceField &amp;&amp; choiceField.Choices) || []);
+        });
+
+    }
+
+    public getAvailableLists(): Promise&lt;IListInfo[]&gt; {
+        return new Promise&lt;IListInfo[]&gt;((resolve) =&gt; {
+            resolve(mockListsInfo);
+        });
+    }
+
+    public getAvailableChoiceFields(): Promise&lt;IFieldInfo[]&gt; {
+        return this.getAvailableLists().then(lists =&gt; {
+            let list = firstOrDefault(lists, l =&gt; l.Id == this.config.tasksListId);
+            if (!list)
+                return [];
+
+            return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);
+        });
+    }
+
+    public getAvailableChoiceFieldsFromLoadedLists() {
+        let list = firstOrDefault(mockListsInfo, l =&gt; l.Id == this.config.tasksListId);
+        if (!list)
+            return [];
+
+        return list.Fields.filter(f =&gt; f.TypeAsString == ChoiceFieldType);
+    }
+
+    public updateTaskStatus(taskId: number, newStatus: string): Promise&lt;any&gt; {
+        return new Promise&lt;IListInfo[]&gt;((resolve) =&gt; {
+            let tasks: ITask[] = mockTasks[this.config.tasksListId];
+
+            // For each task of the list with the Id Task ID (Always only one!), update the status
+            tasks.filter(t =&gt; t.Id == taskId)
+                .forEach(t =&gt; t.Status = newStatus);
+
+
+            resolve();
+        });
+    }
+
+    public getAllTasks(): Promise&lt;ITask[]&gt; {
+        return new Promise&lt;ITask[]&gt;((resolve) =&gt; {
+            let tasks: ITask[] = mockTasks[this.config.tasksListId]
+                .map(t =&gt; ({
+                    Id: t.Id,
+                    Title: t.Title,
+                    Status: t[this.config.statusFieldInternalName]
+                }));
+            resolve(tasks);
+        });
+    }
+}
+</code></pre>
+<p>We have now to tell the WebPart to use this implementation when it used in the local workbench or in unit testing.
+You might have noticed, in the <em>onInit()</em> method of the KanbanBoardWebPart class, I removed the SPFx PnP setup and I added some <em>AppStartup.configure()</em> call.
+What is that ? A great advantage of the SPFx <strong>ServiceScope</strong> class is that it holds the default implementation of the services.
+However, you are able to create child scopes that will contain specific implementation for some services, all the services that have no implementation at the child scope level will take it from its parent scope all the way up until the root ServiceScope.
+I have a AppStartup class that make all the required configuration and instantiate the appropriate services according to the context, all the consumers of the services will not know which implementation they use, they will just use it !</p>
+<pre><code class="language-typescript">
+import {
+    IWebPartContext,
+} from '@microsoft/sp-webpart-base';
+import {
+    Environment,
+    EnvironmentType,
+    ServiceScope
+} from '@microsoft/sp-core-library';
+
+// sp-pnp-js for SPFx context configuration
+import pnp from &quot;sp-pnp-js&quot;;
+
+// Services
+import {
+    ConfigurationServiceKey, DataServiceKey,
+    IConfigurationService, MockDataService
+} from &quot;../services&quot;;
+
+
+export class AppStartup {
+    private static configured: boolean = false;
+    private static serviceScope: ServiceScope = null;
+
+    public static configure(ctx: IWebPartContext, props: any): Promise&lt;ServiceScope&gt; {
+
+        switch (Environment.type) {
+            case EnvironmentType.SharePoint:
+            case EnvironmentType.ClassicSharePoint:
+                return AppStartup.configureForSharePointContext(ctx, props);
+            // case EnvironmentType.Local:
+            // case EnvironmentType.Test:
+            default:
+                return AppStartup.configureForLocalOrTestContext(ctx, props);
+
+        }
+    }
+
+    public static getServiceScope(): ServiceScope {
+        if (AppStartup.configured)
+            throw new Error(&quot;The application is not properly configured&quot;);
+
+        return AppStartup.serviceScope;
+    }
+
+    private static configureForSharePointContext(ctx: IWebPartContext, props: any): Promise&lt;ServiceScope&gt; {
+        return new Promise&lt;any&gt;((resolve, reject) =&gt; {
+            ctx.serviceScope.whenFinished(() =&gt; {
+                // Configure PnP Js for working seamlessly with SPFx
+                pnp.setup({
+                    spfxContext: ctx
+                });
+
+                let config: IConfigurationService = ctx.serviceScope.consume(ConfigurationServiceKey);
+
+                // Initialize the config with WebPart Properties
+                config.statusFieldInternalName = props[&quot;statusFieldName&quot;];
+                config.tasksListId = props[&quot;tasksListId&quot;];
+
+                AppStartup.serviceScope = ctx.serviceScope;
+                AppStartup.configured = true;
+
+                resolve(ctx.serviceScope);
+            });
+        });
+    }
+
+    private static configureForLocalOrTestContext(ctx: IWebPartContext, props: any): Promise&lt;ServiceScope&gt; {
+        return new Promise&lt;any&gt;((resolve, reject) =&gt; {
+            // Here create a dedicated service scope for test or local context
+            const childScope: ServiceScope = ctx.serviceScope.startNewChild();
+            // Register the services that will override default implementation
+            childScope.createAndProvide(DataServiceKey, MockDataService);
+            // Must call the finish() method to make sure the child scope is ready to be used
+            childScope.finish();
+
+            childScope.whenFinished(() =&gt; {
+                // If other services must be used, it must done HERE
+
+                AppStartup.serviceScope = childScope;
+                AppStartup.configured = true;
+                resolve(childScope);
+            });
+        });
+    }
+}
+</code></pre>
+<p>In my solution, the <em><strong>AppStartup</strong></em> class is the only one that knows about the current environment (Local, Test, SharePoint, ClassicSharePoint).
+I designed the class to be responsible of returning the appropriate scope of implementations according to the context. Take a look on the <em><strong>configureForLocalOrTestContext()</strong></em> method to check how to register specific implementation of a service for a given key.
+The <em><strong>configure()</strong></em> method that is called by the <em><strong>KanbanBoardWebPart</strong></em> class performs all the required startup configuration and returns the ServiceScope that will be used by all the layers of the application.</p>
 <h2 id="conclusion">Conclusion</h2>
 <p>With this implementation, all concerns are separated and are easier to maintain, fix, improve or replace ! The only item you have to pass to the units is the <strong>ServiceScope</strong>. I encourage you to read the following articles about the SPFx Service Scope:</p>
 <ul>
 <li><a href="https://dev.office.com/sharepoint/reference/spdx/sp-core-library/servicescope">https://dev.office.com/sharepoint/reference/spdx/sp-core-library/servicescope</a></li>
 <li><a href="https://github.com/SharePoint/sp-dev-docs/wiki/Tech-Note:-ServiceScope-API">https://github.com/SharePoint/sp-dev-docs/wiki/Tech-Note:-ServiceScope-API</a></li>
 </ul>
-<p>You can see the whole solution on the <a href="https://github.com/ypcode/spfx-kanban/tree/V2">V2 branch on my github repo</a> Hope you liked this post and it will be helpful. Yannick</p>
+<p>You can see the whole solution on the <a href="https://github.com/ypcode/spfx-kanban/tree/V2">V2 branch on my github repo</a> Hope you liked this post and it will be helpful.</p>
+<p>Yannick</p>
 
     </div>
 </div>

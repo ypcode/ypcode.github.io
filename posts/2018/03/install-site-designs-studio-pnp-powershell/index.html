@@ -61,7 +61,7 @@
         <meta property="og:title" content="Install Site Designs Studio with PnP PowerShell" />
             <meta property="og:description" content="a few steps to install Site Designs Studio leveraging PnP Powershell" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2018/03/install-site-designs-studio-pnp-powershell" />
-        <meta property="og:image" content="/images/2018/03/installed-page.png?r=202007160439" />
+        <meta property="og:image" content="/images/2018/03/installed-page.png?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2018-03-28 05:00:14Z" />
         <meta property="article:modified_time" content="2018-03-28 05:00:14Z" />
@@ -77,7 +77,7 @@
             <meta name="twitter:description" content="a few steps to install Site Designs Studio leveraging PnP Powershell" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2018/03/install-site-designs-studio-pnp-powershell" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="/images/2018/03/installed-page.png?r=202007160439" />
+            <meta name="twitter:image" content="/images/2018/03/installed-page.png?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Office 365, PnP, PowerShell, SharePoint, SharePoint Framework, SharePoint Online, Site Designs, SPFx" />
         <meta name="twitter:site" content="@yp_code" />
@@ -205,7 +205,7 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="/images/2018/03/installed-page.png?r=202007160439" alt="Install Site Designs Studio with PnP PowerShell" />
+            <img class="content-item-featured-image" src="/images/2018/03/installed-page.png?r=202007160951" alt="Install Site Designs Studio with PnP PowerShell" />
         </div>
    
     <div class="content">
@@ -234,11 +234,44 @@ Actually, you will need to type a few commands in PowerShell, but I will try to 
 <pre><code class="language-powershell"># Replace &quot;yourtenant&quot; by the name of your tenant 
 Connect-SPOService -Url https://yourtenant-admin.sharepoint.com
 </code></pre>
-<p>You will be invited to enter your tenant administrator credentials Get the status of your CDN <a href="https://gist.github.com/ypcode/bebd0614bc2677b4506e1089eb6e9a76">https://gist.github.com/ypcode/bebd0614bc2677b4506e1089eb6e9a76</a> [code] Value ----- True PS C:\tmp&gt; Get-SPOTenantCdnOrigins -CdnType Public */MASTERPAGE */STYLE LIBRARY */CLIENTSIDEASSETS PS C:\tmp&gt; Get-SPOTenantCdnPolicies -CdnType Public Key Value --- ----- IncludeFileExtensions CSS,EOT,GIF,ICO,JPEG,JPG,JS,MAP,PNG,SVG,TTF,WOFF ExcludeRestrictedSiteClassifications ExcludeIfNoScriptDisabled False [/code]   If you see <strong>True</strong> as the return of the first command, and you see, at least, *<strong>/CLIENTSIDEASSETS</strong> as the result of the second command, the CDN is properly configured to install our WebPart and you can jump directly to the next section. Otherwise, we have to use a few more commands: <a href="https://gist.github.com/ypcode/51c570316dd9d3fcbdd3840a49113d0e">https://gist.github.com/ypcode/51c570316dd9d3fcbdd3840a49113d0e</a> After executing the first command (<em><strong>Set-SPOTenantCdnEnabled</strong></em>), it might will take about 15 minutes to be configured, you can check the setup status with the second command (<em><strong>Get-SPOTenantCdnOrigins</strong></em>). As long as you see the mention &quot;(configuration pending)&quot;, the setup is not complete, re-execute the second command after 15 minutes to check if this mention disappeared. When it did, we're good to go.</p>
+<p>You will be invited to enter your tenant administrator credentials Get the status of your CDN</p>
+<pre><code class="language-powershell">Get-SPOTenantCdnEnabled -CdnType Public
+Get-SPOTenantCdnOrigins -CdnType Public
+Get-SPOTenantCdnPolicies -CdnType Public
+#Value 
+#----- 
+#True 
+Get-SPOTenantCdnOrigins -CdnType Public */MASTERPAGE */STYLE LIBRARY */CLIENTSIDEASSETS
+Get-SPOTenantCdnPolicies -CdnType Public 
+#Key Value 
+#--- ----- 
+#IncludeFileExtensions CSS,EOT,GIF,ICO,JPEG,JPG,JS,MAP,PNG,SVG,TTF,WOFF 
+#ExcludeRestrictedSiteClassifications 
+#ExcludeIfNoScriptDisabled False
+</code></pre>
+<p>If you see <strong>True</strong> as the return of the first command, and you see, at least, <strong>*/CLIENTSIDEASSETS</strong> as the result of the second command, the CDN is properly configured to install our WebPart and you can jump directly to the next section. Otherwise, we have to use a few more commands:</p>
+<pre><code class="language-powershell"># Enable the CDN
+Set-SPOTenantCdnEnabled -CdnType Public
+# Check the CDN status
+Get-SPOTenantCdnOrigins -CdnType Public
+</code></pre>
+<p>After executing the first command (<em><strong>Set-SPOTenantCdnEnabled</strong></em>), it might will take about 15 minutes to be configured, you can check the setup status with the second command (<em><strong>Get-SPOTenantCdnOrigins</strong></em>). As long as you see the mention &quot;(configuration pending)&quot;, the setup is not complete, re-execute the second command after 15 minutes to check if this mention disappeared. When it did, we're good to go.</p>
 <h2 id="install-the-webpart">Install the WebPart</h2>
-<p>Extract the content of the package.zip archive, in the extracted folder, open a PowerShell console. If you are on Windows 10, you can do as in the exhibit below <img src="/images/2018/03/powershell-in-folder.png" alt="powershell-in-folder.png" /> Or you can change directory directly in any PowerShell console (cd \path\to\folder) Once in the PowerShell console, just type the following command <code>\n# Replace yourtenant by the name of your tenant # Replace yoursite by your site name # e.g. https://contoso.sharepoint.com/sites/MyTeamSite/ .\install.ps1 -Url https://yourtenant.sharepoint.com/sites/yoursite\n</code> You will be prompted for credentials, here enter again the tenant administrator credentials. Go now to <a href="https://yourtenant.sharepoint.com/sites/yoursite/SitePages/SiteDesignsStudio.aspx">https://yourtenant.sharepoint.com/sites/yoursite/SitePages/SiteDesignsStudio.aspx</a> <img src="/images/2018/03/installed-page.png" alt="installed-page.png" /></p>
+<p>Extract the content of the package.zip archive, in the extracted folder, open a PowerShell console. If you are on Windows 10, you can do as in the exhibit below</p>
+<p><img src="/images/2018/03/powershell-in-folder.png" alt="powershell-in-folder.png" /></p>
+<p>Or you can change directory directly in any PowerShell console (cd \path\to\folder) Once in the PowerShell console, just type the following command</p>
+<pre><code class="language-powershell"># Replace yourtenant by the name of your tenant # Replace yoursite by your site name 
+# e.g. https://contoso.sharepoint.com/sites/MyTeamSite/ 
+.\install.ps1 -Url https://yourtenant.sharepoint.com/sites/yoursite
+</code></pre>
+<p>You will be prompted for credentials, here enter again the tenant administrator credentials.
+Go now to <a href="https://yourtenant.sharepoint.com/sites/yoursite/SitePages/SiteDesignsStudio.aspx">https://yourtenant.sharepoint.com/sites/yoursite/SitePages/SiteDesignsStudio.aspx</a></p>
+<p><img src="/images/2018/03/installed-page.png" alt="installed-page.png" /></p>
 <h2 id="thats-it-enjoy">That's it ! Enjoy !</h2>
-<p>You can now try the WebPart and start creating your own Site Designs and Site Scripts ! Hope it will be useful, Cheers, Yannick</p>
+<p>You can now try the WebPart and start creating your own Site Designs and Site Scripts !</p>
+<p>Hope it will be useful,</p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>

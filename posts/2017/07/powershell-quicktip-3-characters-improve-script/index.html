@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="PowerShell QuickTip: 3 characters to improve a script" />
+            <meta property="og:description" content="This is a quicktip to improve your PowerShell scripts" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/07/powershell-quicktip-3-characters-improve-script" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+        <meta property="og:image" content="/images/2016/12/powershell.jpg?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-07-22 14:45:02Z" />
         <meta property="article:modified_time" content="2017-07-22 14:45:02Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SharePoint" />
                 <meta property="article:tag" content="SharePoint Online" />
         <meta name="twitter:title" content="PowerShell QuickTip: 3 characters to improve a script" />
+            <meta name="twitter:description" content="This is a quicktip to improve your PowerShell scripts" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/07/powershell-quicktip-3-characters-improve-script" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+            <meta name="twitter:image" content="/images/2016/12/powershell.jpg?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Misc, PnP, PowerShell, QuickTip, SharePoint, SharePoint Online" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,23 +203,148 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160439" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2016/12/powershell.jpg?r=202007160951" alt="PowerShell QuickTip: 3 characters to improve a script" />
         </div>
    
     <div class="content">
-        <p>Hello SharePoint fellows, Today, I want to share with you something that will probably remain as my quickest bug fix ever: Add 3 characters to fix a bug which was not a typo. <img src="/images/2016/12/powershell.jpg" alt="powershell" />A few months ago, I wrote a post about <a href="https://ypcode.wordpress.com/2016/12/08/cross-sharepoint-platform-maintenance-tools-using-pnp-powershell/">SharePoint maintenance tasks using PowerShell script and SharePoint PnP Powershell</a> where I presented a script I wrote to migrate the content type applied to a bunch of documents to another content type.   In that same post I wrote:</p>
+        <p>Hello SharePoint fellows,</p>
+<p>Today, I want to share with you something that will probably remain as my quickest bug fix ever: Add 3 characters to fix a bug which was not a typo.</p>
+<p>A few months ago, I wrote a post about <a href="/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell/">SharePoint maintenance tasks using PowerShell script and SharePoint PnP Powershell</a> where I presented a script I wrote to migrate the content type applied to a bunch of documents to another content type.  
+In that same post I wrote:</p>
 <blockquote>
 <p>Whenever I code something, I tend to (over-)split it into reusable and generic parts, sometines I never re-use them… but you never know, one day, maybe…</p>
 </blockquote>
-<p>I knew I would reuse that script someday! In a totally different context (change of existing SharePoint structure and used Content Types), I had to reuse it. In this case however, I have dozens of Content Types to migrate. Still developer and still lazy as I am, I do not want to reenter the command dozens of times. Then, I wrote another script where I crafted, using Excel, the commands with the proper arguments <img src="/images/2017/07/screenshot-bulk-migrate-ct.png" alt="screenshot-bulk-migrate-ct.png" /> Run the script, proud of the accomplished job before is is actually done ! But BOOM ! Some ugly red messages appear ! <img src="/images/2017/07/error-script-migrate.png" alt="error-script-migrate" /></p>
+<p>I knew I would reuse that script someday!
+In a totally different context (change of existing SharePoint structure and used Content Types), I had to reuse it.
+In this case however, I have dozens of Content Types to migrate. Still developer and still lazy as I am, I do not want to reenter the command dozens of times. Then, I wrote another script where I crafted, using Excel, the commands with the proper arguments</p>
+<p><img src="/images/2017/07/screenshot-bulk-migrate-ct.png" alt="screenshot-bulk-migrate-ct.png" /></p>
+<p>Run the script, proud of the accomplished job before is is actually done ! But BOOM ! Some ugly red messages appear!</p>
+<p><img src="/images/2017/07/error-script-migrate.png" alt="error-script-migrate" /></p>
 <h3 id="whats-wrong-with-the-script">What's wrong with the script ?</h3>
-<p>The error message states than I am trying to access an indexed property of $item which is null. <strong>The script hasn't changed even a bit since the last time I used it and it worked !</strong> (Does is sound like one of these developer lame excuses ? I admit... but still). What's funky with the <strong>$item</strong> variable ? <img src="/images/2017/07/erroneous-line1.png" alt="erroneous-line" /> Something I knew, but kind of forgot when I wrote this script is that PowerShell automatically unboxes a single item array to that item. If only a single document has the specified source content type, the <strong>$itemsToUpdate</strong> variable will actually contain the item itself instead of an array. In this case, when I write: <strong>$item = $itemsToUpdate[$i]</strong> It makes no sense since a SharePoint ListItem has no indexed properties, so <strong>$item</strong> is null.</p>
+<p>The error message states than I am trying to access an indexed property of $item which is null. <strong>The script hasn't changed even a bit since the last time I used it and it worked !</strong> (Does is sound like one of these developer lame excuses ? I admit... but still). What's funky with the <strong>$item</strong> variable ?</p>
+<p><img src="/images/2017/07/erroneous-line1.png" alt="erroneous-line" /></p>
+<p>Something I knew, but kind of forgot when I wrote this script is that PowerShell automatically unboxes a single item array to that item. If only a single document has the specified source content type, the <strong>$itemsToUpdate</strong> variable will actually contain the item itself instead of an array. In this case, when I write: <strong>$item = $itemsToUpdate[$i]</strong> It makes no sense since a SharePoint ListItem has no indexed properties, so <strong>$item</strong> is null.</p>
 <h3 id="wait-a-minute-if-it-is-not-an-array-why-didnt-it-crash">Wait a minute, if it is not an array, why didn't it crash ?</h3>
-<p><img src="/images/2017/07/total-count.png" alt="$total Count" /> Because, just like in my sample above, a common way to check the result array is not empty is to check its Count property. Before PowerShell 3.0, the Count property was not working if the result was the unboxed single item, which made the scripts crash on that simple check. Since PowerShell 3.0, it has been solved by providing this Count property even for single item results (Check <a href="http://blogs.microsoft.co.il/scriptfanatic/2012/03/19/counting-objects-in-powershell-30/">this</a> for more info). <img src="/images/2017/07/ps-count.png" alt="ps-count" /><img src="/images/2017/07/ps-count2.png" alt="ps-count2" /> You can see, in the screenshots, the intellisense of PowerShell ISE doesn't suggest the Count property, however, I can read it and it contains a value.</p>
+<p><img src="/images/2017/07/total-count.png" alt="$total Count" /></p>
+<p>Because, just like in my sample above, a common way to check the result array is not empty is to check its Count property. Before PowerShell 3.0, the Count property was not working if the result was the unboxed single item, which made the scripts crash on that simple check. Since PowerShell 3.0, it has been solved by providing this Count property even for single item results (Check <a href="http://blogs.microsoft.co.il/scriptfanatic/2012/03/19/counting-objects-in-powershell-30/">this</a> for more info).</p>
+<p><img src="/images/2017/07/ps-count.png" alt="ps-count" />
+<img src="/images/2017/07/ps-count2.png" alt="ps-count2" /></p>
+<p>You can see, in the screenshots, the intellisense of PowerShell ISE doesn't suggest the Count property, however, I can read it and it contains a value.</p>
 <h3 id="it-is-not-a-bug-its-a-feature">It is not a bug, it's a feature !</h3>
-<p>No, seriously, while the red messages could make think there is a bug in the script, it was originally designed to migrate the content type of a collection of documents to another one, and that's the only way I used it and tested it (It is a script to help me doing stuff quicker, I did not spend much time on testing,... Please don't blame me !). I never tested that script to work on a single document. In this new context, I run multiple commands, one for each Content Type and without a clue of the Content Types that are (or are not) in use and how many times.</p>
+<p>No, seriously, while the red messages could make think there is a bug in the script, it was originally designed to migrate the content type of a collection of documents to another one, and that's the only way I used it and tested it (It is a script to help me doing stuff quicker, I did not spend much time on testing,... Please don't blame me !).
+I never tested that script to work on a single document. In this new context, I run multiple commands, one for each Content Type and without a clue of the Content Types that are (or are not) in use and how many times.</p>
 <h3 id="enough-with-the-excuses-time-to-fix-it">Enough with the excuses, time to fix it !</h3>
-<p>Yeah, I meant &quot;improve it&quot;, PowerShell and its magic allow us to improve this script with a very small change. Use the array constructor on the result <strong>@ ( )</strong>. We have to surround the call of the <strong>Get-PnPListItem</strong> cmdlet with the <em><strong>@ ( )</strong></em> operator, this will make sure the result is an array, even if it is the automatically boxed single item. So here is the adapted code <img src="/images/2017/07/fix.png" alt="fix" />And that's how, with only 3 added characters, I improved (or bug-fixed) my script! Here is the complete improved script <code>\n[CmdletBinding()] Param (     [Parameter(Mandatory=$True)]     [string]$List,      [Parameter(Mandatory=$True)]     [string]$SourceContentType,      [Parameter(Mandatory=$True)]     [string]$TargetContentType )   $ctx = Get-PnPContext if (!$ctx) {     Connect-PnPOnline }  $ListObj = $null $SourceContentTypeObj = $null $TargetContentTypeObj = $null  # Instantiate the list object $ListObj = Get-PnPList -Identity $List If (!$ListObj) {     Throw &quot;The target list cannot be found&quot; } Get-PnPProperty -ClientObject $ListObj -Property Title,ContentTypes  # Instantiate the source content type object $SourceContentTypeObj = Get-PnPContentType -List $ListObj | ? {$_.Name -eq $SourceContentType} If (!$SourceContentTypeObj) {     Throw &quot;The specified content type cannot be found in the list&quot; }  # Ensure the source content type name and id Get-PnPProperty -ClientObject $SourceContentTypeObj -Property Name,Id  # Try to retrieve the target content type from the target list $TargetContentTypeObj = Get-PnPContentType -List $ListObj | ?{$_.Name -eq $TargetContentType}   # If the target content type does not already exist in the target list, add it If (!$TargetContentTypeObj) {     # Retrieve it from the available content types     $TargetContentTypeObj = Get-PnPContentType -InSiteHierarchy | ?{$_.Name -eq $TargetContentType}     If (!$TargetContentTypeObj) {         Throw &quot;The specified content type does not exists neither in list nor in site collection&quot;     }      # Add the content type to the target list     Add-PnPContentTypeToList -List $ListObj -ContentType $TargetContentTypeObj }  # Get all items of the target list having the source content type $camlQuery = $(&quot;&lt;View&gt;                     &lt;Query&gt;                         &lt;Where&gt;                             &lt;Eq&gt;                                 &lt;FieldRef Name='ContentType'/&gt;                                 &lt;Value Type='Computed'&gt;$SourceContentType&lt;/Value&gt;                             &lt;/Eq&gt;                         &lt;/Where&gt;                     &lt;/Query&gt;                     &lt;ViewFields&gt;                         &lt;FieldRef Name='Id'/&gt;                         &lt;FieldRef Name='Title'/&gt;                         &lt;FieldRef Name='FileLeafRef'/&gt;                     &lt;/ViewFields&gt;                 &lt;/View&gt;&quot;)  $itemsToUpdate = @(Get-PnPListItem -List $ListObj -Query $camlQuery)  $total = $itemsToUpdate.Count if ($total -eq 0) {     Write-Host &quot;No items to migrate&quot;     Return }   $progressStep = 100/$total For ($i = 0; $i -lt $total; $i++) {     $item = $itemsToUpdate[$i]     $title = if ($item.Title) {$item.Title} else {$item[&quot;FileLeafRef&quot;]}     $itemInfo = &quot;$title [$($item.Id)]&quot;     $currentProgress = ($i+1)*$progressStep     Try     {                      $dummy = Set-PnPListItem -List $ListObj -Identity $item -ContentType $TargetContentTypeObj         Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has been migrated&quot; -PercentComplete $currentProgress     }     Catch     {         Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has not been migrated&quot; -PercentComplete $currentProgress         Write-Warning &quot;Item $itemInfo cannot be fully updated.&quot;         Write-Error $_.Error.Message         Write-Error $_.Error.StackTrace     } }  Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Operation complete&quot; -PercentComplete 1\n</code> I hope this tip will help you as well someday! Regards, Yannick</p>
+<p>Yeah, I meant &quot;improve it&quot;, PowerShell and its magic allow us to improve this script with a very small change. Use the array constructor on the result <strong>@ ( )</strong>.
+We have to surround the call of the <strong>Get-PnPListItem</strong> cmdlet with the <em><strong>@ ( )</strong></em> operator, this will make sure the result is an array, even if it is the automatically boxed single item.
+So here is the adapted code</p>
+<p><img src="/images/2017/07/fix.png" alt="fix" /></p>
+<p>And that's how, with only 3 added characters, I improved (or bug-fixed) my script!
+Here is the complete improved script</p>
+<pre><code class="language-powershell">[CmdletBinding()]
+Param (
+    [Parameter(Mandatory=$True)]
+    [string]$List,
+
+    [Parameter(Mandatory=$True)]
+    [string]$SourceContentType,
+
+    [Parameter(Mandatory=$True)]
+    [string]$TargetContentType
+)
+
+
+$ctx = Get-PnPContext
+if (!$ctx) {
+    Connect-PnPOnline
+}
+
+$ListObj = $null
+$SourceContentTypeObj = $null
+$TargetContentTypeObj = $null
+
+# Instantiate the list object
+$ListObj = Get-PnPList -Identity $List
+If (!$ListObj) {
+    Throw &quot;The target list cannot be found&quot;
+}
+Get-PnPProperty -ClientObject $ListObj -Property Title,ContentTypes
+
+# Instantiate the source content type object
+$SourceContentTypeObj = Get-PnPContentType -List $ListObj | ? {$_.Name -eq $SourceContentType}
+If (!$SourceContentTypeObj) {
+    Throw &quot;The specified content type cannot be found in the list&quot;
+}
+
+# Ensure the source content type name and id
+Get-PnPProperty -ClientObject $SourceContentTypeObj -Property Name,Id
+
+# Try to retrieve the target content type from the target list
+$TargetContentTypeObj = Get-PnPContentType -List $ListObj | ?{$_.Name -eq $TargetContentType}
+
+ # If the target content type does not already exist in the target list, add it
+If (!$TargetContentTypeObj) {
+    # Retrieve it from the available content types
+    $TargetContentTypeObj = Get-PnPContentType -InSiteHierarchy | ?{$_.Name -eq $TargetContentType}
+    If (!$TargetContentTypeObj) {
+        Throw &quot;The specified content type does not exists neither in list nor in site collection&quot;
+    }
+
+    # Add the content type to the target list
+    Add-PnPContentTypeToList -List $ListObj -ContentType $TargetContentTypeObj
+}
+
+# Get all items of the target list having the source content type
+$camlQuery = $(&quot;&lt;View&gt;
+                    &lt;Query&gt;
+                        &lt;Where&gt;
+                            &lt;Eq&gt;
+                                &lt;FieldRef Name='ContentType'/&gt;
+                                &lt;Value Type='Computed'&gt;$SourceContentType&lt;/Value&gt;
+                            &lt;/Eq&gt;
+                        &lt;/Where&gt;
+                    &lt;/Query&gt;
+                    &lt;ViewFields&gt;
+                        &lt;FieldRef Name='Id'/&gt;
+                        &lt;FieldRef Name='Title'/&gt;
+                        &lt;FieldRef Name='FileLeafRef'/&gt;
+                    &lt;/ViewFields&gt;
+                &lt;/View&gt;&quot;)
+
+$itemsToUpdate = @(Get-PnPListItem -List $ListObj -Query $camlQuery)
+
+$total = $itemsToUpdate.Count
+if ($total -eq 0) {
+    Write-Host &quot;No items to migrate&quot;
+    Return
+}
+
+
+$progressStep = 100/$total
+For ($i = 0; $i -lt $total; $i++) {
+    $item = $itemsToUpdate[$i]
+    $title = if ($item.Title) {$item.Title} else {$item[&quot;FileLeafRef&quot;]}
+    $itemInfo = &quot;$title [$($item.Id)]&quot;
+    $currentProgress = ($i+1)*$progressStep
+    Try
+    {    
+        
+        $dummy = Set-PnPListItem -List $ListObj -Identity $item -ContentType $TargetContentTypeObj
+        Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has been migrated&quot; -PercentComplete $currentProgress
+    }
+    Catch
+    {
+        Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Content type of item $itemInfo has not been migrated&quot; -PercentComplete $currentProgress
+        Write-Warning &quot;Item $itemInfo cannot be fully updated.&quot;
+        Write-Error $_.Error.Message
+        Write-Error $_.Error.StackTrace
+    }
+}
+
+Write-Progress -Activity &quot;Migrating Content Types&quot; -Status &quot;Operation complete&quot; -PercentComplete 1
+</code></pre>
+<p>I hope this tip will help you as well someday!</p>
+<p>Regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>

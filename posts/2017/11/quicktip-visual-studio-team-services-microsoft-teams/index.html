@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="QuickTip - Visual Studio Team Services and Microsoft Teams" />
+            <meta property="og:description" content="Integrate Microsoft Teams with Visual Studio Team Services and get rid of e-mail notifications" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/11/quicktip-visual-studio-team-services-microsoft-teams" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+        <meta property="og:image" content="/images/common/ms-teams.png?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-11-16 22:25:21Z" />
         <meta property="article:modified_time" content="2017-11-16 22:25:21Z" />
@@ -68,9 +69,10 @@
                 <meta property="article:tag" content="Teams" />
                 <meta property="article:tag" content="VSTS" />
         <meta name="twitter:title" content="QuickTip - Visual Studio Team Services and Microsoft Teams" />
+            <meta name="twitter:description" content="Integrate Microsoft Teams with Visual Studio Team Services and get rid of e-mail notifications" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/11/quicktip-visual-studio-team-services-microsoft-teams" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+            <meta name="twitter:image" content="/images/common/ms-teams.png?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="NoEmails, Teams, VSTS" />
         <meta name="twitter:site" content="@yp_code" />
@@ -198,15 +200,38 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160439" alt="code image" />
+            <img class="content-item-featured-image" src="/images/common/ms-teams.png?r=202007160951" alt="QuickTip - Visual Studio Team Services and Microsoft Teams" />
         </div>
    
     <div class="content">
-        <p>Hi Guys, For almost one year, my workmates and I have been using Microsoft Teams to collaborate efficiently, from Meeting Notes to document peer reviews via sharing Kanban Board from VSTS. It offers a wide variety of capabilities and is totally extendable through different interfaces (Bots, tabs or connectors). You can use existing ones or even develop your own ones. According to me, it really helps getting rid of e-mails for less formal and more interactive communication. I keep being sick of receiving massive notification e-mails from all parties (Facebook, Twitter, Youtube, and all others... With our VSTS continous integration, I started to also receive a bunch of e-mails for various events (PR, Build, Releases, ...). There is where Microsoft Teams helped me, since I have the desktop application always launched as well as the iPhone version, I will always get notifications from it and never miss and I won't be flooded anymore by notification e-mails.</p>
+        <p>Hi Guys,</p>
+<p>For almost one year, my workmates and I have been using Microsoft Teams to collaborate efficiently, from Meeting Notes to document peer reviews via sharing Kanban Board from VSTS.
+It offers a wide variety of capabilities and is totally extendable through different interfaces (Bots, tabs or connectors).
+You can use existing ones or even develop your own ones.</p>
+<p>According to me, it really helps getting rid of e-mails for less formal and more interactive communication.
+I keep being sick of receiving massive notification e-mails from all parties (Facebook, Twitter, Youtube, and all others...</p>
+<p>With our VSTS continous integration, I started to also receive a bunch of e-mails for various events (PR, Build, Releases, ...).
+There is where Microsoft Teams helped me, since I have the desktop application always launched as well as the iPhone version, I will always get notifications from it and never miss and I won't be flooded anymore by notification e-mails.</p>
 <h2 id="silence-in-e-mails">Silence (in e-mails)!</h2>
-<p>Let's start to deactivate all the notifications that are not specifically dedicated to me. On VSTS, in my account settings, just turn off all the general notifications that targets the whole team: <img src="/images/2017/11/turn_off_notif.png" alt="turn_off_notif" /><img src="/images/2017/11/build_notif_deact.png" alt="build_notif_deact" /><img src="/images/2017/11/release_notif_deact.png" alt="release_notif_deact" /></p>
+<p>Let's start to deactivate all the notifications that are not specifically dedicated to me. On VSTS, in my account settings, just turn off all the general notifications that targets the whole team:</p>
+<p><img src="/images/2017/11/turn_off_notif.png" alt="turn_off_notif" />
+<img src="/images/2017/11/build_notif_deact.png" alt="build_notif_deact" />
+<img src="/images/2017/11/release_notif_deact.png" alt="release_notif_deact" /></p>
 <h2 id="teams-do-notify-me">Teams, do notify me !</h2>
-<p>With Teams, I decided to create a dedicated channel that will be the recipient of VSTS events, I can decide to follow this channel or not to be notified of these events. <img src="/images/2017/11/build_releases_channel.png" alt="build_releases_channel" /> In order to do so, we have to set up a VSTS connector on our channel <img src="/images/2017/11/teams_add_connector1.png" alt="teams_add_connector.png" /> Let's choose the VSTS connector, under the <strong>Developer Tools</strong> section <img src="/images/2017/11/vsts_connector.png" alt="vsts_connector.png" /> Set up the connection to the VSTS, your Team project and the events you want to subscribe to <img src="/images/2017/11/vsts_settings.png" alt="vsts_settings" /> Once everything is set, your channel will receive cards for the events, if you follow this channel, you will receive the notifications on your favorite devices <img src="/images/2017/11/build_releases_channel_content.png" alt="build_releases_channel_content.png" /> Here we go ! Hope it will help you getting rid of mass of e-mails ! Cheers Yannick</p>
+<p>With Teams, I decided to create a dedicated channel that will be the recipient of VSTS events, I can decide to follow this channel or not to be notified of these events.</p>
+<p><img src="/images/2017/11/build_releases_channel.png" alt="build_releases_channel" /></p>
+<p>In order to do so, we have to set up a VSTS connector on our channel</p>
+<p><img src="/images/2017/11/teams_add_connector1.png" alt="teams_add_connector.png" /></p>
+<p>Let's choose the VSTS connector, under the <strong>Developer Tools</strong> section</p>
+<p><img src="/images/2017/11/vsts_connector.png" alt="vsts_connector.png" /></p>
+<p>Set up the connection to the VSTS, your Team project and the events you want to subscribe to</p>
+<p><img src="/images/2017/11/vsts_settings.png" alt="vsts_settings" /></p>
+<p>Once everything is set, your channel will receive cards for the events, if you follow this channel, you will receive the notifications on your favorite devices</p>
+<p><img src="/images/2017/11/build_releases_channel_content.png" alt="build_releases_channel_content.png" /></p>
+<p>Here we go !</p>
+<p>Hope it will help you getting rid of mass of e-mails!</p>
+<p>Cheers</p>
+<p>Yannick</p>
 
     </div>
 </div>

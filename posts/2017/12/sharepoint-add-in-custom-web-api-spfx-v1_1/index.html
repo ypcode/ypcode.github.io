@@ -60,7 +60,7 @@
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SharePoint add-in, custom Web API and SPFx (v1.1)" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/12/sharepoint-add-in-custom-web-api-spfx-v1_1" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+        <meta property="og:image" content="/images/2017/12/webpart_output.png?r=202007160951" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-12-29 21:44:43Z" />
         <meta property="article:modified_time" content="2017-12-29 21:44:43Z" />
@@ -81,7 +81,7 @@
         <meta name="twitter:title" content="SharePoint add-in, custom Web API and SPFx (v1.1)" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/12/sharepoint-add-in-custom-web-api-spfx-v1_1" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160439" />
+            <meta name="twitter:image" content="/images/2017/12/webpart_output.png?r=202007160951" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, ASP.NET, Document Library, JavaScript, JS, PnP, PowerShell, SharePoint, SharePoint Framework, SharePoint Online, SharePoint2016, SPFx, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -209,13 +209,23 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160439" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/12/webpart_output.png?r=202007160951" alt="SharePoint add-in, custom Web API and SPFx (v1.1)" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint guys ! It's been a while I haven't written a blog post mainly due to lack of free time. Thanks to the end of year holidays, I could spend a few hours to build a proof-of-concept which, IMHO, might be really interesting. Hope you will be interested in it as much as I am.</p>
+        <p>Hi SharePoint guys !</p>
+<p>It's been a while I haven't written a blog post mainly due to lack of free time.
+Thanks to the end of year holidays, I could spend a few hours to build a proof-of-concept which, IMHO, might be really interesting.
+Hope you will be interested in it as much as I am.</p>
 <h1 id="introduction">Introduction</h1>
-<p>The SharePoint Framework is the new promoted development model for SharePoint customizations. It follows the current web development trends (Asynchronous HTTP calls, Web/REST APIs, ...). In this article, we will then see how to implement a custom Web API based on the SharePoint add-in model we can call from our SPFx solutions. A few months ago, I wrote <a href="https://ypcode.wordpress.com/2017/06/29/leverage-app-only-features-with-spfx-pnp-and-azure-functions/">a post explaning how to call App Only proxy implemented as Azure Functions from SPFx</a>. This previous blog post focuses on Azure Functions, and is relevant for Cloud or Hybrid environments, it relies on Azure Function, Azure AD and can easily be extended with Microsoft Graph. Unfortunately, in a 'pure' On-prem environment without any cloud components, the previous blog post is not relevant. At the time, SPFx was not available for SharePoint on-premises, Now it is ! I then decided to port this concept using the assets and techniques we can all use in a full on-prem environment. This post will leverage the SharePoint provider-hoster add-in model which is applicable to both SharePoint Online and SharePoint (full) On-prem.</p>
+<p>The SharePoint Framework is the new promoted development model for SharePoint customizations.
+It follows the current web development trends (Asynchronous HTTP calls, Web/REST APIs, ...).
+In this article, we will then see how to implement a custom Web API based on the SharePoint add-in model we can call from our SPFx solutions.
+A few months ago, I wrote <a href="/posts/2017/06/leverage-app-only-features-with-spfx-pnp-and-azure-functions/">a post explaning how to call App Only proxy implemented as Azure Functions from SPFx</a>.
+This previous blog post focuses on Azure Functions, and is relevant for Cloud or Hybrid environments, it relies on Azure Function, Azure AD and can easily be extended with Microsoft Graph.
+Unfortunately, in a 'pure' On-prem environment without any cloud components, the previous blog post is not relevant. At the time, SPFx was not available for SharePoint on-premises, Now it is !
+I then decided to port this concept using the assets and techniques we can all use in a full on-prem environment.
+This post will leverage the SharePoint provider-hoster add-in model which is applicable to both SharePoint Online and SharePoint (full) On-prem.</p>
 <h1 id="the-case-study">The case study</h1>
 <p>In order to implement a relevant Proof-of-Concept, let's ellaborate a context and some requirements.</p>
 <ul>
@@ -223,54 +233,837 @@
 <li>The SPFx WebPart will interact with SharePoint exclusively via a custom Web API</li>
 <li>The custom Web API will be a simple CRUD for _Business Documents_stored in a SharePoint document library</li>
 </ul>
-<p>To make sure to rely on the same library structure as I am, you can use the provisioning assets <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/Provisioning">here</a>. You will need to have the <a href="https://github.com/SharePoint/PnP-PowerShell#installation">PnP PowerShell module installed</a> and execute the <strong><em>Provision.ps1</em></strong> script.</p>
+<p>To make sure to rely on the same library structure as I am, you can use the provisioning assets <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/Provisioning">here</a>.
+You will need to have the <a href="https://github.com/SharePoint/PnP-PowerShell#installation">PnP PowerShell module installed</a> and execute the <strong><em>Provision.ps1</em></strong> script.</p>
 <h1 id="lets-create-a-sharepoint-add-in">Let's create a SharePoint add-in</h1>
-<p>We will first create a new SharePoint provider-hosted add-in solution like any other one. Open Visual Studio and create your new project as usual <img src="/images/2017/12/vs-newproj.png" alt="vs-newproj" /> Enter the address of your SharePoint development site and select the <strong><em>Provider-hosted</em></strong> hosting option. <img src="/images/2017/12/vs-addin-type.png" alt="vs-addin-type" /> Select the targeted SharePoint version (in my case, I use SharePoint Online, but this blog post is also valid for SharePoint 2016 FP2) <img src="/images/2017/12/vs-choose-spversion.png" alt="vs-choose-spversion" /> Select <strong><em>ASP.NET MVC Web Application</em></strong> <img src="/images/2017/12/vs-choose-webapp-type.png" alt="vs-choose-webapp-type" /> <img src="/images/2017/12/vs-choose-trust-type.png" alt="vs-choose-trust-type" /></p>
+<p>We will first create a new SharePoint provider-hosted add-in solution like any other one.
+Open Visual Studio and create your new project as usual</p>
+<p><img src="/images/2017/12/vs-newproj.png" alt="vs-newproj" /></p>
+<p>Enter the address of your SharePoint development site and select the <strong><em>Provider-hosted</em></strong> hosting option.</p>
+<p><img src="/images/2017/12/vs-addin-type.png" alt="vs-addin-type" /></p>
+<p>Select the targeted SharePoint version (in my case, I use SharePoint Online, but this blog post is also valid for SharePoint 2016 FP2)</p>
+<p><img src="/images/2017/12/vs-choose-spversion.png" alt="vs-choose-spversion" /></p>
+<p>Select <strong><em>ASP.NET MVC Web Application</em></strong></p>
+<p><img src="/images/2017/12/vs-choose-webapp-type.png" alt="vs-choose-webapp-type" />
+<img src="/images/2017/12/vs-choose-trust-type.png" alt="vs-choose-trust-type" /></p>
 <ol>
 <li>Select this option if you are using SharePoint Online or SharePoint On-prem with a configured low trust</li>
 <li>Select this option if you are using Server-to-server authentication in an on-prem environement (You will have to configure the X.509 certificate if you do so). <a href="https://docs.microsoft.com/en-us/sharepoint/dev/sp-add-ins/create-high-trust-sharepoint-add-ins">Check this for more accurate information</a></li>
 </ol>
-<p>Now that we have the boilerplate code of our solution, let's configure the SharePoint add-in. Open the AppManifest.xml file Let's change the start page value <img src="/images/2017/12/addin-appmanifest-startpage.png" alt="addin-appmanifest-startpage" /> Let's set the <strong><em>[your-project]/Home/Register</em></strong> value. On the <strong>permissions</strong> tab, select <strong>List</strong> as the Scope and select <strong>Full Control</strong>. Make sure to tick the checkbox to allow app-only calls <img src="/images/2017/12/addin-appmanifest-perms.png" alt="addin-appmanifest-perms" /></p>
+<p>Now that we have the boilerplate code of our solution, let's configure the SharePoint add-in.
+Open the AppManifest.xml file Let's change the start page value</p>
+<p><img src="/images/2017/12/addin-appmanifest-startpage.png" alt="addin-appmanifest-startpage" /></p>
+<p>Let's set the <strong><em>[your-project]/Home/Register</em></strong> value.
+On the <strong>permissions</strong> tab, select <strong>List</strong> as the Scope and select <strong>Full Control</strong>.
+Make sure to tick the checkbox to allow app-only calls</p>
+<p><img src="/images/2017/12/addin-appmanifest-perms.png" alt="addin-appmanifest-perms" /></p>
 <h1 id="a-custom-web-api-in-a-sharepoint-add-in">A custom Web API in a SharePoint add-in</h1>
 <p>The SharePoint provider-hosted add-in model and the featured boilerplate code in the corresponding Visual Studio project template allows to use CSOM either in App+User or in App-Only mode.</p>
 <h3 id="how-does-it-work">How does it work ?</h3>
-<p>It relies on an authentication flow (OAuth in low-trust or direct in high-trust). To initiate this authentication flow, when you click the add-in icon in SharePoint, you reach a SharePoint system page (<strong>appredirect.aspx</strong>) that redirects you to your provider hosted application default page. This HTTP call issued for the redirection contains all the information of the current context (SharePoint and User context), this context will be persisted in the user session on the server side. It will later be used to create a CSOM ClientContext object instance that is the base of any CSOM operation. At each time a page (or ASP.NET MVC action) is reached, the current user context is fetched from his session state or created if it does not exist yet. If no context can be fetched or created on the server (for example, because needed information is missing), the user is redirected to an error page. because he cannot be properly authenticated, he won't be able to go further.</p>
+<p>It relies on an authentication flow (OAuth in low-trust or direct in high-trust). To initiate this authentication flow, when you click the add-in icon in SharePoint, you reach a SharePoint system page (<strong>appredirect.aspx</strong>) that redirects you to your provider hosted application default page.
+This HTTP call issued for the redirection contains all the information of the current context (SharePoint and User context), this context will be persisted in the user session on the server side.
+It will later be used to create a CSOM ClientContext object instance that is the base of any CSOM operation.
+At each time a page (or ASP.NET MVC action) is reached, the current user context is fetched from his session state or created if it does not exist yet.
+If no context can be fetched or created on the server (for example, because needed information is missing), the user is redirected to an error page. because he cannot be properly authenticated, he won't be able to go further.</p>
 <h3 id="with-a-stateless-web-api">With a stateless Web API ?</h3>
-<p>By nature, a Web/REST API is stateless, it means that the common implementation will not handle user sessions. In the code, you won't have access to any session state for the current Request object. Anyway,  the SharePoint add-in model needs some kind of session mechanism to work properly, we can implement our own session mechanism with the following steps :</p>
+<p>By nature, a Web/REST API is stateless, it means that the common implementation will not handle user sessions.
+In the code, you won't have access to any session state for the current Request object.
+Anyway, the SharePoint add-in model needs some kind of session mechanism to work properly, we can implement our own session mechanism with the following steps :</p>
 <ol>
 <li>When the <strong><em>appredirect.aspx</em></strong> SharePoint page redirects to the provider-hosted addin default page, save the created context in cache with a specific key.</li>
-<li>Add a cookie in the HTTP response that will contain the cache key. This cookie will be included in all subsequent calls</li>
+<li>Add a cookie in the HTTP response that will contain the cache key. 
+This cookie will be included in all subsequent calls</li>
 <li>In the next HTTP calls, get the cached context using the key contained in the cookie of the current request.</li>
 </ol>
 <blockquote>
 <p>Hum...OK. That's a lot of work for such a basic thing...</p>
 </blockquote>
-<p><img src="/images/2017/12/pnp-superhero.png" alt="pnp-superhero" /> Exactly ! We might need some help! Let's call our friend the PnP super-hero ! Actually, once again, the community has done great job and already implemented such a mechanism in the PnP Core library. All the stuff we need are here: <a href="https://github.com/SharePoint/PnP-Sites-Core/tree/master/Core/OfficeDevPnP.Core/WebAPI">https://github.com/SharePoint/PnP-Sites-Core/tree/master/Core/OfficeDevPnP.Core/WebAPI</a> OK, let's install the PnP Core library package in our solution. In the <strong><em>Package Manager Console</em></strong> of Visual Studio, make sure you select your Web application project and type the following command <img src="/images/2017/12/vs-packagemanager-installpnp2016.png" alt="vs-packagemanager-installpnp2016" /> There is a module for each SharePoint currently supported version</p>
+<p><img src="/images/2017/12/pnp-superhero.png" alt="pnp-superhero" /></p>
+<p>Exactly ! We might need some help! Let's call our friend the PnP super-hero !
+Actually, once again, the community has done great job and already implemented such a mechanism in the PnP Core library.
+All the stuff we need are here: <a href="https://github.com/SharePoint/PnP-Sites-Core/tree/master/Core/OfficeDevPnP.Core/WebAPI">https://github.com/SharePoint/PnP-Sites-Core/tree/master/Core/OfficeDevPnP.Core/WebAPI</a></p>
+<p>OK, let's install the PnP Core library package in our solution.
+In the <strong><em>Package Manager Console</em></strong> of Visual Studio, make sure you select your Web application project and type the following command <img src="/images/2017/12/vs-packagemanager-installpnp2016.png" alt="vs-packagemanager-installpnp2016" />
+There is a module for each SharePoint currently supported version.</p>
 <ul>
 <li>SharePointPnPCore2013</li>
 <li>SharePointPnPCore2016</li>
 <li>SharePointPnPCoreOnline</li>
 </ul>
-<p>Choose the one that suits for you. While you're in the Package Manager console, enter also the command: <strong><em>&gt; Install-Package Microsoft.AspNet.WebApi.Cors</em></strong> As you understood above, we will need to register the Web API to make sure the subsequent calls will be able to fetch the SharePoint context stored in the cache. In the HomeController, we will then create a dedicated action (make sure to include the needed using clause) <code>\nusing OfficeDevPnP.Core.WebAPI;  //...  [SharePointContextFilter] public ActionResult Register() {    try    {        // Register the BusinessDocuments API        WebAPIHelper.RegisterWebAPIService(this.HttpContext, &quot;/api/BusinessDocuments&quot;);        return Json(new { message = &quot;Web API registered&quot; });    }    catch (Exception ex)    {        return Json(ex);    } }\n</code> Let's then create a ViewModel class that will represent our business document entity. In the empty <strong>Models</strong> folder, add a new class name <strong><em>BusinessDocumentViewModel</em></strong> <a href="https://gist.github.com/ypcode/662c2ae7a4607886614f93eb979ee671">https://gist.github.com/ypcode/662c2ae7a4607886614f93eb979ee671</a> We will then add our Web API controller</p>
+<p>Choose the one that suits for you.
+While you're in the Package Manager console, enter also the command:</p>
+<pre><code class="language-powershell">Install-Package Microsoft.AspNet.WebApi.Cors
+</code></pre>
+<p>As you understood above, we will need to register the Web API to make sure the subsequent calls will be able to fetch the SharePoint context stored in the cache.
+In the HomeController, we will then create a dedicated action (make sure to include the needed using clause)</p>
+<pre><code class="language-csharp">using OfficeDevPnP.Core.WebAPI;  
+//...  
+[SharePointContextFilter] public ActionResult Register() 
+{    
+  try    
+  {        
+    // Register the BusinessDocuments API        
+    WebAPIHelper.RegisterWebAPIService(this.HttpContext, &quot;/api/BusinessDocuments&quot;);        
+    return Json(new { message = &quot;Web API registered&quot; });    
+  }    
+  catch (Exception ex)    
+  {
+    return Json(ex);    
+  } 
+}
+</code></pre>
+<p>Let's then create a ViewModel class that will represent our business document entity.
+In the empty <strong>Models</strong> folder, add a new class name <strong><em>BusinessDocumentViewModel</em></strong></p>
+<p><a href="https://gist.github.com/ypcode/662c2ae7a4607886614f93eb979ee671">https://gist.github.com/ypcode/662c2ae7a4607886614f93eb979ee671</a></p>
+<p>We will then add our Web API controller</p>
 <ol>
 <li>Right-click the <strong>Controllers</strong> folder</li>
 <li>Expand the <strong>Add</strong> menu</li>
 <li>Click <strong>Controller...</strong></li>
 </ol>
-<p><img src="/images/2017/12/vs-add-apicontroller-01.png" alt="vs-add-apicontroller-01" /> Select the Web API 2 Controller with read/write actions<img src="/images/2017/12/vs-add-apicontroller-02.png" alt="vs-add-apicontroller-02" />And name if &quot;<strong><em>BusinessDocumentsController</em></strong>&quot;<img src="/images/2017/12/vs-name-apicontroller.png" alt="vs-name-apicontroller" /> Replace the code of the scaffolded class by this one <code>\nusing Microsoft.SharePoint.Client; using OfficeDevPnP.Core.WebAPI; using spaddin_webapiWeb.Models; using System; using System.Collections.Generic; using System.Linq; using System.Net; using System.Net.Http; using System.Web.Http; using System.Web.Http.Cors;  namespace spaddin_webapiWeb.Controllers {     [EnableCors(origins: &quot;https://ypcode.sharepoint.com,https://localhost:4321&quot;,          headers: &quot;*&quot;,          methods: &quot;*&quot;,         SupportsCredentials = true)]     [WebAPIContextFilter]     public class BusinessDocumentsController : ApiController     {         public const string FileLeafRefField = &quot;FileLeafRef&quot;;         public const string InChargeField = &quot;InCharge&quot;;         public const string DocumentPurposeField = &quot;DocumentPurpose&quot;;          public static string[] ValidDocumentPurposes = new string[]         {             &quot;Agreement project&quot;,             &quot;Offer project&quot;,             &quot;Purchase project&quot;,             &quot;Research document&quot;         };                  private static BusinessDocumentViewModel ListItemToViewModel(ListItem businessDocListItem)         {             FieldUserValue inChargeUserValue = businessDocListItem[InChargeField] as FieldUserValue;             string inChargeValue = inChargeUserValue != null ? inChargeUserValue.LookupValue : string.Empty;              return new BusinessDocumentViewModel()             {                 Id = businessDocListItem.Id,                 Name = (string)businessDocListItem[FileLeafRefField],                 Purpose = (string)businessDocListItem[DocumentPurposeField],                 InCharge = inChargeValue             };         }          private static ListItem MapToListItem(BusinessDocumentViewModel viewModel, ListItem targetListItem)         {             targetListItem[FileLeafRefField] = viewModel.Name;             targetListItem[DocumentPurposeField] = viewModel.Purpose;             targetListItem[InChargeField] = FieldUserValue.FromUser(viewModel.InCharge);             return targetListItem;         }          private static ListItem TryGetListItemById(List list, int id)         {             try             {                 ListItem item = list.GetItemById(id);                 list.Context.Load(item, i =&gt; i.Id);                 list.Context.ExecuteQuery();                 return item;             }             catch (Exception)             {                 return null;             }         }          private static bool ValidateModel(BusinessDocumentViewModel viewModel, out string message)         {             // Validate the purpose is a valid value             if (!ValidDocumentPurposes.Contains(viewModel.Purpose))             {                 message = &quot;The specified document purpose is invalid&quot;;                 return false;             }              message = string.Empty;             return true;         }          // GET: api/BusinessDocuments         public IEnumerable&lt;BusinessDocumentViewModel&gt; Get()         {             using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                 // Get the documents from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 ListItemCollection businessDocItems = businessDocsLib.GetItems(CamlQuery.CreateAllItemsQuery());                  clientContext.Load(businessDocItems, items =&gt; items.Include(                     item =&gt; item.Id,                     item =&gt; item[FileLeafRefField],                     item =&gt; item[InChargeField],                     item =&gt; item[DocumentPurposeField]));                 clientContext.ExecuteQuery();                  // Create collection of view models from list item collection                 List&lt;BusinessDocumentViewModel&gt; viewModels = businessDocItems.Select(ListItemToViewModel).ToList();                  return viewModels;             }         }          // GET: api/MyBusinessDocuments         [HttpGet]         [Route(&quot;api/MyBusinessDocuments&quot;)]         public IEnumerable&lt;BusinessDocumentViewModel&gt; MyBusinessDocuments()         {             using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                  // Get the documents from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 var camlQuery = new CamlQuery                 {                     ViewXml = $@&quot;&lt;View&gt;&lt;Query&gt;&lt;Where&gt;     &lt;Eq&gt;         &lt;FieldRef Name='{InChargeField}' LookupId='TRUE' /&gt;         &lt;Value Type = 'Integer'&gt;&lt;UserID /&gt;&lt;/Value&gt;      &lt;/Eq&gt;  &lt;/Where&gt;&lt;/Query&gt;&lt;/View&gt;&quot;                 };                 ListItemCollection businessDocItems = businessDocsLib.GetItems(camlQuery);                                  clientContext.Load(businessDocItems, items =&gt; items.Include(                     item =&gt; item.Id,                     item =&gt; item[FileLeafRefField],                     item =&gt; item[InChargeField],                     item =&gt; item[DocumentPurposeField]));                 clientContext.ExecuteQuery();                  // Create collection of view models from list item collection                 List&lt;BusinessDocumentViewModel&gt; viewModels = businessDocItems.Select(ListItemToViewModel).ToList();                  return viewModels;             }         }                    // GET: api/BusinessDocuments/5         public IHttpActionResult Get(int id)         {             using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                 // Get the documents from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);                 if (businessDocItem == null)                     return NotFound();                  // Ensure the needed metadata are loaded                 clientContext.Load(businessDocItem, item =&gt; item.Id,                     item =&gt; item[FileLeafRefField],                     item =&gt; item[InChargeField],                     item =&gt; item[DocumentPurposeField]);                 clientContext.ExecuteQuery();                  // Create a view model object from the list item                 BusinessDocumentViewModel viewModel = ListItemToViewModel(businessDocItem);                  return Ok(viewModel);             }         }          // POST: api/BusinessDocuments         public IHttpActionResult Post([FromBody]BusinessDocumentViewModel value)         {             string validationError = null;             if (!ValidateModel(value, out validationError))             {                 return BadRequest(validationError);             }              using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                 // Get the documents from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 // Ensure the root folder is loaded                 Folder rootFolder = businessDocsLib.EnsureProperty(l =&gt; l.RootFolder);                 ListItem newItem = businessDocsLib.CreateDocument(value.Name, rootFolder, DocumentTemplateType.Word);                  // Update the new document metadata                 newItem[DocumentPurposeField] = value.Purpose;                 newItem[InChargeField] = FieldUserValue.FromUser(value.InCharge);                 newItem.Update();                  // Ensure the needed metadata are loaded                 clientContext.Load(newItem, item =&gt; item.Id,                     item =&gt; item[FileLeafRefField],                     item =&gt; item[InChargeField],                     item =&gt; item[DocumentPurposeField]);                  newItem.File.CheckIn(&quot;&quot;, CheckinType.MajorCheckIn);                 clientContext.ExecuteQuery();                  BusinessDocumentViewModel viewModel = ListItemToViewModel(newItem);                 return Created($&quot;/api/BusinessDocuments/{viewModel.Id}&quot;, viewModel);             }         }                  // PUT: api/BusinessDocuments/5         public IHttpActionResult Put(int id, [FromBody]BusinessDocumentViewModel value)         {             string validationError = null;             if (!ValidateModel(value, out validationError))             {                 return BadRequest(validationError);             }              using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                 // Get the documents from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);                  // If not found, return the appropriate status code                 if (businessDocItem == null)                     return NotFound();                  // Update the list item properties                 MapToListItem(value, businessDocItem);                 businessDocItem.Update();                 clientContext.ExecuteQuery();                  return Ok();             }         }          // DELETE: api/BusinessDocuments/5         public IHttpActionResult Delete(int id)         {             using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             {                 // Get the document from the Business Documents library                 List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);                 // If not found, return the appropriate status code                 if (businessDocItem == null)                     return NotFound();                  // Delete the list item                 businessDocItem.DeleteObject();                 clientContext.ExecuteQuery();                  return Ok();             }         }     } }\n</code> It is the complete implementation of our custom Web API. We have to notice several important parts:</p>
+<p><img src="/images/2017/12/vs-add-apicontroller-01.png" alt="vs-add-apicontroller-01" /></p>
+<p>Select the Web API 2 Controller with read/write actions</p>
+<p><img src="/images/2017/12/vs-add-apicontroller-02.png" alt="vs-add-apicontroller-02" /></p>
+<p>And name if &quot;<strong><em>BusinessDocumentsController</em></strong>&quot;</p>
+<p><img src="/images/2017/12/vs-name-apicontroller.png" alt="vs-name-apicontroller" /></p>
+<p>Replace the code of the scaffolded class by this one</p>
+<pre><code class="language-csharp">using Microsoft.SharePoint.Client; 
+using OfficeDevPnP.Core.WebAPI; 
+using spaddin_webapiWeb.Models; 
+using System; 
+using System.Collections.Generic; 
+using System.Linq; 
+using System.Net; 
+using System.Net.Http; 
+using System.Web.Http; 
+using System.Web.Http.Cors;  
+
+namespace spaddin_webapiWeb.Controllers 
+{     
+  [EnableCors(origins: &quot;https://ypcode.sharepoint.com,https://localhost:4321&quot;,          
+  headers: &quot;*&quot;,
+  methods: &quot;*&quot;,         
+  SupportsCredentials = true)]     
+  [WebAPIContextFilter]     
+  public class BusinessDocumentsController : ApiController     
+  {         
+    public const string FileLeafRefField = &quot;FileLeafRef&quot;;         
+    public const string InChargeField = &quot;InCharge&quot;;         
+    public const string DocumentPurposeField = &quot;DocumentPurpose&quot;;          
+    public static string[] ValidDocumentPurposes = new string[]         
+    {             
+      &quot;Agreement project&quot;,             
+      &quot;Offer project&quot;,             
+      &quot;Purchase project&quot;,             
+      &quot;Research document&quot;         
+    };                  
+    
+    private static BusinessDocumentViewModel ListItemToViewModel(ListItem businessDocListItem)         
+    {             
+      FieldUserValue inChargeUserValue = businessDocListItem[InChargeField] as FieldUserValue;             
+      string inChargeValue = inChargeUserValue != null ? inChargeUserValue.LookupValue : string.Empty;              return new BusinessDocumentViewModel()             
+      {                 
+        Id = businessDocListItem.Id,                 
+        Name = (string)businessDocListItem[FileLeafRefField],                 
+        Purpose = (string)businessDocListItem[DocumentPurposeField],                 
+        InCharge = inChargeValue             
+      };         
+    }          
+    
+    private static ListItem MapToListItem(BusinessDocumentViewModel viewModel, ListItem targetListItem)         {             
+      targetListItem[FileLeafRefField] = viewModel.Name;             
+      targetListItem[DocumentPurposeField] = viewModel.Purpose;             
+      targetListItem[InChargeField] = FieldUserValue.FromUser(viewModel.InCharge);             
+      return targetListItem;         
+    }          
+    
+    private static ListItem TryGetListItemById(List list, int id)         
+    {             
+      try             
+      {                 
+        ListItem item = list.GetItemById(id);                 
+        list.Context.Load(item, i =&gt; i.Id);                 
+        list.Context.ExecuteQuery();                 
+        return item;             
+      }             
+      catch (Exception)             
+      {                 
+        return null;             
+      }         
+    }          
+    
+    private static bool ValidateModel(BusinessDocumentViewModel viewModel, out string message)         
+    {             
+      // Validate the purpose is a valid value             
+      if (!ValidDocumentPurposes.Contains(viewModel.Purpose))             
+      {                 
+        message = &quot;The specified document purpose is invalid&quot;;                 
+        return false;             
+      }              
+      message = string.Empty;             
+      return true;         
+    }          
+    
+    // GET: api/BusinessDocuments         
+    public IEnumerable&lt;BusinessDocumentViewModel&gt; Get()         
+    {             
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             
+      {                 
+        // Get the documents from the Business Documents library                 
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);                 
+        ListItemCollection businessDocItems = businessDocsLib.GetItems(CamlQuery.CreateAllItemsQuery();
+        clientContext.Load(businessDocItems, 
+          items =&gt; items.Include(item =&gt; item.Id,                     
+                                 item =&gt; item[FileLeafRefField],
+                                 item =&gt; item[InChargeField],
+                                 item =&gt; item[DocumentPurposeField]));
+        clientContext.ExecuteQuery();
+        // Create collection of view models from list item collection
+        List&lt;BusinessDocumentViewModel&gt; viewModels = businessDocItems.Select(ListItemToViewModel).ToList();
+        return viewModels;
+      }
+    }
+    
+    // GET: api/MyBusinessDocuments
+    [HttpGet]
+    [Route(&quot;api/MyBusinessDocuments&quot;)]
+    public IEnumerable&lt;BusinessDocumentViewModel&gt; MyBusinessDocuments()
+    {
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))
+      {
+        // Get the documents from the Business Documents library
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);
+        var camlQuery = new CamlQuery {
+          ViewXml = $@&quot;&lt;View&gt;&lt;Query&gt;&lt;Where&gt;
+            &lt;Eq&gt;
+              &lt;FieldRef Name='{InChargeField}' LookupId='TRUE' /&gt;
+              &lt;Value Type = 'Integer'&gt;&lt;UserID /&gt;&lt;/Value&gt;
+            &lt;/Eq&gt;
+          &lt;/Where&gt;
+        &lt;/Query&gt;
+      &lt;/View&gt;&quot;
+        };
+        ListItemCollection businessDocItems = businessDocsLib.GetItems(camlQuery);                                 
+        clientContext.Load(businessDocItems, items =&gt; items.Include(item =&gt; item.Id,
+                                                                  item =&gt; item[FileLeafRefField],
+                                                                  item =&gt; item[InChargeField],
+                                                                  item =&gt; item[DocumentPurposeField]));                 
+        clientContext.ExecuteQuery();
+        // Create collection of view models from list item collection
+        List&lt;BusinessDocumentViewModel&gt; viewModels = businessDocItems.Select(ListItemToViewModel).ToList();
+        return viewModels;
+      }
+    }
+    
+    // GET: api/BusinessDocuments/5
+    public IHttpActionResult Get(int id)         
+    {
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))
+      {
+        // Get the documents from the Business Documents library
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);
+        ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);
+        if (businessDocItem == null)
+          return NotFound();
+        // Ensure the needed metadata are loaded
+        clientContext.Load(businessDocItem, item =&gt; item.Id,
+                                            item =&gt; item[FileLeafRefField],
+                                            item =&gt; item[InChargeField],
+                                            item =&gt; item[DocumentPurposeField]);                 
+        clientContext.ExecuteQuery();
+        // Create a view model object from the list item                 
+        BusinessDocumentViewModel viewModel = ListItemToViewModel(businessDocItem);
+        return Ok(viewModel);
+      }
+    }
+    
+    // POST: api/BusinessDocuments         
+    public IHttpActionResult Post([FromBody]BusinessDocumentViewModel value)
+    {
+      string validationError = null;
+      if (!ValidateModel(value, out validationError))
+      {
+        return BadRequest(validationError);
+      }
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))
+      {
+        // Get the documents from the Business Documents library
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);
+        // Ensure the root folder is loaded
+        Folder rootFolder = businessDocsLib.EnsureProperty(l =&gt; l.RootFolder);
+        ListItem newItem = businessDocsLib.CreateDocument(value.Name, rootFolder, DocumentTemplateType.Word);
+        // Update the new document metadata
+        newItem[DocumentPurposeField] = value.Purpose;
+        newItem[InChargeField] = FieldUserValue.FromUser(value.InCharge);
+        newItem.Update();
+        // Ensure the needed metadata are loaded
+        clientContext.Load(newItem, item =&gt; item.Id, item =&gt; item[FileLeafRefField],                     
+                                                     item =&gt; item[InChargeField],                     
+                                                     item =&gt; item[DocumentPurposeField]);                  
+        newItem.File.CheckIn(&quot;&quot;, CheckinType.MajorCheckIn);
+        clientContext.ExecuteQuery();
+        BusinessDocumentViewModel viewModel = ListItemToViewModel(newItem);
+        return Created($&quot;/api/BusinessDocuments/{viewModel.Id}&quot;, viewModel);             
+      }
+    }
+    
+    // PUT: api/BusinessDocuments/5
+    public IHttpActionResult Put(int id, [FromBody]BusinessDocumentViewModel value)
+    {
+      string validationError = null;
+      if (!ValidateModel(value, out validationError))
+      {
+        return BadRequest(validationError);
+      }
+      
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))
+      {
+        // Get the documents from the Business Documents library
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);
+        ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);
+        // If not found, return the appropriate status code
+        if (businessDocItem == null)
+          return NotFound();
+        // Update the list item properties
+        MapToListItem(value, businessDocItem);
+        businessDocItem.Update();
+        clientContext.ExecuteQuery();
+        return Ok();
+      }
+    }
+    
+    // DELETE: api/BusinessDocuments/5
+    public IHttpActionResult Delete(int id)
+    {
+      using (var clientContext = WebAPIHelper.GetClientContext(this.ControllerContext))             
+      {
+        // Get the document from the Business Documents library
+        List businessDocsLib = clientContext.Web.GetListByUrl(&quot;/BusinessDocs&quot;);
+        ListItem businessDocItem = TryGetListItemById(businessDocsLib, id);
+        // If not found, return the appropriate status code                 
+        if (businessDocItem == null)
+          return NotFound();
+        
+        // Delete the list item
+        businessDocItem.DeleteObject();                 
+        clientContext.ExecuteQuery();                  
+        return Ok();             
+      }         
+    }     
+  } 
+}
+</code></pre>
+<p>It is the complete implementation of our custom Web API. We have to notice several important parts:</p>
 <ol>
 <li>The use of [<strong><em>EnableCors</em></strong>] attribute that will allow our Web API to be called from JavaScript executed outside of our domain (JavaScript of the SPFx WebPart. You will have to change the value of the <strong><em>origins</em></strong> parameter to match your own SharePoint domain.</li>
 <li>The use of [<strong><em>WebAPIContextFilter</em></strong>] attribute that will make sure the call is issued by an authenticated user. Will actually fetch the context in cache from the key stored in the request cookie.</li>
 <li>The use of <strong><em>varclientContext = WebAPIHelper.GetClientContext(this.ControllerContext)</em></strong> instead of the classic **<em>SharePointContextProvider</em>**to instantiate the ClientContext object.</li>
 </ol>
-<p>In order for everything to work, you will also have to make some changes in the <strong><em>Global.asax</em></strong> file <code>\nusing System; using System.Collections.Generic; using System.Linq; using System.Web; using System.Web.Http; using System.Web.Mvc; using System.Web.Optimization; using System.Web.Routing;  namespace spaddin_webapiWeb {     public class MvcApplication : System.Web.HttpApplication     {         protected void Application_Start()         {             AreaRegistration.RegisterAllAreas();             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);             // Make sure to include this before the RouteConfig.RegisterRoutes() call             GlobalConfiguration.Configure(WebApiConfig.Register);             RouteConfig.RegisterRoutes(RouteTable.Routes);             BundleConfig.RegisterBundles(BundleTable.Bundles);         }     } }\n</code> as well as in the <strong>WebApiConfig</strong> class <a href="https://gist.github.com/ypcode/ea51f85157363d4bfa4333b687fa8d9b">https://gist.github.com/ypcode/ea51f85157363d4bfa4333b687fa8d9b</a> At this step, we are done with our Web API. you can hit <strong>F5</strong> to deploy the addin of our dev site. You can leave it running. Don't forget to select the right library when trusting the add-in <img src="/images/2017/12/trust-webapi.png" alt="trust-webapi" /> If you want to see the complete Web API solution code, you can go to the <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/spaddin-webapi">GitHub repo</a></p>
+<p>In order for everything to work, you will also have to make some changes in the <strong><em>Global.asax</em></strong> file</p>
+<pre><code class="language-csharp">using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Optimization;
+using System.Web.Routing;
+
+namespace spaddin_webapiWeb
+{
+    public class MvcApplication : System.Web.HttpApplication
+    {
+        protected void Application_Start()
+        {
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            // Make sure to include this before the RouteConfig.RegisterRoutes() call
+            GlobalConfiguration.Configure(WebApiConfig.Register);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+        }
+    }
+}
+</code></pre>
+<p>as well as in the <strong>WebApiConfig</strong> class</p>
+<pre><code class="language-csharp">using System.Web.Http;
+
+namespace spaddin_webapiWeb
+{
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            config.EnableCors();
+
+            config.MapHttpAttributeRoutes();
+
+            config.Routes.MapHttpRoute(
+                name: &quot;DefaultApi&quot;,
+                routeTemplate: &quot;api/{controller}/{id}&quot;,
+                defaults: new { id = RouteParameter.Optional }
+            );
+        }
+    }
+}
+</code></pre>
+<p>At this step, we are done with our Web API. you can hit <strong>F5</strong> to deploy the addin of our dev site. You can leave it running. Don't forget to select the right library when trusting the add-in</p>
+<p><img src="/images/2017/12/trust-webapi.png" alt="trust-webapi" /></p>
+<p>If you want to see the complete Web API solution code, you can go to the <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/spaddin-webapi">GitHub repo</a></p>
 <h1 id="the-spfx-webpart">The SPFx WebPart</h1>
-<p>Let's create a new SPFx WebPart project with the famous <strong><em>yo @microsoft/sharepoint</em></strong> Let's add a service class that will be responsible to issue the calls the our Web API <code>\nimport { IApiConfigService, ApiConfigServiceKey } from './ApiConfigService'; import HttpClient from '@microsoft/sp-http/lib/httpClient/HttpClient'; import { IBusinessDocument } from '../entities/IBusinessDocument'; import { ServiceScope, ServiceKey } from '@microsoft/sp-core-library';  export interface IBusinessDocumentsService { 	getAllBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt;; 	getMyBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt;; 	getBusinessDocument(id: number): Promise&lt;IBusinessDocument&gt;; 	createBusinessDocument(businessDocument: IBusinessDocument): Promise&lt;any&gt;; 	updateBusinessDocument(id: number, update: IBusinessDocument): Promise&lt;any&gt;; 	removeBusinessDocument(id: number): Promise&lt;any&gt;; }  export class BusinessDocumentsService implements IBusinessDocumentsService {   private httpClient: HttpClient;   private apiConfig: IApiConfigService;   	constructor(private serviceScope: ServiceScope) { 		serviceScope.whenFinished(() =&gt; {       this.httpClient = serviceScope.consume(HttpClient.serviceKey);       this.apiConfig = serviceScope.consume(ApiConfigServiceKey); 		}); 	}  	public getAllBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt; { 		return this.httpClient.get(this.apiConfig.apiUrl, HttpClient.configurations.v1, {       mode: 'cors',       credentials: 'include'     }).then((resp) =&gt; resp.json()); 	}  	public getMyBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt; { 		return this.httpClient.get(this.apiConfig.apiMyDocumentsUrl, HttpClient.configurations.v1, {       mode: 'cors',       credentials: 'include'     }).then((resp) =&gt; resp.json()); 	}  	public getBusinessDocument(id: number): Promise&lt;IBusinessDocument&gt; { 		return this.httpClient.get(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1,{       mode: 'cors',       credentials: 'include'     }).then((resp) =&gt; resp.json()); 	}  	public createBusinessDocument(businessDocument: IBusinessDocument): Promise&lt;any&gt; { 		return this.httpClient 			.post(`${this.apiConfig.apiUrl}`, HttpClient.configurations.v1, {         body: JSON.stringify(businessDocument),         headers: [           ['Content-Type','application/json']         ], 				mode: 'cors', 				credentials: 'include' 			}) 			.then((resp) =&gt; resp.json()); 	}  	public updateBusinessDocument(id: number, update: IBusinessDocument): Promise&lt;any&gt; { 		return this.httpClient 			.fetch(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1, {         body: JSON.stringify(update),         headers: [           ['Content-Type','application/json']         ], 				mode: 'cors', 				credentials: 'include', 				method: 'PUT' 			}); 	}  	public removeBusinessDocument(id: number): Promise&lt;any&gt; { 		return this.httpClient 			.fetch(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1, { 				mode: 'cors',         credentials: 'include',         method:'DELETE' 			}); 	} }  export const BusinessDocumentsServiceKey = ServiceKey.create&lt;IBusinessDocumentsService&gt;( 	'ypcode:bizdocs-service', 	BusinessDocumentsService );\n</code> and let's create our main React component for our WebPart <a href="https://gist.github.com/ypcode/90545dc7a3d30ebc6a90547da8bfc17f">https://gist.github.com/ypcode/90545dc7a3d30ebc6a90547da8bfc17f</a> The most important parts in this code are the following :</p>
+<p>Let's create a new SPFx WebPart project with the famous <strong>yo @microsoft/sharepoint</strong>.
+Let's add a service class that will be responsible to issue the calls the our Web API</p>
+<pre><code class="language-typescript">import { IApiConfigService, ApiConfigServiceKey } from './ApiConfigService';
+import HttpClient from '@microsoft/sp-http/lib/httpClient/HttpClient';
+import { IBusinessDocument } from '../entities/IBusinessDocument';
+import { ServiceScope, ServiceKey } from '@microsoft/sp-core-library';
+
+export interface IBusinessDocumentsService {
+	getAllBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt;;
+	getMyBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt;;
+	getBusinessDocument(id: number): Promise&lt;IBusinessDocument&gt;;
+	createBusinessDocument(businessDocument: IBusinessDocument): Promise&lt;any&gt;;
+	updateBusinessDocument(id: number, update: IBusinessDocument): Promise&lt;any&gt;;
+	removeBusinessDocument(id: number): Promise&lt;any&gt;;
+}
+
+export class BusinessDocumentsService implements IBusinessDocumentsService {
+  private httpClient: HttpClient;
+  private apiConfig: IApiConfigService;
+
+
+	constructor(private serviceScope: ServiceScope) {
+		serviceScope.whenFinished(() =&gt; {
+      this.httpClient = serviceScope.consume(HttpClient.serviceKey);
+      this.apiConfig = serviceScope.consume(ApiConfigServiceKey);
+		});
+	}
+
+	public getAllBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt; {
+		return this.httpClient.get(this.apiConfig.apiUrl, HttpClient.configurations.v1, {
+      mode: 'cors',
+      credentials: 'include'
+    }).then((resp) =&gt; resp.json());
+	}
+
+	public getMyBusinessDocuments(): Promise&lt;IBusinessDocument[]&gt; {
+		return this.httpClient.get(this.apiConfig.apiMyDocumentsUrl, HttpClient.configurations.v1, {
+      mode: 'cors',
+      credentials: 'include'
+    }).then((resp) =&gt; resp.json());
+	}
+
+	public getBusinessDocument(id: number): Promise&lt;IBusinessDocument&gt; {
+		return this.httpClient.get(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1,{
+      mode: 'cors',
+      credentials: 'include'
+    }).then((resp) =&gt; resp.json());
+	}
+
+	public createBusinessDocument(businessDocument: IBusinessDocument): Promise&lt;any&gt; {
+		return this.httpClient
+			.post(`${this.apiConfig.apiUrl}`, HttpClient.configurations.v1, {
+        body: JSON.stringify(businessDocument),
+        headers: [
+          ['Content-Type','application/json']
+        ],
+				mode: 'cors',
+				credentials: 'include'
+			})
+			.then((resp) =&gt; resp.json());
+	}
+
+	public updateBusinessDocument(id: number, update: IBusinessDocument): Promise&lt;any&gt; {
+		return this.httpClient
+			.fetch(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1, {
+        body: JSON.stringify(update),
+        headers: [
+          ['Content-Type','application/json']
+        ],
+				mode: 'cors',
+				credentials: 'include',
+				method: 'PUT'
+			});
+	}
+
+	public removeBusinessDocument(id: number): Promise&lt;any&gt; {
+		return this.httpClient
+			.fetch(`${this.apiConfig.apiUrl}/${id}`, HttpClient.configurations.v1, {
+				mode: 'cors',
+        credentials: 'include',
+        method:'DELETE'
+			});
+	}
+}
+
+export const BusinessDocumentsServiceKey = ServiceKey.create&lt;IBusinessDocumentsService&gt;(
+	'ypcode:bizdocs-service',
+	BusinessDocumentsService
+);
+</code></pre>
+<p>and let's create our main React component for our WebPart</p>
+<pre><code class="language-typescript">import * as React from 'react';
+import styles from './WebApiClient.module.scss';
+import { IWebApiClientProps } from './IWebApiClientProps';
+import { escape } from '@microsoft/sp-lodash-subset';
+
+import {
+	CommandBar,
+	DetailsList,
+	ISelection,
+	Selection,
+	SelectionMode,
+	Panel,
+	TextField,
+	PrimaryButton,
+	DefaultButton
+} from 'office-ui-fabric-react';
+import { IBusinessDocument } from '../../../entities/IBusinessDocument';
+import { BusinessDocumentsServiceKey, IBusinessDocumentsService } from '../../../services/BusinessDocumentsService';
+import { ApiConfigServiceKey, IApiConfigService } from '../../../services/ApiConfigService';
+
+export interface IWebApiClientState {
+	businessDocuments?: IBusinessDocument[];
+	selectedDocument?: IBusinessDocument;
+	selection?: ISelection;
+	isAdding?: boolean;
+	isEditing?: boolean;
+	selectedView?: 'All' | 'My';
+}
+
+export default class WebApiClient extends React.Component&lt;IWebApiClientProps, IWebApiClientState&gt; {
+	private businessDocsService: IBusinessDocumentsService;
+	private apiConfig: IApiConfigService;
+	private authenticated: boolean;
+
+	constructor(props: IWebApiClientProps) {
+		super(props);
+		this.state = {
+			businessDocuments: [],
+			selectedDocument: null,
+			isAdding: false,
+			isEditing: false,
+			selectedView: 'All',
+			selection: new Selection({
+				onSelectionChanged: this._onSelectionChanged.bind(this)
+			})
+		};
+	}
+
+	public componentWillMount() {
+		this.props.serviceScope.whenFinished(() =&gt; {
+			this.businessDocsService = this.props.serviceScope.consume(BusinessDocumentsServiceKey);
+			this.apiConfig = this.props.serviceScope.consume(ApiConfigServiceKey);
+			this._loadDocuments();
+		});
+	}
+
+	private _loadDocuments(stateRefresh?: IWebApiClientState, forceView?: 'All' | 'My') {
+		let { selectedView } = this.state;
+
+		let effectiveView = forceView || selectedView;
+		// After being authenticated
+		this._executeOrDelayUntilAuthenticated(() =&gt; {
+			switch (effectiveView) {
+				case 'All':
+					// Load all business documents when component is being mounted
+					this.businessDocsService.getAllBusinessDocuments().then((docs) =&gt; {
+						let state = stateRefresh || {};
+						state.businessDocuments = docs;
+						this.setState(state);
+					});
+					break;
+				case 'My':
+					// Load My business documents when component is being mounted
+					this.businessDocsService.getMyBusinessDocuments().then((docs) =&gt; {
+						let state = stateRefresh || {};
+						state.businessDocuments = docs;
+						this.setState(state);
+					});
+					break;
+			}
+		});
+	}
+
+	private _executeOrDelayUntilAuthenticated(action: Function): void {
+		if (this.authenticated) {
+			console.log('Is authenticated');
+			action();
+		} else {
+			console.log('Still not authenticated');
+			setTimeout(() =&gt; {
+				this._executeOrDelayUntilAuthenticated(action);
+			}, 1000);
+		}
+	}
+
+	private _onSelectionChanged() {
+		let { selection } = this.state;
+		let selectedDocuments = selection.getSelection() as IBusinessDocument[];
+
+		let selectedDocument = selectedDocuments &amp;&amp; selectedDocuments.length == 1 &amp;&amp; selectedDocuments[0];
+
+		console.log('SELECTED DOCUMENT: ', selectedDocument);
+		this.setState({
+			selectedDocument: selectedDocument || null
+		});
+	}
+
+	private _buildCommands() {
+		let { selectedDocument } = this.state;
+
+		const add = {
+			key: 'add',
+			name: 'Create',
+			icon: 'Add',
+			onClick: () =&gt; this.addNewBusinessDocument()
+		};
+
+		const edit = {
+			key: 'edit',
+			name: 'Edit',
+			icon: 'Edit',
+			onClick: () =&gt; this.editCurrentBusinessDocument()
+		};
+
+		const remove = {
+			key: 'remove',
+			name: 'Remove',
+			icon: 'Remove',
+			onClick: () =&gt; this.removeCurrentBusinessDocument()
+		};
+
+		let commands = [ add ];
+
+		if (selectedDocument) {
+			commands.push(edit, remove);
+		}
+
+		return commands;
+	}
+
+	private _buildFarCommands() {
+		let { selectedDocument, selectedView } = this.state;
+
+		const views = {
+			key: 'views',
+			name: selectedView == 'All' ? 'All' : &quot;I'm in charge of&quot;,
+			icon: 'View',
+			subMenuProps: {
+				items: [
+					{
+						key: 'viewAll',
+						name: 'All',
+						icon: 'ViewAll',
+						onClick: () =&gt; this.selectView('All')
+					},
+					{
+						key: 'inChargeOf',
+						name: &quot;I'm in charge of&quot;,
+						icon: 'AccountManagement',
+						onClick: () =&gt; this.selectView('My')
+					}
+				]
+			}
+		};
+
+		let commands = [ views ];
+
+		return commands;
+	}
+
+	public selectView(view: 'All' | 'My') {
+		this.setState({
+			selectedView: view
+		});
+
+		this._loadDocuments(null, view);
+	}
+
+	public addNewBusinessDocument() {
+		this.setState({
+			isAdding: true,
+			selectedDocument: {
+				Id: 0,
+				Name: 'New document.docx',
+				Purpose: '',
+				InCharge: ''
+			}
+		});
+	}
+
+	public editCurrentBusinessDocument() {
+		let { selectedDocument } = this.state;
+		if (!selectedDocument) {
+			return;
+		}
+
+		this.setState({
+			isEditing: true
+		});
+	}
+
+	public removeCurrentBusinessDocument() {
+		let { selectedDocument } = this.state;
+		if (!selectedDocument) {
+			return;
+		}
+
+		if (confirm('Are you sure ?')) {
+			this._executeOrDelayUntilAuthenticated(() =&gt; {
+				this.businessDocsService
+					.removeBusinessDocument(selectedDocument.Id)
+					.then(() =&gt; {
+						alert('Document is removed !');
+						this._loadDocuments();
+					})
+					.catch((error) =&gt; {
+						console.log(error);
+						alert('Document CANNOT be removed !');
+					});
+			});
+		}
+	}
+
+	private onValueChange(property: string, value: string) {
+		let { selectedDocument } = this.state;
+		if (!selectedDocument) {
+			return;
+		}
+
+		selectedDocument[property] = value;
+	}
+
+	private onApply() {
+		let { selectedDocument, isAdding, isEditing } = this.state;
+
+		if (isAdding) {
+			this._executeOrDelayUntilAuthenticated(() =&gt; {
+				this.businessDocsService
+					.createBusinessDocument(selectedDocument)
+					.then(() =&gt; {
+						alert('Document is created !');
+						this._loadDocuments({
+							selectedDocument: null,
+							isAdding: false,
+							isEditing: false
+						});
+					})
+					.catch((error) =&gt; {
+						console.log(error);
+						alert('Document CANNOT be created !');
+					});
+			});
+		} else if (isEditing) {
+			this._executeOrDelayUntilAuthenticated(() =&gt; {
+				this.businessDocsService
+					.updateBusinessDocument(selectedDocument.Id, selectedDocument)
+					.then(() =&gt; {
+						alert('Document is updated !');
+						this._loadDocuments({
+							selectedDocument: null,
+							isAdding: false,
+							isEditing: false
+						});
+					})
+					.catch((error) =&gt; {
+						console.log(error);
+						alert('Document CANNOT be updated !');
+					});
+			});
+		}
+	}
+
+	private onCancel() {
+		this.setState({
+			selectedDocument: null,
+			isAdding: false,
+			isEditing: false
+		});
+	}
+
+	public render(): React.ReactElement&lt;IWebApiClientProps&gt; {
+		let { businessDocuments, selection, selectedDocument, isAdding, isEditing } = this.state;
+		return (
+			&lt;div className={styles.webApiClient}&gt;
+				&lt;div className={styles.container}&gt;
+					&lt;iframe
+						src={this.apiConfig.appRedirectUri}
+						style={{ display: 'none' }}
+						onLoad={() =&gt; (this.authenticated = true)}
+					/&gt;
+					&lt;CommandBar items={this._buildCommands()} farItems={this._buildFarCommands()} /&gt;
+					&lt;DetailsList
+						items={businessDocuments}
+						columns={[
+							{
+								key: 'id',
+								name: 'Id',
+								fieldName: 'Id',
+								minWidth: 15,
+								maxWidth: 30
+							},
+							{
+								key: 'docName',
+								name: 'Name',
+								fieldName: 'Name',
+								minWidth: 100,
+								maxWidth: 200
+							},
+							{
+								key: 'docPurpose',
+								name: 'Purpose',
+								fieldName: 'Purpose',
+								minWidth: 100,
+								maxWidth: 200
+							},
+							{
+								key: 'inChargeOf',
+								name: &quot;Who's in charge&quot;,
+								fieldName: 'InCharge',
+								minWidth: 100,
+								maxWidth: 200
+							}
+						]}
+						selectionMode={SelectionMode.single}
+						selection={selection}
+					/&gt;
+					{selectedDocument &amp;&amp;
+					(isAdding || isEditing) &amp;&amp; (
+						&lt;Panel isOpen={true}&gt;
+							&lt;TextField
+								label=&quot;Name&quot;
+								value={selectedDocument.Name}
+								onChanged={(v) =&gt; this.onValueChange('Name', v)}
+							/&gt;
+							&lt;TextField
+								label=&quot;Purpose&quot;
+								value={selectedDocument.Purpose}
+								onChanged={(v) =&gt; this.onValueChange('Purpose', v)}
+							/&gt;
+							&lt;TextField
+								label=&quot;InCharge&quot;
+								value={selectedDocument.InCharge}
+								onChanged={(v) =&gt; this.onValueChange('InCharge', v)}
+							/&gt;
+							&lt;PrimaryButton text=&quot;Apply&quot; onClick={() =&gt; this.onApply()} /&gt;
+							&lt;DefaultButton text=&quot;Cancel&quot; onClick={() =&gt; this.onCancel()} /&gt;
+						&lt;/Panel&gt;
+					)}
+				&lt;/div&gt;
+			&lt;/div&gt;
+		);
+	}
+}
+</code></pre>
+<p>The most important parts in this code are the following :</p>
 <ul>
 <li>The hidden IFrame in the <strong><em>render()</em></strong> method, it will reach the default page of the add-in to initiate the context on the server-side <strong><em>&lt;iframe</em></strong> <strong><em>src=</em></strong> <strong><em>style={ { display: 'none' }}</em></strong> <strong><em>onLoad={() =&gt; (this.authenticated = true)}</em></strong> <strong><em>/&gt;</em></strong></li>
-<li>The <strong>_<em>executeOrDelayUntilAuthenticated</em></strong>() method that will execute the function as argument only after the IFrame content is loaded. This will make sure the the Web API calls are done only after the user is properly authenticated.</li>
+<li>The <strong>_<em>executeOrDelayUntilAuthenticated</em></strong>() method that will execute the function as argument only after the IFrame content is loaded.
+This will make sure the the Web API calls are done only after the user is properly authenticated.</li>
 </ul>
-<p>Another service class is used as the configuration holder and will take and compute its values from the WebPart properties. <img src="/images/2017/12/webpart-properties.png" alt="webpart-properties" /></p>
+<p>Another service class is used as the configuration holder and will take and compute its values from the WebPart properties.</p>
+<p><img src="/images/2017/12/webpart-properties.png" alt="webpart-properties" /></p>
 <ul>
 <li><p>_<strong>remoteApiHost</strong> _: must contains the base URL of the provider hosted add-in (In this case, I use the address of my IIS Express instance launched by Visual Studio)</p>
 </li>
@@ -281,9 +1074,20 @@
 <blockquote>
 <p><em><strong>Get-PnPAppInstance -Identity &quot;your app name&quot;</strong></em></p>
 </blockquote>
-<p><img src="/images/2017/12/ps-appinstanceid.png" alt="ps-appinstanceid" /> Just copy/paste the Id as the value of the &quot;App Instance ID&quot; WebPart property You will find the whole SPFx solution in the <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/spfx-webapi-client">GitHub repo</a></p>
+<p><img src="/images/2017/12/ps-appinstanceid.png" alt="ps-appinstanceid" /></p>
+<p>Just copy/paste the Id as the value of the &quot;App Instance ID&quot; WebPart property
+You will find the whole SPFx solution in the <a href="https://github.com/ypcode/spfx-webapi-spaddin/tree/master/spfx-webapi-client">GitHub repo</a></p>
 <h1 id="result">Result</h1>
-<p>[gallery ids=&quot;5230,5231,5232&quot; type=&quot;slideshow&quot;] We have now a custom WebPart able to interact with SharePoint data via our custom Web API. In this API we can implement any business logic, use App-Only mode or stick to the User permissions context. This solution is usable on SharePoint Online as well as on SharePoint On-prem ! Now that I have this boilerplate and PoC running, I think it will become my favorite approach when I need to build a customization that needs server-side custom code :) Leave your comments and feedback and please share this blog around you ! I wish you all the best for the upcoming new year and you can expect plenty other blog posts in 2018 ! Best regards, Yannick</p>
+<p><a href="/images/2017/12/output-webpart.png"></a>
+<a href="/images/2017/12/output-workbench.png"></a>
+<a href="/images/2017/12/output-webpart-my.png"></a></p>
+<p>We have now a custom WebPart able to interact with SharePoint data via our custom Web API.
+In this API we can implement any business logic, use App-Only mode or stick to the User permissions context. This solution is usable on SharePoint Online as well as on SharePoint On-prem !
+Now that I have this boilerplate and PoC running, I think it will become my favorite approach when I need to build a customization that needs server-side custom code :)</p>
+<p>Leave your comments and feedback and please share this blog around you !
+I wish you all the best for the upcoming new year and you can expect plenty other blog posts in 2018 !</p>
+<p>Best regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>
