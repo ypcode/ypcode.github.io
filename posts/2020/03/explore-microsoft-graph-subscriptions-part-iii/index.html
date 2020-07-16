@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Explore Microsoft Graph Subscriptions – Part III: Handle subscription lifetime" />
+            <meta property="og:description" content="See how and why handling the lifetime of your Microsoft Graph subscriptions" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2020/03/explore-microsoft-graph-subscriptions-part-iii" />
-        <meta property="og:image" content="https://ypcode.github.io/images/msgraph-webhooks-partiii.png?r=202007150757" />
+        <meta property="og:image" content="/images/2020/03/msgraph-webhooks-partiii.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2020-03-09 06:30:22Z" />
         <meta property="article:modified_time" content="2020-03-09 06:30:22Z" />
@@ -75,9 +76,10 @@
                 <meta property="article:tag" content="TypeScript" />
                 <meta property="article:tag" content="Webhook" />
         <meta name="twitter:title" content="Explore Microsoft Graph Subscriptions – Part III: Handle subscription lifetime" />
+            <meta name="twitter:description" content="See how and why handling the lifetime of your Microsoft Graph subscriptions" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2020/03/explore-microsoft-graph-subscriptions-part-iii" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/msgraph-webhooks-partiii.png?r=202007150757" />
+            <meta name="twitter:image" content="/images/2020/03/msgraph-webhooks-partiii.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, Azure, Azure Functions, Microsoft 365, Microsoft Graph, PnP, Subscriptions, TypeScript, Webhook" />
         <meta name="twitter:site" content="@yp_code" />
@@ -205,12 +207,12 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/msgraph-webhooks-partiii.png?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2020/03/msgraph-webhooks-partiii.png?r=202007160439" alt="Explore Microsoft Graph Subscriptions – Part III: Handle subscription lifetime" />
         </div>
    
     <div class="content">
-        <p>Hi Microsoft 365 devs !
-Here we go again with the part III of my blog post series about Microsoft Graph Subscriptions (aka Webhooks).
+        <p>Hi Microsoft 365 devs !</p>
+<p>Here we go again with the part III of my blog post series about Microsoft Graph Subscriptions (aka Webhooks).
 In this post, we will see how we can implement a real world solution that handles the lifetime of our Microsoft Graph subscriptions !</p>
 <h2 id="whats-the-matter-with-subscription-lifetime">What's the matter with subscription lifetime ?</h2>
 <p>Microsoft Graph subscriptions are great to hook our custom logic triggered by the events that occur in our corporate information (groups, users, events, and so on...).
@@ -224,7 +226,78 @@ We will rely on these foundations to make sure that the lifetime of our subscrip
 Concretely, it means that, whenever a notification is sent to our system, the Webhook will not only trigger our custom business logic to be executed, but will also update the subscription to postpone the date of its expiration.
 In order to respond as fast as possible to Graph (as expected from Webhook endpoints), we will delegate the tasks to other functions that gets executed when a message is pushed into a queue.
 Let's see how the code of our Webhook will look like</p>
-<p><code>\nimport { AzureFunction, Context, HttpRequest } from &quot;@azure/functions&quot; import { INotificationsPayload } from &quot;../entities/INotification&quot;;  import { SUBSCRIPTIONS_QUEUE_NAME, BUSINESS_TASKS_QUEUE_NAME } from &quot;../helpers/configure&quot;; import { addMessageToQueue } from &quot;../helpers/azure-queue-helper&quot;;  const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise&lt;void&gt; {     context.log('HTTP trigger function processed a request.');     // Validate the subscription creation     if (req.query.validationToken) {         context.log('Validating new subscription...');         context.log('Validation token:');         context.log(req.query.validationToken);         context.res = {             headers: {                 'Content-Type': 'text/plain'             },             body: req.query.validationToken         };     }     else {         context.log('Received new notification from Microsoft Graph...');         context.log('Notifications: ');         const payload = req.body as INotificationsPayload;         payload.value.forEach(async (n, i) =&gt; {             context.log(` Notification #${i} `);             context.log(`----------------------------------------------------------`);             context.log(`Subscription Id    : ${n.subscriptionId}`);             context.log(`Expiration         : ${n.subscriptionExpirationDateTime}`);             context.log(`Change Type        : ${n.changeType}`);             context.log(`Client State       : ${n.clientState}`);             context.log(`Resource           : ${n.resource}`);             const resourceData = n.resourceData &amp;&amp; JSON.stringify(n.resourceData);             context.log(`Resource Data      : ${resourceData}`);             context.log(`----------------------------------------------------------`);              // ====================================================================================             // HERE we delegate the business logic work to a dedicated queue triggered function             // We pass any needed parameter that might come from the notification             // ====================================================================================             try {                 const taskArgs = {                     eventId: n.resource                 };                 await addMessageToQueue(BUSINESS_TASKS_QUEUE_NAME, JSON.stringify(taskArgs));             }             catch (err) {                 context.log.error(err);             }              // ====================================================================================              // ====================================================================================             // HERE Ensure the subscription lifetime will be extended             // ====================================================================================             // we push the subscription id to the subscriptions queue             // The EnsureSubscription queue-triggered function              // will in turn update the expiration of the subscription if needed             try {                 await addMessageToQueue(SUBSCRIPTIONS_QUEUE_NAME, n.subscriptionId);             }             catch (err) {                 context.log.error(err);             }         });          context.res = { body: &quot;&quot; };     } };  export default httpTrigger;\n</code></p>
+<pre><code class="language-typescript">import { AzureFunction, Context, HttpRequest } from &quot;@azure/functions&quot;
+import { INotificationsPayload } from &quot;../entities/INotification&quot;;
+
+import { SUBSCRIPTIONS_QUEUE_NAME, BUSINESS_TASKS_QUEUE_NAME } from &quot;../helpers/configure&quot;;
+import { addMessageToQueue } from &quot;../helpers/azure-queue-helper&quot;;
+
+const httpTrigger: AzureFunction = async function (context: Context, req: HttpRequest): Promise&lt;void&gt; {
+    context.log('HTTP trigger function processed a request.');
+    // Validate the subscription creation
+    if (req.query.validationToken) {
+        context.log('Validating new subscription...');
+        context.log('Validation token:');
+        context.log(req.query.validationToken);
+        context.res = {
+            headers: {
+                'Content-Type': 'text/plain'
+            },
+            body: req.query.validationToken
+        };
+    }
+    else {
+        context.log('Received new notification from Microsoft Graph...');
+        context.log('Notifications: ');
+        const payload = req.body as INotificationsPayload;
+        payload.value.forEach(async (n, i) =&gt; {
+            context.log(` Notification #${i} `);
+            context.log(`----------------------------------------------------------`);
+            context.log(`Subscription Id    : ${n.subscriptionId}`);
+            context.log(`Expiration         : ${n.subscriptionExpirationDateTime}`);
+            context.log(`Change Type        : ${n.changeType}`);
+            context.log(`Client State       : ${n.clientState}`);
+            context.log(`Resource           : ${n.resource}`);
+            const resourceData = n.resourceData &amp;&amp; JSON.stringify(n.resourceData);
+            context.log(`Resource Data      : ${resourceData}`);
+            context.log(`----------------------------------------------------------`);
+
+            // ====================================================================================
+            // HERE we delegate the business logic work to a dedicated queue triggered function
+            // We pass any needed parameter that might come from the notification
+            // ====================================================================================
+            try {
+                const taskArgs = {
+                    eventId: n.resource
+                };
+                await addMessageToQueue(BUSINESS_TASKS_QUEUE_NAME, JSON.stringify(taskArgs));
+            }
+            catch (err) {
+                context.log.error(err);
+            }
+
+            // ====================================================================================
+
+            // ====================================================================================
+            // HERE Ensure the subscription lifetime will be extended
+            // ====================================================================================
+            // we push the subscription id to the subscriptions queue
+            // The EnsureSubscription queue-triggered function 
+            // will in turn update the expiration of the subscription if needed
+            try {
+                await addMessageToQueue(SUBSCRIPTIONS_QUEUE_NAME, n.subscriptionId);
+            }
+            catch (err) {
+                context.log.error(err);
+            }
+        });
+
+        context.res = { body: &quot;&quot; };
+    }
+};
+
+export default httpTrigger;
+</code></pre>
 <p>As we can see at line 60, we push the subscription id to a queue, an other Azure Function we call <strong><em>EnsureSubscription</em></strong> will be triggered and will be responsible for updating the expiration date of the subscription.
 Another queue-triggered Function we call <strong>BusinessTask</strong> will achieve what we really want to do with the notification.</p>
 <h3 id="setup-some-prerequisites">Setup some prerequisites</h3>
@@ -237,9 +310,23 @@ If you follow me, it means we need to register an AAD application and grant it t
 <h4 id="register-the-aad-application">Register the AAD application</h4>
 <p>From the Azure AD portal, go to the App registrations section and click <strong>Add new registration</strong>
 <img src="/images/2020/02/azuread-appregistration.png" alt="AzureAD-AppRegistration" /></p>
-<p>Select a name and register the new application. We'll need to grant our application the required permissions, From the <strong>API Permissions</strong> section, add the following permissions to Microsoft Graph, don't forget to grant admin consent once you set the API permissions <img src="/images/2020/03/azuread-appregistration-appperms-1.png" alt="AzureAD-AppRegistration-appPerms" /></p>
+<p>Select a name and register the new application. We'll need to grant our application the required permissions, From the <strong>API Permissions</strong> section, add the following permissions to Microsoft Graph, don't forget to grant admin consent once you set the API permissions</p>
+<p><img src="/images/2020/03/azuread-appregistration-appperms-1.png" alt="AzureAD-AppRegistration-appPerms" /></p>
 <p>We will put the needed AAD app information in our function app settings. At development time, it will be in the <strong>local.settings.json</strong> file that should probably already exist in your solution. If it does not, you can create it with the keys we'll set the values later on</p>
-<p><code>\n{   &quot;IsEncrypted&quot;: false,   &quot;Values&quot;: {     &quot;TENANT&quot;: &quot;&quot;,     &quot;AAD_APP_ID&quot;: &quot;&quot;,     &quot;AAD_APP_SECRET&quot;: &quot;&quot;,     &quot;OVERRIDDEN_WEBSITE_HOSTNAME&quot;: &quot;&quot;,     &quot;SUBSCRIBED_RESOURCE_URI&quot; : &quot;&quot;,     &quot;FUNCTIONS_WORKER_RUNTIME&quot;: &quot;node&quot;,     &quot;AZURE_STORAGE_CONNECTION_STRING&quot;: &quot;&quot;,     &quot;AzureWebJobsStorage&quot;: &quot;&quot;   } }\n</code></p>
+<pre><code class="language-json">{
+  &quot;IsEncrypted&quot;: false,
+  &quot;Values&quot;: {
+    &quot;TENANT&quot;: &quot;&quot;,
+    &quot;AAD_APP_ID&quot;: &quot;&quot;,
+    &quot;AAD_APP_SECRET&quot;: &quot;&quot;,
+    &quot;OVERRIDDEN_WEBSITE_HOSTNAME&quot;: &quot;&quot;,
+    &quot;SUBSCRIBED_RESOURCE_URI&quot; : &quot;&quot;,
+    &quot;FUNCTIONS_WORKER_RUNTIME&quot;: &quot;node&quot;,
+    &quot;AZURE_STORAGE_CONNECTION_STRING&quot;: &quot;&quot;,
+    &quot;AzureWebJobsStorage&quot;: &quot;&quot;
+  }
+}
+</code></pre>
 <p>From the</p>
 <ul>
 <li>Copy the <strong>Directory (tenant) Id</strong> and paste it as the value of the <strong>TENANT</strong> app setting</li>
@@ -267,69 +354,267 @@ Copy the https URL as the value of <strong>OVERRIDDEN_WEBSITE_HOSTNAME</strong> 
 <p>In the app settings, we'll also need to specify the resource we want to subscribe to, concretely, it means set the Microsoft Graph relative URL of the resource. For instance, here I will subscribe to the events of my user, I will need to specify it using the user id like &quot;<strong>users/efda010b-19a4-4303-bf7b-70bd6e62e7d2/events</strong>&quot;, since we will use Microsoft Graph using an app-only token, we cannot use &quot;<strong>me/events</strong>&quot;</p>
 <h4 id="lets-create-a-few-helpers">Let's create a few helpers</h4>
 <p>In a <strong>helpers</strong> folder: create a <strong><em>configure.ts</em></strong> with the following code</p>
-<pre><code class="language-\nimport" graph="">
-create a file **_date-helper.ts_** 
+<pre><code class="language-typescript">import { graph } from &quot;@pnp/graph-commonjs&quot;;
+import { AdalFetchClient } from &quot;@pnp/nodejs-commonjs&quot;;
+import { Context } from &quot;@azure/functions&quot;;
 
-```\nexport const DEFAULT_SAFETY_WINDOW_IN_MSECS = 4860000; // 1h31 (Graph common delay is 4230 rounded minutes (70.5 h))  export const getExpirationDateTimeISOString = (fromNowInDays: number, safetyWindowInMsecs?: number) =&gt; {     const now = Date.now();     //                                day     24h 60m  60s   ms           // const expiration = now + (fronNowInDays * 24 * 60 * 60 * 1000);     const expiration = now + (fromNowInDays * 86400000) - (safetyWindowInMsecs || DEFAULT_SAFETY_WINDOW_IN_MSECS);     return new Date(expiration).toISOString(); };   export const isNearlyExpired = (dateIsoString: string, safetyWindowInMsecs?: number) =&gt; {     const date = Date.parse(dateIsoString);     return (date - (safetyWindowInMsecs || DEFAULT_SAFETY_WINDOW_IN_MSECS)) &lt;= Date.now(); }\n``` 
+export const SUBSCRIPTIONS_QUEUE_NAME = &quot;subscriptions-to-ensure&quot;;
+export const BUSINESS_TASKS_QUEUE_NAME = &quot;business-tasks&quot;;
 
-create a file **_azure-queue-helper.ts_** 
+const TENANT = process.env.TENANT;
+const AAD_APP_ID = process.env.AAD_APP_ID;
+// TODO That should rather be fetched from Azure Keyvault instead
+const AAD_APP_SECRET = process.env.AAD_APP_SECRET;
 
-```\nimport * as azure from &quot;azure-storage&quot;;  let _queueService = null; const getQueueService = () =&gt; {     if (!_queueService) {         _queueService = azure.createQueueService();     }     return _queueService; }  export const addMessageToQueue = async (queue: string, message: string): Promise&lt;void&gt; =&gt; {      return new Promise((resolve, reject) =&gt; {         const queueService = getQueueService();         queueService.createQueueIfNotExists(queue, (error, results, response) =&gt; {             if (!error) {                 const base64EncodedMessage = new Buffer(message).toString(&quot;base64&quot;);                 queueService.createMessage(queue, base64EncodedMessage, (err, msgResult, msgResp) =&gt; {                     if (err) {                         reject(&quot;Could not send message to queue&quot;);                     }                      resolve();                 })             } else {                 reject(&quot;Queue could not be created.&quot;);             }         });     }); } \n``` 
+export const WEBSITE_HOSTNAME = process.env.OVERRIDDEN_WEBSITE_HOSTNAME || process.env.WEBSITE_HOSTNAME;
+// Probably a good idea to store these in app settings or in any easily updatable location
+export const SETUP_CHANGE_TYPE = &quot;updated&quot;;
+export const SETUP_NOTIFICATION_URL = `${WEBSITE_HOSTNAME}/api/Webhook`;
+export const SETUP_RESOURCE = process.env.SUBSCRIBED_RESOURCE_URI;
+// NOTE Cannot subscribe with app permissions to groups events
+// export const SETUP_RESOURCE = &quot;groups/a619f4ce-xxxxxx-xxxx-f5df845c5e96/calendar/events&quot;;
+export const SETUP_EXPIRATION_DELAY_IN_DAYS = 3;
 
-create a file **_subscription-helpers.ts_** 
+export function configure(functionContext: Context) {
 
-```\nimport { Logger } from &quot;@azure/functions&quot; import { graph } from &quot;@pnp/graph-commonjs&quot;; import { Subscription } from &quot;@microsoft/microsoft-graph-types&quot;;   const isValidForCreate = (subscription: Subscription) =&gt; {     return !!(subscription.changeType &amp;&amp; subscription.notificationUrl &amp;&amp; subscription.resource &amp;&amp; subscription.expirationDateTime); }  const isValidForUpdate = (subscription: Subscription) =&gt; {     return !!(subscription.id &amp;&amp; subscription.expirationDateTime); }  export const getSubscription = async function (subscriptionId: string, log: Logger): Promise&lt;Subscription&gt; {     try {         const subscription = await graph.subscriptions.getById(subscriptionId).get();         return subscription;     } catch (error) {         log.warn(`An error occured while trying to get subscription with Id ${subscriptionId}`, error);         return null;     } }  export const createSubscription = async function (subscription: Subscription, log: Logger): Promise&lt;Subscription&gt; {     if (isValidForCreate(subscription)) {         log(&quot;Creating new subscription...&quot;);         const { changeType, notificationUrl, resource, expirationDateTime } = subscription;         const result = await graph.subscriptions.add(changeType, notificationUrl, resource, expirationDateTime, subscription);         log(`New subscription to ${changeType} of ${resource} has been created.`);         return result.data;     }     else {         log.error(&quot;Received request is not valid to create a subscription...&quot;);     } }  export const updateSubscription = async function (subscription: Subscription, log: Logger): Promise&lt;void&gt; {     if (isValidForUpdate(subscription)) {         log(`Updating subscription ${subscription.id}...`);         await graph.subscriptions.getById(subscription.id).update(subscription);         log(`Subscription ${subscription.id} has been updated.`);     } else {         log.error(&quot;Received request is not valid to update the subscription...&quot;);     } };\n``` 
+    functionContext.log(`Using function app base url: '${WEBSITE_HOSTNAME}'`);
+    functionContext.log(`Using tenant               : '${TENANT}'`);
+    functionContext.log(`Using ADD App Id           : '${AAD_APP_ID}'`);
 
-and a last one **_subscription-setup.ts_** 
-
-```\nimport { Logger } from &quot;@azure/functions&quot;; import { createSubscription } from &quot;./subscriptions-helper&quot;; import { getExpirationDateTimeISOString } from &quot;./date-helper&quot;; import { SETUP_RESOURCE, SETUP_CHANGE_TYPE, SETUP_NOTIFICATION_URL } from &quot;./configure&quot;;  export const setupNewSubscription = async function(log: Logger) {     log(&quot;Let's create a new subscription...&quot;);     const created = await createSubscription({         resource: SETUP_RESOURCE,         changeType: SETUP_CHANGE_TYPE,         notificationUrl: SETUP_NOTIFICATION_URL,         expirationDateTime: getExpirationDateTimeISOString(3)     }, log);      log(`A new subscription has been created with id ${created.id}`);     log(&quot;Please update the configuration accordingly...&quot;); }\n```
-
-### Let's code the EnsureSubscription function
-
-![Azure-Function-VSCode-CreateNew](/images/2020/03/azure-function-vscode-createnew.png)
-
-First of all, let's create a new queue-triggered function, from VS Code Azure extension, click the &quot;Create function&quot; button. Select &quot;**_Azure Queue Storage Triggered_**&quot; and name it &quot;**_EnsureSubscription_**&quot;. Select the app setting you want to use to store the Azure Storage connection string. You will have to put the connection string to your storage account. The VS Code extensions also allows to create a new storage account if you don't already have one. Name the azure queue as &quot;**_subscriptions-to-ensure_**&quot; Then let's write the following code as the body of our EnsureSubscription function 
-
-```\nimport { AzureFunction, Context } from &quot;@azure/functions&quot; import { isNearlyExpired, getExpirationDateTimeISOString } from &quot;../helpers/date-helper&quot;; import { updateSubscription, getSubscription } from &quot;../helpers/subscriptions-helper&quot;; import { setupNewSubscription } from &quot;../helpers/subscription-setup&quot;; import { configure, SETUP_EXPIRATION_DELAY_IN_DAYS } from &quot;../helpers/configure&quot;;  const queueTriggeredEnsureSubscription: AzureFunction = async function (context: Context, subscriptionId: string): Promise&lt;void&gt; {     context.log(`Ensuring subscription ${subscriptionId}...`);     configure(context);      const foundSubscription = await getSubscription(subscriptionId, context.log);     if (foundSubscription) {         context.log(&quot;A subscription has been found !&quot;);         context.log(`Resource    : ${foundSubscription.resource}`);         context.log(`Change type : ${foundSubscription.changeType}`);         context.log(`Expires on  : ${foundSubscription.expirationDateTime}`);          // At this point, if we realize the subscription is expiring soon, we update it with a new maximum delay starting right now !         if (isNearlyExpired(foundSubscription.expirationDateTime)) {             const expirationDateTime = getExpirationDateTimeISOString(SETUP_EXPIRATION_DELAY_IN_DAYS);             context.log(`Will update the expiration to ${expirationDateTime}`);             await updateSubscription({                 id: foundSubscription.id,                 expirationDateTime             },                 context.log);             context.log(&quot;Subscription updated.&quot;);         } else {             context.log(&quot;The subscription will not expire soon...&quot;);         }     } else {         context.log(`No subscription has been found with id ${subscriptionId}...`);         // If subscription is not found, it might have been deleted in the meantime for some reason         // In order to keep the whole system stable, we recreate a new subscription here         await setupNewSubscription(context.log);     } };  export default queueTriggeredEnsureSubscription;\n```
-
-### Let's code the Business Task function
-
-We will create another queue-triggered Azure Function that will execute the actual task we want to achieve whenever a notification is received. Here my business task will be to simply log the Id of the updated event. It is here that you will have to change to code to achieve the task according to your requirements. Repeat the steps above to create a new queue-triggered Function and name the queue **_&quot;business-tasks&quot;_**. Just for information, the code I have in this function is 
-
-```\nimport { AzureFunction, Context } from &quot;@azure/functions&quot;; import { IBusinessTaskArgs } from &quot;../entities/IBusinessTaskArgs&quot;; import { GraphHttpClient } from &quot;@pnp/graph-commonjs/graphhttpclient&quot;; import { configure } from &quot;../helpers/configure&quot;;  const queueTrigger: AzureFunction = async function (context: Context, taskArgs: IBusinessTaskArgs): Promise&lt;void&gt; {   // The calendar event is post process by our custom logic   context.log(`Received arguments: ${JSON.stringify(taskArgs)}`);   configure(context);    try {     // TODO Here implement custom logic     // e.g. Update the updated event's title     const resourceAbsoluteUrl = `https://graph.microsoft.com/v1.0/${taskArgs.eventResourceUri}`;     const client = new GraphHttpClient();     const eventResponse = await client.get(resourceAbsoluteUrl);     const event: { subject: string; } = await eventResponse.json();      // If event is not already processed     // Since we are updating the notified updated event, we have to check the custom task is not already done     // Otherwise, a notification will be resent and cause an &quot;infinite&quot; loop     if (event.subject.indexOf(&quot;[UPDATED]&quot;) != 0) {       const eventUpdate = {         subject: `[UPDATED] ${event.subject}`       }        const patchResponse = await client.patch(resourceAbsoluteUrl, {         body: JSON.stringify(eventUpdate)       });        if (patchResponse.ok) {         console.log(&quot;Event has been updated.&quot;);       } else {         console.log(&quot;Event could not be updated&quot;);       }     }   }   catch (error) {     context.log.error(&quot;An error occured while processing custom business task&quot;, error);   }  };  export default queueTrigger;\n``` 
-
-This custom task will grab the updated event and update its subject if it is not already properly updated (This will avoid resulting in an infinite loop!).
-
-### Let's test it
-
-We should be good now, hit F5 in VS Code to run your Azure Function locally ! We will then need to trigger the subscription to be created ! To make sure all is going well, set a breakpoint in the EnsureSubscription index.ts file **at line 32** From the Azure Portal, access your storage account, select the **subscriptions-to-ensure** queue and add a new message with any dummy content 
-
-![Azure-Storage-Queue](/images/2020/03/azure-storage-queue.png)
-![Azure-Storage-Queue-AddMessage](/images/2020/03/azure-storage-queue-addmessage.png) 
-
-Your breakpoint should be hit almost at once. Continue the execution and your subscription should be added. To test your webhook solution, set a breakpoint in your BusinessTask function and then add an event to the calendar of the user you specified (or do any action that should triggered the specific notification you requested). In my case, I create or update an event in my calendar (It is the resource monitored by the Microsoft Graph Subscription), and I see it gets updated after a few seconds
-
-Now time to deploy !
---------------------
-
-If everything in debug works as expected you can now deploy the Azure Function to Azure, in the VS Code extension tab, click the &quot;Deploy to Function App..&quot; button. Then you will have to make sure you copy the following app settings to the Function App
-
-*   TENANT
-*   AAD\_APP\_ID
-*   AAD\_APP\_SECRET
-*   SUBSCRIBED\_RESOURCE\_URI
-
-Conclusion
-----------
-
-We now have a solution that will keep our subscriptions alive as long as it is used. Take care however, with this solution as is, if there is no activity during the maximum lifetime of your particular subscription, it will get deleted ! Fortunately, with the solution described in this post, the only thing you will have to do is to setup a time triggered function that will trigger the EnsureSubscription, But that will be part of a next post :) You can get the whole solution on the [GitHub repo here](https://github.com/ypcode/ypcode-msgraph-subscriptions) 
-
-Hope you liked it and please let me know any feedback you might have ! 
-
-Cheers ! 
-
-Yannick
+    graph.setup({
+        graph: {
+            fetchClientFactory: () =&gt; {
+                return new AdalFetchClient(TENANT, AAD_APP_ID, AAD_APP_SECRET);
+            },
+        },
+    });
+}
 </code></pre>
+<p>create a file <strong><em>date-helper.ts</em></strong></p>
+<pre><code class="language-typescript">export const DEFAULT_SAFETY_WINDOW_IN_MSECS = 4860000; // 1h31 (Graph common delay is 4230 rounded minutes (70.5 h))
+
+export const getExpirationDateTimeISOString = (fromNowInDays: number, safetyWindowInMsecs?: number) =&gt; {
+    const now = Date.now();
+    //                                day     24h 60m  60s   ms      
+    // const expiration = now + (fronNowInDays * 24 * 60 * 60 * 1000);
+    const expiration = now + (fromNowInDays * 86400000) - (safetyWindowInMsecs || DEFAULT_SAFETY_WINDOW_IN_MSECS);
+    return new Date(expiration).toISOString();
+};
+
+
+export const isNearlyExpired = (dateIsoString: string, safetyWindowInMsecs?: number) =&gt; {
+    const date = Date.parse(dateIsoString);
+    return (date - (safetyWindowInMsecs || DEFAULT_SAFETY_WINDOW_IN_MSECS)) &lt;= Date.now();
+}
+</code></pre>
+<p>create a file <strong><em>azure-queue-helper.ts</em></strong></p>
+<pre><code class="language-typescript">import * as azure from &quot;azure-storage&quot;;
+
+let _queueService = null;
+const getQueueService = () =&gt; {
+    if (!_queueService) {
+        _queueService = azure.createQueueService();
+    }
+    return _queueService;
+}
+
+export const addMessageToQueue = async (queue: string, message: string): Promise&lt;void&gt; =&gt; {
+
+    return new Promise((resolve, reject) =&gt; {
+        const queueService = getQueueService();
+        queueService.createQueueIfNotExists(queue, (error, results, response) =&gt; {
+            if (!error) {
+                const base64EncodedMessage = new Buffer(message).toString(&quot;base64&quot;);
+                queueService.createMessage(queue, base64EncodedMessage, (err, msgResult, msgResp) =&gt; {
+                    if (err) {
+                        reject(&quot;Could not send message to queue&quot;);
+                    }
+
+                    resolve();
+                })
+            } else {
+                reject(&quot;Queue could not be created.&quot;);
+            }
+        });
+    });
+}
+
+</code></pre>
+<p>create a file <strong><em>subscription-helpers.ts</em></strong></p>
+<pre><code class="language-typescript">import { Logger } from &quot;@azure/functions&quot;
+import { graph } from &quot;@pnp/graph-commonjs&quot;;
+import { Subscription } from &quot;@microsoft/microsoft-graph-types&quot;;
+
+
+const isValidForCreate = (subscription: Subscription) =&gt; {
+    return !!(subscription.changeType &amp;&amp; subscription.notificationUrl &amp;&amp; subscription.resource &amp;&amp; subscription.expirationDateTime);
+}
+
+const isValidForUpdate = (subscription: Subscription) =&gt; {
+    return !!(subscription.id &amp;&amp; subscription.expirationDateTime);
+}
+
+export const getSubscription = async function (subscriptionId: string, log: Logger): Promise&lt;Subscription&gt; {
+    try {
+        const subscription = await graph.subscriptions.getById(subscriptionId).get();
+        return subscription;
+    } catch (error) {
+        log.warn(`An error occured while trying to get subscription with Id ${subscriptionId}`, error);
+        return null;
+    }
+}
+
+export const createSubscription = async function (subscription: Subscription, log: Logger): Promise&lt;Subscription&gt; {
+    if (isValidForCreate(subscription)) {
+        log(&quot;Creating new subscription...&quot;);
+        const { changeType, notificationUrl, resource, expirationDateTime } = subscription;
+        const result = await graph.subscriptions.add(changeType, notificationUrl, resource, expirationDateTime, subscription);
+        log(`New subscription to ${changeType} of ${resource} has been created.`);
+        return result.data;
+    }
+    else {
+        log.error(&quot;Received request is not valid to create a subscription...&quot;);
+    }
+}
+
+export const updateSubscription = async function (subscription: Subscription, log: Logger): Promise&lt;void&gt; {
+    if (isValidForUpdate(subscription)) {
+        log(`Updating subscription ${subscription.id}...`);
+        await graph.subscriptions.getById(subscription.id).update(subscription);
+        log(`Subscription ${subscription.id} has been updated.`);
+    } else {
+        log.error(&quot;Received request is not valid to update the subscription...&quot;);
+    }
+};
+</code></pre>
+<p>and a last one <strong><em>subscription-setup.ts</em></strong></p>
+<pre><code class="language-typescript">import { Logger } from &quot;@azure/functions&quot;;
+import { createSubscription } from &quot;./subscriptions-helper&quot;;
+import { getExpirationDateTimeISOString } from &quot;./date-helper&quot;;
+import { SETUP_RESOURCE, SETUP_CHANGE_TYPE, SETUP_NOTIFICATION_URL } from &quot;./configure&quot;;
+
+export const setupNewSubscription = async function(log: Logger) {
+    log(&quot;Let's create a new subscription...&quot;);
+    const created = await createSubscription({
+        resource: SETUP_RESOURCE,
+        changeType: SETUP_CHANGE_TYPE,
+        notificationUrl: SETUP_NOTIFICATION_URL,
+        expirationDateTime: getExpirationDateTimeISOString(3)
+    }, log);
+
+    log(`A new subscription has been created with id ${created.id}`);
+    log(&quot;Please update the configuration accordingly...&quot;);
+}
+</code></pre>
+<h3 id="lets-code-the-ensuresubscription-function">Let's code the EnsureSubscription function</h3>
+<p><img src="/images/2020/03/azure-function-vscode-createnew.png" alt="Azure-Function-VSCode-CreateNew" /></p>
+<p>First of all, let's create a new queue-triggered function, from VS Code Azure extension, click the &quot;Create function&quot; button. Select &quot;<strong><em>Azure Queue Storage Triggered</em></strong>&quot; and name it &quot;<strong><em>EnsureSubscription</em></strong>&quot;. Select the app setting you want to use to store the Azure Storage connection string. You will have to put the connection string to your storage account. The VS Code extensions also allows to create a new storage account if you don't already have one. Name the azure queue as &quot;<strong><em>subscriptions-to-ensure</em></strong>&quot; Then let's write the following code as the body of our EnsureSubscription function</p>
+<pre><code class="language-typescript">import { AzureFunction, Context } from &quot;@azure/functions&quot;
+import { isNearlyExpired, getExpirationDateTimeISOString } from &quot;../helpers/date-helper&quot;;
+import { updateSubscription, getSubscription } from &quot;../helpers/subscriptions-helper&quot;;
+import { setupNewSubscription } from &quot;../helpers/subscription-setup&quot;;
+import { configure, SETUP_EXPIRATION_DELAY_IN_DAYS } from &quot;../helpers/configure&quot;;
+
+const queueTriggeredEnsureSubscription: AzureFunction = async function (context: Context, subscriptionId: string): Promise&lt;void&gt; {
+    context.log(`Ensuring subscription ${subscriptionId}...`);
+    configure(context);
+
+    const foundSubscription = await getSubscription(subscriptionId, context.log);
+    if (foundSubscription) {
+        context.log(&quot;A subscription has been found !&quot;);
+        context.log(`Resource    : ${foundSubscription.resource}`);
+        context.log(`Change type : ${foundSubscription.changeType}`);
+        context.log(`Expires on  : ${foundSubscription.expirationDateTime}`);
+
+        // At this point, if we realize the subscription is expiring soon, we update it with a new maximum delay starting right now !
+        if (isNearlyExpired(foundSubscription.expirationDateTime)) {
+            const expirationDateTime = getExpirationDateTimeISOString(SETUP_EXPIRATION_DELAY_IN_DAYS);
+            context.log(`Will update the expiration to ${expirationDateTime}`);
+            await updateSubscription({
+                id: foundSubscription.id,
+                expirationDateTime
+            },
+                context.log);
+            context.log(&quot;Subscription updated.&quot;);
+        } else {
+            context.log(&quot;The subscription will not expire soon...&quot;);
+        }
+    } else {
+        context.log(`No subscription has been found with id ${subscriptionId}...`);
+        // If subscription is not found, it might have been deleted in the meantime for some reason
+        // In order to keep the whole system stable, we recreate a new subscription here
+        await setupNewSubscription(context.log);
+    }
+};
+
+export default queueTriggeredEnsureSubscription;
+</code></pre>
+<h3 id="lets-code-the-business-task-function">Let's code the Business Task function</h3>
+<p>We will create another queue-triggered Azure Function that will execute the actual task we want to achieve whenever a notification is received. Here my business task will be to simply log the Id of the updated event. It is here that you will have to change to code to achieve the task according to your requirements. Repeat the steps above to create a new queue-triggered Function and name the queue <strong><em>&quot;business-tasks&quot;</em></strong>. Just for information, the code I have in this function is</p>
+<pre><code class="language-typescript">import { AzureFunction, Context } from &quot;@azure/functions&quot;;
+import { IBusinessTaskArgs } from &quot;../entities/IBusinessTaskArgs&quot;;
+import { GraphHttpClient } from &quot;@pnp/graph-commonjs/graphhttpclient&quot;;
+import { configure } from &quot;../helpers/configure&quot;;
+
+const queueTrigger: AzureFunction = async function (context: Context, taskArgs: IBusinessTaskArgs): Promise&lt;void&gt; {
+  // The calendar event is post process by our custom logic
+  context.log(`Received arguments: ${JSON.stringify(taskArgs)}`);
+  configure(context);
+
+  try {
+    // TODO Here implement custom logic
+    // e.g. Update the updated event's title
+    const resourceAbsoluteUrl = `https://graph.microsoft.com/v1.0/${taskArgs.eventResourceUri}`;
+    const client = new GraphHttpClient();
+    const eventResponse = await client.get(resourceAbsoluteUrl);
+    const event: { subject: string; } = await eventResponse.json();
+
+    // If event is not already processed
+    // Since we are updating the notified updated event, we have to check the custom task is not already done
+    // Otherwise, a notification will be resent and cause an &quot;infinite&quot; loop
+    if (event.subject.indexOf(&quot;[UPDATED]&quot;) != 0) {
+      const eventUpdate = {
+        subject: `[UPDATED] ${event.subject}`
+      }
+
+      const patchResponse = await client.patch(resourceAbsoluteUrl, {
+        body: JSON.stringify(eventUpdate)
+      });
+
+      if (patchResponse.ok) {
+        console.log(&quot;Event has been updated.&quot;);
+      } else {
+        console.log(&quot;Event could not be updated&quot;);
+      }
+    }
+  }
+  catch (error) {
+    context.log.error(&quot;An error occured while processing custom business task&quot;, error);
+  }
+
+};
+
+export default queueTrigger;
+</code></pre>
+<p>This custom task will grab the updated event and update its subject if it is not already properly updated (This will avoid resulting in an infinite loop!).</p>
+<h3 id="lets-test-it">Let's test it</h3>
+<p>We should be good now, hit F5 in VS Code to run your Azure Function locally ! We will then need to trigger the subscription to be created ! To make sure all is going well, set a breakpoint in the EnsureSubscription index.ts file <strong>at line 32</strong> From the Azure Portal, access your storage account, select the <strong>subscriptions-to-ensure</strong> queue and add a new message with any dummy content</p>
+<p><img src="/images/2020/03/azure-storage-queue.png" alt="Azure-Storage-Queue" />
+<img src="/images/2020/03/azure-storage-queue-addmessage.png" alt="Azure-Storage-Queue-AddMessage" /></p>
+<p>Your breakpoint should be hit almost at once. Continue the execution and your subscription should be added. To test your webhook solution, set a breakpoint in your BusinessTask function and then add an event to the calendar of the user you specified (or do any action that should triggered the specific notification you requested). In my case, I create or update an event in my calendar (It is the resource monitored by the Microsoft Graph Subscription), and I see it gets updated after a few seconds</p>
+<h2 id="now-time-to-deploy">Now time to deploy !</h2>
+<p>If everything in debug works as expected you can now deploy the Azure Function to Azure, in the VS Code extension tab, click the &quot;Deploy to Function App..&quot; button. Then you will have to make sure you copy the following app settings to the Function App</p>
+<ul>
+<li>TENANT</li>
+<li>AAD_APP_ID</li>
+<li>AAD_APP_SECRET</li>
+<li>SUBSCRIBED_RESOURCE_URI</li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<p>We now have a solution that will keep our subscriptions alive as long as it is used. Take care however, with this solution as is, if there is no activity during the maximum lifetime of your particular subscription, it will get deleted ! Fortunately, with the solution described in this post, the only thing you will have to do is to setup a time triggered function that will trigger the EnsureSubscription, But that will be part of a next post :) You can get the whole solution on the <a href="https://github.com/ypcode/ypcode-msgraph-subscriptions">GitHub repo here</a></p>
+<p>Hope you liked it and please let me know any feedback you might have !</p>
+<p>Cheers !</p>
+<p>Yannick</p>
 
     </div>
 </div>

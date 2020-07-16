@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Site Designs Studio 1.0" />
+            <meta property="og:description" content="Check out the SPFx application I wrote to manage Site Designs and Site Scripts in your tenant" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2018/03/site-designs-studio-1_0" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+        <meta property="og:image" content="/images/2018/03/sss-sitescriptedit.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2018-03-26 05:00:05Z" />
         <meta property="article:modified_time" content="2018-03-26 05:00:05Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="SPFx" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="Site Designs Studio 1.0" />
+            <meta name="twitter:description" content="Check out the SPFx application I wrote to manage Site Designs and Site Scripts in your tenant" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2018/03/site-designs-studio-1_0" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+            <meta name="twitter:image" content="/images/2018/03/sss-sitescriptedit.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, Office 365, SharePoint, SharePoint Framework, SharePoint Online, Site Designs, SPFx, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,17 +205,30 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2018/03/sss-sitescriptedit.png?r=202007160439" alt="Site Designs Studio 1.0" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint guys, Today, I am very proud to announce the upcoming <em><strong>release of Site Designs Studio 1.0</strong>.</em> [EDIT] The latest version (1.1) of Site Designs Studio, is now maintained under a PnP repository <a href="https://github.com/SharePoint/sp-dev-solutions/tree/master/solutions/SiteDesignsStudio">here</a></p>
+        <p>Hi SharePoint guys,</p>
+<p>Today, I am very proud to announce the upcoming <strong>release of Site Designs Studio 1.0</strong>.
+[EDIT] The latest version (1.1) of Site Designs Studio, is now maintained under a PnP repository <a href="https://github.com/SharePoint/sp-dev-solutions/tree/master/solutions/SiteDesignsStudio">here</a></p>
 <h2 id="site-designs-and-site-scripts">Site Designs and Site Scripts</h2>
-<p>Recently, Microsoft has released a new capability in SharePoint Online : <strong>Site Designs</strong>. It is a modern way of automating customizations of SharePoint sites. You can use them in the Modern site creation interface on the SharePoint homepage. A Site design is a set of Site Scripts that will be applied to the modern site when it is created. These scripts are a set of actions to configure. [caption id=&quot;attachment_5249&quot; align=&quot;alignnone&quot; width=&quot;1743&quot;]<img src="/images/2018/03/createsite01.png" alt="CreateSite01.png" /> Choose the Modern Site type[/caption] [caption id=&quot;attachment_5250&quot; align=&quot;alignnone&quot; width=&quot;1795&quot;]<img src="/images/2018/03/choosesitedesign.png" alt="ChooseSiteDesign" /> Choose the design to apply to the site[/caption] <img src="/images/2018/03/site-design-applying.png" alt="site-design-applying" />   When the site is created, the Site Design will be applied, in other words, the customization actions will be executed. When all actions are executed, you will be invited to view the updated site.        </p>
+<p>Recently, Microsoft has released a new capability in SharePoint Online : <strong>Site Designs</strong>.
+It is a modern way of automating customizations of SharePoint sites.
+You can use them in the Modern site creation interface on the SharePoint homepage.
+A Site design is a set of Site Scripts that will be applied to the modern site when it is created.
+These scripts are a set of actions to configure.</p>
+<p><img src="/images/2018/03/createsite01.png" alt="Choose the Modern Site type " />
+<img src="/images/2018/03/choosesitedesign.png" alt="Choose the design to apply to the site" />
+<img src="/images/2018/03/site-design-applying.png" alt="site-design-applying" />  </p>
+<p>When the site is created, the Site Design will be applied, in other words, the customization actions will be executed. When all actions are executed, you will be invited to view the updated site.        </p>
 <h2 id="json-and-rest-api">JSON and REST API</h2>
-<p>By the time of this writing, the only official ways of managing Site Designs and Site Scripts is through REST API or SharePoint Online Management shell. <a href="https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-design-overview">Check out this page</a> to get all the needed technical information. The Site Scripts are described in JSON format. While it is quite easy to use for developers, the business end-users won't probably be very confortable with these technical matters.</p>
+<p>By the time of this writing, the only official ways of managing Site Designs and Site Scripts is through REST API or SharePoint Online Management shell. <a href="https://docs.microsoft.com/en-us/sharepoint/dev/declarative-customization/site-design-overview">Check out this page</a> to get all the needed technical information.</p>
+<p>The Site Scripts are described in JSON format. While it is quite easy to use for developers, the business end-users won't probably be very confortable with these technical matters.</p>
 <h2 id="site-designs-studio">Site Designs Studio</h2>
-<p>I decided to create a user-friendly interface that will allow these end-users to manage and create Site Scripts and Site Designs. I called it <em>Site Designs Studio</em>. It is a SharePoint Framework WebPart that will rely on a JSON schema to dynamically build a Site Script generator UI, manage the Site Designs and associate Site Scripts to them. <img src="/images/2018/03/sss-home.png" alt="sss-home" /></p>
+<p>I decided to create a user-friendly interface that will allow these end-users to manage and create Site Scripts and Site Designs. I called it <em>Site Designs Studio</em>.
+It is a SharePoint Framework WebPart that will rely on a JSON schema to dynamically build a Site Script generator UI, manage the Site Designs and associate Site Scripts to them.</p>
+<p><img src="/images/2018/03/sss-home.png" alt="sss-home" /></p>
 <h3 id="manage-site-designs">Manage Site Designs</h3>
 <p><img src="/images/2018/03/sss-designs.png" alt="sss-designs.png" /></p>
 <ul>
@@ -221,9 +236,11 @@
 <li>By clicking the pen under the Site Design picture, you will be able to update its information</li>
 <li>You can delete a Site Design by clicking the trash icon</li>
 </ul>
-<p><img src="/images/2018/03/edit-sitedesign.png" alt="edit-sitedesign" /> Here you can edit the information of the design and associate the available scripts that you need.</p>
+<p><img src="/images/2018/03/edit-sitedesign.png" alt="edit-sitedesign" /></p>
+<p>Here you can edit the information of the design and associate the available scripts that you need.</p>
 <h3 id="manage-site-scripts">Manage Site Scripts</h3>
-<p><img src="/images/2018/03/sss-sitescripts.png" alt="sss-sitescripts" /> The WebPart displays the list of Site Scripts in your tenant</p>
+<p><img src="/images/2018/03/sss-sitescripts.png" alt="sss-sitescripts" /></p>
+<p>The WebPart displays the list of Site Scripts in your tenant</p>
 <ul>
 <li>Click the edit icon to edit the Site Script</li>
 <li>Click the trash icon to delete the Site Script</li>
@@ -241,9 +258,13 @@
 <li>Switch to &quot;Code-only&quot; mode</li>
 <li>Switch to &quot;Split&quot; mode (as in the exhibit)</li>
 </ol>
-<p><img src="/images/2018/03/sss-add-action.png" alt="sss-add-action.png" /> By clicking the &quot;+&quot; button, you can add a new action to your script.</p>
+<p><img src="/images/2018/03/sss-add-action.png" alt="sss-add-action.png" /></p>
+<p>By clicking the &quot;+&quot; button, you can add a new action to your script.</p>
 <h2 id="enjoy">Enjoy !</h2>
-<p>Here it is, without any specific technical knowledge, we all will be able to create and manage Site Scripts and Site Designs. Currently I only publish the <a href="https://github.com/ypcode/sp-site-designs-studio">source code of the WebPart here</a> but I plan to ship an easy-to-install package very soon. Stay tuned. Give your feedback and ideas, I would be more than happy to bring some new features to this software. Cheers, Yannick</p>
+<p>Here it is, without any specific technical knowledge, we all will be able to create and manage Site Scripts and Site Designs. Currently I only publish the <a href="https://github.com/SharePoint/sp-dev-solutions/tree/master/solutions/SiteDesignsStudio">source code of the WebPart here</a> but I plan to ship an easy-to-install package very soon.</p>
+<p>Stay tuned. Give your feedback and ideas, I would be more than happy to bring some new features to this software.</p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>

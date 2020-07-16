@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SPFx/React DEBUG vs PRODUCTION builds" />
+            <meta property="og:description" content="Check some differences that might exists between DEBUG and PRODUCTION builds of your SPFx applications" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/12/spfx-react-debug-vs-production-builds" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+        <meta property="og:image" content="/images/2019/12/react_prod_vs_debug.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-12-18 15:14:33Z" />
         <meta property="article:modified_time" content="2019-12-18 15:14:33Z" />
@@ -76,9 +77,10 @@
                 <meta property="article:tag" content="SPFx" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="SPFx/React DEBUG vs PRODUCTION builds" />
+            <meta name="twitter:description" content="Check some differences that might exists between DEBUG and PRODUCTION builds of your SPFx applications" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/12/spfx-react-debug-vs-production-builds" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+            <meta name="twitter:image" content="/images/2019/12/react_prod_vs_debug.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="--ship, Build, DEBUG, JavaScript, JS, PRODUCTION, SharePoint, SharePoint Framework, SharePoint Online, SPFx, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -206,25 +208,174 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/12/react_prod_vs_debug.png?r=202007160439" alt="SPFx/React DEBUG vs PRODUCTION builds" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint and React devs, If you have a bit of experience with SPFx and/or React, you probably know that you can usually build your bundles with at least two configurations: DEBUG and PRODUCTION. In this post I want to tackle an issue I faced a couple times and once again recently.</p>
+        <p>Hi SharePoint and React devs,</p>
+<p>If you have a bit of experience with SPFx and/or React, you probably know that you can usually build your bundles with at least two configurations: DEBUG and PRODUCTION.
+In this post I want to tackle an issue I faced a couple times and once again recently.</p>
 <h1 id="debug-production-build">DEBUG != PRODUCTION build</h1>
-<p>Indeed, while, the DEBUG build is very handy while developing your app; it includes Webpack original sources (e.g. your TypeScript sources, ...), not minified JS code, etc... Bundles built for PRODUCTION contains a version of the code that is minified, uglified, optomized for better runtime performance, etc... In some cases, the PRODUCTION and DEBUG output can be different enough that, at runtime, it might break or behaves in an unexpected way. As a reminder, in the case of SPFx, when you run <em><strong>gulp build</strong></em> or <em><strong>gulp bundle</strong></em>, by default you get a DEBUG build, in order to have a PRODUCTION build, you rather use <em><strong>gulp build --ship</strong></em> or <em><strong>gulp bundle --ship</strong></em> On my side, when I work on a SPFx project, during development time, I usually use  DEBUG build and deploy a solution package that refers to the locally served JS assets. I guess it is a pretty common scenario</p>
+<p>Indeed, while, the DEBUG build is very handy while developing your app; it includes Webpack original sources (e.g. your TypeScript sources, ...), not minified JS code, etc...
+Bundles built for PRODUCTION contains a version of the code that is minified, uglified, optimized for better runtime performance, etc...</p>
+<p>In some cases, the PRODUCTION and DEBUG output can be different enough that, at runtime, it might break or behaves in an unexpected way.
+As a reminder, in the case of SPFx, when you run <em><strong>gulp build</strong></em> or <em><strong>gulp bundle</strong></em>, by default you get a DEBUG build, in order to have a PRODUCTION build, you rather use <em><strong>gulp build --ship</strong></em> or <em><strong>gulp bundle --ship</strong></em></p>
+<p>On my side, when I work on a SPFx project, during development time, I usually use DEBUG build and deploy a solution package that refers to the locally served JS assets.
+I guess it is a pretty common scenario</p>
 <h1 id="two-problematic-cases">Two problematic cases</h1>
 <p>Let me present 2 cases I ran into in which everything worked just fine in DEBUG build and crashes miserably in PRODUCTION build config.</p>
 <h2 id="case-1-spfx-localized-strings-results-in-different-transpiled-js">Case #1 SPFx localized strings results in different transpiled JS</h2>
-<p>In one of my projects, I needed to implement a service that takes a SPFx localized string key as parameter. To avoid passing the keys as strings at risk of mispelling it, I implemented the method so you can either pass the key as string or as an arrow function that return, let's say <em><strong>strings.myKey</strong></em>. Let's see a example of code: <code>\nimport * as strings from 'myStrings';  const getLocalizedStringKey: (keyResolver: (() =&gt; string)) =&gt; string = (nameResolver: () =&gt; string) =&gt; {      console.log(&quot;getLocalizedStringKey() - name resolver: &quot;, nameResolver);     const dotFormNamePattern = /function\s*\(\)\s*\{\s*return (.*)\.(.*)\s*\}/;     const dotFormNameMatch = dotFormNamePattern.exec(nameResolver + '');      let labelKey: string = null;     if (dotFormNameMatch == null) {         const arrayIndexingFormNamePattern = /return (.*)\[\&quot;(.*)\&quot;\]/;         const arrayIndexingFormNameMatch = arrayIndexingFormNamePattern.exec(nameResolver + '');         console.log(&quot;getLocalizedStringKey() - uses array indexing form&quot;);         if (arrayIndexingFormNameMatch == null) {             throw new Error(&quot;The keyResolver is invalid. Make sure to use '() =&gt; strings.LabelKey'&quot;);         }          labelKey = arrayIndexingFormNameMatch[2];     } else {         console.log(&quot;getLocalizedStringKey() - uses dot form&quot;);         labelKey = dotFormNameMatch[2];     }      return labelKey; };  const getKey = (labelKey: string | (() =&gt; string)) =&gt; {     let key: string = null;     if (!labelKey) {         throw new Error('The labelKey argument is not set');     }      if (typeof labelKey === 'string') {         key = labelKey as string;     } else if (typeof labelKey === 'function') {         key = getLocalizedStringKey(labelKey as (() =&gt; string));     } else {         key = (labelKey as any).toString();     }      return key; };  export const doStuff = (labelKey: string | (() =&gt; string)) =&gt; {     const effectiveKey = getKey(labelKey);     // Do stuff with key here ... };  // I can than use doStuff(() =&gt; strings.MyKey);           // &lt;= Compilation will succeed //doStuff(() =&gt; strings.MyKy);          // &lt;= Compilation would fail  // instead of doStuff(&quot;MyKey&quot;);                       // &lt;= Compilation will succeed and code will work fine doStuff(&quot;Myky&quot;);                        // &lt;= Compilation will succeed and code won't work as expected\n</code> Let's run the exact same solution in both build configurations and let's take a look at the value of the name resolver</p>
+<p>In one of my projects, I needed to implement a service that takes a SPFx localized string key as parameter.
+To avoid passing the keys as strings at risk of mispelling it, I implemented the method so you can either pass the key as string or as an arrow function that return, let's say <em><strong>strings.myKey</strong></em>.</p>
+<p>Let's see a example of code:</p>
+<pre><code class="language-typescript">import * as strings from 'myStrings';
+
+const getLocalizedStringKey: (keyResolver: (() =&gt; string)) =&gt; string = (nameResolver: () =&gt; string) =&gt; {
+
+    console.log(&quot;getLocalizedStringKey() - name resolver: &quot;, nameResolver);
+    const dotFormNamePattern = /function\s*\(\)\s*\{\s*return (.*)\.(.*)\s*\}/;
+    const dotFormNameMatch = dotFormNamePattern.exec(nameResolver + '');
+
+    let labelKey: string = null;
+    if (dotFormNameMatch == null) {
+        const arrayIndexingFormNamePattern = /return (.*)\[\&quot;(.*)\&quot;\]/;
+        const arrayIndexingFormNameMatch = arrayIndexingFormNamePattern.exec(nameResolver + '');
+        console.log(&quot;getLocalizedStringKey() - uses array indexing form&quot;);
+        if (arrayIndexingFormNameMatch == null) {
+            throw new Error(&quot;The keyResolver is invalid. Make sure to use '() =&gt; strings.LabelKey'&quot;);
+        }
+
+        labelKey = arrayIndexingFormNameMatch[2];
+    } else {
+        console.log(&quot;getLocalizedStringKey() - uses dot form&quot;);
+        labelKey = dotFormNameMatch[2];
+    }
+
+    return labelKey;
+};
+
+const getKey = (labelKey: string | (() =&gt; string)) =&gt; {
+    let key: string = null;
+    if (!labelKey) {
+        throw new Error('The labelKey argument is not set');
+    }
+
+    if (typeof labelKey === 'string') {
+        key = labelKey as string;
+    } else if (typeof labelKey === 'function') {
+        key = getLocalizedStringKey(labelKey as (() =&gt; string));
+    } else {
+        key = (labelKey as any).toString();
+    }
+
+    return key;
+};
+
+export const doStuff = (labelKey: string | (() =&gt; string)) =&gt; {
+    const effectiveKey = getKey(labelKey);
+    // Do stuff with key here ...
+};
+
+// I can than use
+doStuff(() =&gt; strings.MyKey);           // &lt;= Compilation will succeed
+//doStuff(() =&gt; strings.MyKy);          // &lt;= Compilation would fail
+
+// instead of
+doStuff(&quot;MyKey&quot;);                       // &lt;= Compilation will succeed and code will work fine
+doStuff(&quot;Myky&quot;);                        // &lt;= Compilation will succeed and code won't work as expected
+</code></pre>
+<p>Let's run the exact same solution in both build configurations and let's take a look at the value of the name resolver</p>
 <h4 id="in-debug-build-config">In DEBUG build config</h4>
 <p><img src="/images/2019/12/keyresolver_debug_build.png" alt="keyResolver_debug_build" /> <strong>In PRODUCTION build config</strong> <img src="/images/2019/12/keyresolver_prod_build.png" alt="keyResolver_prod_build" /> Note: see in the code exhibit above how I handled the differences using two different regex patterns.</p>
 <h2 id="case-2-react-child-has-different-form-in-debug-and-production">Case #2 React child has different form in DEBUG and PRODUCTION</h2>
-<p>One of my React components is implemented to handle only those of its children that are instances of a particular class. I implemented it this way: <code>\nimport * as React from 'react';  export interface IPlaceholderProps {     key: string;     title: string;     zoneId: string;     children?: React.ReactElement | React.ReactElement[]; }  export class Placeholder extends React.Component&lt;IPlaceholderProps, {}&gt; {} export interface ILayoutProps { }  export class LayoutComponent extends React.Component&lt;ILayoutProps, {}&gt; {     private _renderZone(zoneId: string): JSX.Element {         const childProps = React.Children.toArray(this.props.children)             .filter((reactChild: React.ReactElement&lt;IPlaceholderProps&gt;) =&gt; {                 console.log(&quot;_renderZone() - Current child type: &quot;, reactChild.type);                 console.log(&quot;_renderZone() - Current child type name: &quot;, (reactChild.type as any).name);                 return reactChild.type                     // Initial implemetation =&gt; WORKED IN DEBUG BUILD                     // &amp;&amp; (reactChild.type as any).name == &quot;Placeholder&quot;                     &amp;&amp; reactChild.type == Placeholder                     &amp;&amp; (reactChild.props.zoneId == zoneId);             })             .map((reactChild: React.ReactElement&lt;IPlaceholderProps&gt;) =&gt; reactChild.props);          return &lt;div&gt;             {childProps.map((c, i) =&gt; &lt;div key={i}&gt;                 {c.children}             &lt;/div&gt;)}         &lt;/div&gt;;     }      public render() {         return &lt;div&gt;             &lt;h1&gt;Zone 1&lt;/h1&gt;             {this._renderZone(&quot;1&quot;)}             &lt;h1&gt;Zone 2&lt;/h1&gt;             {this._renderZone(&quot;2&quot;)}             &lt;h1&gt;Zone 3&lt;/h1&gt;             {this._renderZone(&quot;3&quot;)}         &lt;/div&gt;;     } }      // Some client code   export default class ProdVsDebugLab extends React.Component&lt;IProdVsDebugLabProps, {}&gt; {    public render(): React.ReactElement&lt;IProdVsDebugLabProps&gt; {      doStuff(() =&gt; strings.DescriptionFieldLabel);      return (       &lt;div className={styles.prodVsDebugLab}&gt;         &lt;LayoutComponent&gt;           &lt;Placeholder key=&quot;ph1&quot; zoneId=&quot;3&quot; title=&quot;This is it !&quot;&gt;             &lt;div&gt;Hello World !&lt;/div&gt;           &lt;/Placeholder&gt;           &lt;Placeholder key=&quot;ph2&quot; zoneId=&quot;1&quot; title=&quot;This is foo !&quot;&gt;             &lt;div&gt;Foo !&lt;/div&gt;           &lt;/Placeholder&gt;           &lt;Placeholder key=&quot;ph3&quot; zoneId=&quot;2&quot; title=&quot;This is bar !&quot;&gt;             &lt;div&gt;Bar !&lt;/div&gt;           &lt;/Placeholder&gt;         &lt;/LayoutComponent&gt;       &lt;/div&gt;     );   } }\n</code> Take a closer look at <em><strong>lines 21,22</strong></em> It worked fine in DEBUG mode where the type's name of a React child was the name of the type until I built it for PRODUCTION. In this configuration, the type's name is minified so I had to adapt my code to make it work there as well... Let's see the difference with some logging done from both build configurations</p>
-<h4 id="in-debug-build-config-1">In DEBUG build config</h4>
-<p><img src="/images/2019/12/react_child_debug.png" alt="react_child_debug" /> <strong>In PRODUCTION build config</strong> <img src="/images/2019/12/react_child_prod.png" alt="react_child_prod" /></p>
+<p>One of my React components is implemented to handle only those of its children that are instances of a particular class. I implemented it this way:</p>
+<pre><code class="language-typescript">import * as React from 'react';
+
+export interface IPlaceholderProps {
+    key: string;
+    title: string;
+    zoneId: string;
+    children?: React.ReactElement | React.ReactElement[];
+}
+
+export class Placeholder extends React.Component&lt;IPlaceholderProps, {}&gt; {}
+export interface ILayoutProps { }
+
+export class LayoutComponent extends React.Component&lt;ILayoutProps, {}&gt; {
+    private _renderZone(zoneId: string): JSX.Element {
+        const childProps = React.Children.toArray(this.props.children)
+            .filter((reactChild: React.ReactElement&lt;IPlaceholderProps&gt;) =&gt; {
+                console.log(&quot;_renderZone() - Current child type: &quot;, reactChild.type);
+                console.log(&quot;_renderZone() - Current child type name: &quot;, (reactChild.type as any).name);
+                return reactChild.type
+                    // Initial implemetation =&gt; WORKED IN DEBUG BUILD
+                    // &amp;&amp; (reactChild.type as any).name == &quot;Placeholder&quot;
+                    &amp;&amp; reactChild.type == Placeholder
+                    &amp;&amp; (reactChild.props.zoneId == zoneId);
+            })
+            .map((reactChild: React.ReactElement&lt;IPlaceholderProps&gt;) =&gt; reactChild.props);
+
+        return &lt;div&gt;
+            {childProps.map((c, i) =&gt; &lt;div key={i}&gt;
+                {c.children}
+            &lt;/div&gt;)}
+        &lt;/div&gt;;
+    }
+
+    public render() {
+        return &lt;div&gt;
+            &lt;h1&gt;Zone 1&lt;/h1&gt;
+            {this._renderZone(&quot;1&quot;)}
+            &lt;h1&gt;Zone 2&lt;/h1&gt;
+            {this._renderZone(&quot;2&quot;)}
+            &lt;h1&gt;Zone 3&lt;/h1&gt;
+            {this._renderZone(&quot;3&quot;)}
+        &lt;/div&gt;;
+    }
+}
+  
+  // Some client code
+  export default class ProdVsDebugLab extends React.Component&lt;IProdVsDebugLabProps, {}&gt; {
+
+  public render(): React.ReactElement&lt;IProdVsDebugLabProps&gt; {
+
+    doStuff(() =&gt; strings.DescriptionFieldLabel);
+
+    return (
+      &lt;div className={styles.prodVsDebugLab}&gt;
+        &lt;LayoutComponent&gt;
+          &lt;Placeholder key=&quot;ph1&quot; zoneId=&quot;3&quot; title=&quot;This is it !&quot;&gt;
+            &lt;div&gt;Hello World !&lt;/div&gt;
+          &lt;/Placeholder&gt;
+          &lt;Placeholder key=&quot;ph2&quot; zoneId=&quot;1&quot; title=&quot;This is foo !&quot;&gt;
+            &lt;div&gt;Foo !&lt;/div&gt;
+          &lt;/Placeholder&gt;
+          &lt;Placeholder key=&quot;ph3&quot; zoneId=&quot;2&quot; title=&quot;This is bar !&quot;&gt;
+            &lt;div&gt;Bar !&lt;/div&gt;
+          &lt;/Placeholder&gt;
+        &lt;/LayoutComponent&gt;
+      &lt;/div&gt;
+    );
+  }
+}
+</code></pre>
+<p>Take a closer look at <em><strong>lines 21,22</strong></em>
+It worked fine in DEBUG mode where the type's name of a React child was the name of the type until I built it for PRODUCTION.
+In this configuration, the type's name is minified so I had to adapt my code to make it work there as well...
+Let's see the difference with some logging done from both build configurations</p>
+<p><strong>In DEBUG build config</strong></p>
+<p><img src="/images/2019/12/react_child_debug.png" alt="react_child_debug" /></p>
+<p><strong>In PRODUCTION build config</strong></p>
+<p><img src="/images/2019/12/react_child_prod.png" alt="react_child_prod" /></p>
 <h1 id="conclusion">Conclusion</h1>
-<p>Definitely, these issues were there because of bad code I wrote I guess, I should probably have written it differently in the first place. The fact is, I couldn't realize it before it jumps at my face ! And the only way it did was to run from a bundle built for PRODUCTION. In this project, I have been working on quite big features that needed time to be stable enough before being deployed to a common testing environment. That's the main reason why I did not build a PROD bundle sooner... Anyway, a lesson learned for me that I share with you today: <em><strong>Build more often PROD bundles so I can be aware of these kind of issues in advance.</strong></em> Hopefully you will find that post useful ! Best regards, Yannick</p>
+<p>Definitely, these issues were there because of bad code I wrote I guess, I should probably have written it differently in the first place.
+The fact is, I couldn't realize it before it jumps at my face !
+And the only way it did was to run from a bundle built for PRODUCTION.
+In this project, I have been working on quite big features that needed time to be stable enough before being deployed to a common testing environment.</p>
+<p>That's the main reason why I did not build a PROD bundle sooner... Anyway, a lesson learned for me that I share with you today: <em><strong>Build more often PROD bundles so I can be aware of these kind of issues in advance.</strong></em></p>
+<p>Hopefully you will find that post useful !</p>
+<p>Best regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>

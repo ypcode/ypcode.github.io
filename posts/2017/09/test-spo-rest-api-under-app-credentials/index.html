@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Test the SharePoint Online REST API under App credentials" />
+            <meta property="og:description" content="See the steps to issue test calls to SharePoint REST API with application credentials" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+        <meta property="og:image" content="/images/2017/09/register-app.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-09-11 05:00:36Z" />
         <meta property="article:modified_time" content="2017-09-11 05:00:36Z" />
@@ -71,9 +72,10 @@
                 <meta property="article:tag" content="SharePoint" />
                 <meta property="article:tag" content="SharePoint Online" />
         <meta name="twitter:title" content="Test the SharePoint Online REST API under App credentials" />
+            <meta name="twitter:description" content="See the steps to issue test calls to SharePoint REST API with application credentials" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+            <meta name="twitter:image" content="/images/2017/09/register-app.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, PnP, PowerShell, SharePoint, SharePoint Online" />
         <meta name="twitter:site" content="@yp_code" />
@@ -201,17 +203,20 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/09/register-app.png?r=202007160439" alt="Test the SharePoint Online REST API under App credentials" />
         </div>
    
     <div class="content">
-        <p>Hello SharePoint developers, In this post, I would like to share a useful technique that will allow you to test the SharePoint REST API with some great Lab tool such as POSTman. In order to follow this technique, you will need the following tools installed on your computer:</p>
+        <p>Hello SharePoint developers,</p>
+<p>In this post, I would like to share a useful technique that will allow you to test the SharePoint REST API with some great Lab tool such as POSTman.
+In order to follow this technique, you will need the following tools installed on your computer:</p>
 <ul>
 <li>PnP PowerShell (september 2017 release at least)</li>
 <li>Postman</li>
 </ul>
 <h2 id="setup-the-app-credentials-and-permissions">Setup the app credentials and permissions</h2>
-<p>In order to setup the app credentials and permissions, you first need to go to the app registration page: <em><strong><a href="https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx">https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx</a></strong></em> <img src="/images/2017/09/register-app.png" alt="register-app" /></p>
+<p>In order to setup the app credentials and permissions, you first need to go to the app registration page: <em><strong><a href="https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx">https://yourtenant.sharepoint.com/sites//_layouts/15/appregnew.aspx</a></strong></em></p>
+<p><img src="/images/2017/09/register-app.png" alt="register-app" /></p>
 <ol>
 <li>Click the <strong>Generate</strong> button next to the Client Id field to generate a new one.</li>
 <li>Click the <strong>Generate</strong> button next to the Client Secret field to generate a new one.</li>
@@ -220,7 +225,11 @@
 <li>Set the Redirect URL to https://localhost</li>
 <li>Click the <strong>Create</strong> button</li>
 </ol>
-<p>( * bullets 4 &amp; 5 values don't really matter but the UI will not validate them if they have an incorrect format) <img src="/images/2017/09/clientid_clientsecret.png" alt="clientid_clientsecret" /> Keep safely the Client Id and Client Secret values because you will never be able to recover the secret if you lose it. Then you need to set the permissions for this app <em><strong><a href="https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx">https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx</a></strong></em> <img src="/images/2017/09/app-permissions.png" alt="app-permissions" /></p>
+<p>( * bullets 4 &amp; 5 values don't really matter but the UI will not validate them if they have an incorrect format)</p>
+<p><img src="/images/2017/09/clientid_clientsecret.png" alt="clientid_clientsecret" /></p>
+<p>Keep safely the Client Id and Client Secret values because you will never be able to recover the secret if you lose them.
+Then you need to set the permissions for this app <em><strong><a href="https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx">https://yourtenant.sharepoint.com/sites/yoursite/_layouts/15/appinv.aspx</a></strong></em></p>
+<p><img src="/images/2017/09/app-permissions.png" alt="app-permissions" /></p>
 <ul>
 <li>
 <ol>
@@ -238,7 +247,10 @@
 </ol>
 </li>
 </ul>
-<p><code>\n&lt;AppPermissionRequests AllowAppOnlyPolicy=&quot;true&quot;&gt;   &lt;AppPermissionRequest Scope=&quot;http://sharepoint/content/sitecollection/web&quot; Right=&quot;FullControl&quot;/&gt; &lt;/AppPermissionRequests&gt;\n</code></p>
+<pre><code class="language-xml">&lt;AppPermissionRequests AllowAppOnlyPolicy=&quot;true&quot;&gt;   
+  &lt;AppPermissionRequest Scope=&quot;http://sharepoint/content/sitecollection/web&quot; Right=&quot;FullControl&quot;/&gt; 
+&lt;/AppPermissionRequests&gt;
+</code></pre>
 <ul>
 <li>
 <ol start="4">
@@ -246,9 +258,14 @@
 </ol>
 </li>
 </ul>
-<p><img src="/images/2017/09/trust.png" alt="trust" /> Check the application requires the permission you expect it to and click the <em><strong>Trust it</strong></em> button.</p>
+<p><img src="/images/2017/09/trust.png" alt="trust" /></p>
+<p>Check the application requires the permission you expect it to and click the <em><strong>Trust it</strong></em> button.</p>
 <h2 id="get-the-access-token">Get the access token</h2>
-<p>In order to use Postman to call the REST API, you need to include the proper access token. With PnP PowerShell, you can get the app access token if you're connected using app credentials <code>\nConnect-PnPOnline https://&lt;your-tenant&gt;.sharepoint.com/sites/&lt;your-site&gt; -AppId &lt;your_client_id&gt; -AppSecret &lt;your_client_secret&gt; Get-PnPAppAuthAccessToken | Clip\n</code> These commands above will connect you to your site with app credentials and copy the access token to the clipboard.</p>
+<p>In order to use Postman to call the REST API, you need to include the proper access token.
+With PnP PowerShell, you can get the app access token if you're connected using app credentials</p>
+<pre><code class="language-powershell">Connect-PnPOnline https://&lt;your-tenant&gt;.sharepoint.com/sites/&lt;your-site&gt; -AppId &lt;your_client_id&gt; -AppSecret &lt;your_client_secret&gt; Get-PnPAppAuthAccessToken | Clip
+</code></pre>
+<p>These commands above will connect you to your site with app credentials and copy the access token to the clipboard.</p>
 <h2 id="issue-requests-with-postman">Issue requests with Postman</h2>
 <p><img src="/images/2017/09/postman1.png" alt="postman" /></p>
 <ol>
@@ -257,7 +274,10 @@
 <li>Optionally set a <em><strong>Accept</strong></em> header to &quot;<em><strong>application/json</strong></em>&quot; or &quot;<em><strong>application/json; odata=verbose</strong></em>&quot; to receive the data in the appropriate format.</li>
 <li>Click the Send button.</li>
 </ol>
-<p>Here we are, we can issue HTTP calls to the SharePoint API with the appropriate credentials. With Postman, we can easily change the request headers and configuration to test different use cases. Hope this will help! Yannick</p>
+<p>Here we are, we can issue HTTP calls to the SharePoint API with the appropriate credentials.
+With Postman, we can easily change the request headers and configuration to test different use cases.</p>
+<p>Hope this will help!</p>
+<p>Yannick</p>
 
     </div>
 </div>

@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="QuickTip - Be efficiently schizophrenic with Office 365 and Chrome" />
+            <meta property="og:description" content="See that quicktip to be efficient as a professional working with multiple Office 365 accounts" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/10/quicktip-be-efficiently-schizophrenic-office-365-chrome" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+        <meta property="og:image" content="/images/2017/10/chrome_managepeople.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-10-09 05:00:47Z" />
         <meta property="article:modified_time" content="2017-10-09 05:00:47Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="Tenant" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="QuickTip - Be efficiently schizophrenic with Office 365 and Chrome" />
+            <meta name="twitter:description" content="See that quicktip to be efficient as a professional working with multiple Office 365 accounts" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/10/quicktip-be-efficiently-schizophrenic-office-365-chrome" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+            <meta name="twitter:image" content="/images/2017/10/chrome_managepeople.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Azure, Chrome, Misc, Office 365, QuickTip, SharePoint Online, Tenant, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,30 +205,65 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/10/chrome_managepeople.png?r=202007160439" alt="QuickTip - Be efficiently schizophrenic with Office 365 and Chrome" />
         </div>
    
     <div class="content">
-        <p>Hi Office 365 and Azure specialists, In this QuickTip, I will present something that is not at all specific to Office 365 nor Azure. However, it is particularly useful for consultants like me who have to log into various tenants as different users from my computer. Actually, this tip is valid for almost every website that you have to log into (I also use it for my personal or Pro Microsoft Account, Gmail accounts, ...).  Indeed, the session mechanism in most website uses cookies.</p>
+        <p>Hi Office 365 and Azure specialists,</p>
+<p>In this QuickTip, I will present something that is not at all specific to Office 365 nor Azure.
+However, it is particularly useful for consultants like me who have to log into various tenants as different users from my computer.
+Actually, this tip is valid for almost every website that you have to log into (I also use it for my personal or Pro Microsoft Account, Gmail accounts, ...). 
+Indeed, the session mechanism in most website uses cookies.</p>
 <h3 id="what-is-a-cookie">What is a cookie ?</h3>
-<p>In a few words, a cookie is a piece of information included in the HTTP roundtrip between clients and servers. It can be used for numerous purposes. In the context of a session mechanism, it contains an information that allows the server to identify a request as being issued by a particular logged-in user. This piece of information is persistent in the client browser (for a particular server address) at least for the period of the session (until you close the browser). It can also persist for a longer period if you tick the typical &quot;Remember me&quot; checkbox at login time.</p>
+<p>In a few words, a cookie is a piece of information included in the HTTP roundtrip between clients and servers.
+It can be used for numerous purposes.
+In the context of a session mechanism, it contains an information that allows the server to identify a request as being issued by a particular logged-in user.
+This piece of information is persistent in the client browser (for a particular server address) at least for the period of the session (until you close the browser).
+It can also persist for a longer period if you tick the typical &quot;Remember me&quot; checkbox at login time.</p>
 <h3 id="browsers-and-persistent-data">Browsers and persistent data</h3>
-<p>For a very long time, all persistent data in the browser (Cookies, History, Remembered passwords, ...) have been bound to the OS user. It means, for instance, that if you chose to remember your password for a site. It's for your current OS user.</p>
+<p>For a very long time, all persistent data in the browser (Cookies, History, Remembered passwords, ...) have been bound to the OS user.
+It means, for instance, that if you chose to remember your password for a site.
+It's for your current OS user.</p>
 <h3 id="act-as-another-user">Act as another user</h3>
-<p>If, for any reason, you have to log in as another user (e.g. Test a feature in a particular user context, ...). You have multiple options :</p>
+<p>If, for any reason, you have to log in as another user (e.g. Test a feature in a particular user context, ...).
+You have multiple options :</p>
 <ul>
 <li>Log out from your current session and log back in with the new credentials (This sometimes can cause troubles if you don't restart the browser, because the cookies might not be removed).</li>
-<li>If you're in a fully integrated authentication mechanism (AD on-prem or ADFS), you can run your browser as a different user. <img src="/images/2017/10/runas.png" alt="runas.png" /> On Windows:
-<ul>
-<li>hold the the Shift key and right-click your browser icon</li>
-<li>Select &quot;Run as different user&quot;</li>
-<li>Enter the other user credentials</li>
+<li>If you're in a fully integrated authentication mechanism (AD on-prem or ADFS), you can run your browser as a different user.</li>
 </ul>
-</li>
-<li>If you are not in a fully integrated authentication mode, (e.g. Office 365 without ADFS), You need to run another browser session (so your cookies and history won't bother you). You can open a new &quot;Incognito&quot; session, almost all current browsers has such a capability. You then use a kind of sandboxed context separated from your regular user data.</li>
+<p><img src="/images/2017/10/runas.png" alt="runas.png" /></p>
+<p>On Windows:
+*   hold the the Shift key and right-click your browser icon
+*   Select &quot;Run as different user&quot;
+*   Enter the other user credentials</p>
+<ul>
+<li>If you are not in a fully integrated authentication mode, (e.g. Office 365 without ADFS), you need to run another browser session (so your cookies and history won't bother you).
+You can open a new &quot;Incognito&quot; session, almost all current browsers has such a capability.
+You then use a kind of sandboxed context separated from your regular user data.</li>
 </ul>
 <h3 id="act-as-many-different-users-be-schizophrenic">Act as many different users (Be schizophrenic)</h3>
-<p>In some cases, you might want to be able to easily test several different user contexts on the same Office 365 Tenant. You also might want to be able to easily deal with multiple tenants without the need of logging out /logging in continously. In my very own daily situation, I work with 4 different customers' tenants every week (sometimes during the same day), eventually with different accounts (for testing) on each. Before being aware of this tip, it was really a mess when I needed to grab an info for a customer while in a middle of something else for another customer. Google Chrome offers a capability that helps me a lot every day, and, I think, can help you a lot too: The &quot;People&quot; feature. It is a mechanism built in Chrome to use multiple user profiles with the same OS User account. It basically works as a &quot;named incognito mode&quot; except that it keeps the history and cookies for the user profile. Open Chrome and type <strong>chrome://settings/people</strong> in the address bar <img src="/images/2017/10/chrome_managepeople.png" alt="chrome_managepeople.png" /> Click the &quot;Manage other people&quot; section <img src="/images/2017/10/chrome_managed_people.png" alt="chrome_managed_people.png" /> Click the &quot;ADD PERSON&quot; to add a new user profile (give it a name and optionnally select an icon, It can avoid confusion between sessions), you can also create a dedicated desktop shortcut for the user profile. <img src="/images/2017/10/chrome_add_people.png" alt="chrome_add_people" /> <img src="/images/2017/10/chrome_user_picker.png" alt="chrome_user_picker" /> Now that you have other people available, in Chrome upper right corner you will see the name of the current user. You can click that name to quickly open a &quot;session&quot; with another user profile. In this menu, you can also directly access the &quot;Manage people&quot; window. Open a user profile, log into the system (e.g. Office 365) you want to bind this user (You can even remember the password,...). Then switch to another user profile and log into another Office 365 tenant with another account. With this cool feature, I can now be simultaneously logged in as different users on different tenants without the need of signing in / signing out every time I switch.     As always, I hope that will help. Best regards, Yannick</p>
+<p>In some cases, you might want to be able to easily test several different user contexts on the same Office 365 Tenant. You also might want to be able to easily deal with multiple tenants without the need of logging out /logging in continously.
+In my very own daily situation, I work with 4 different customers' tenants every week (sometimes during the same day), eventually with different accounts (for testing) on each.
+Before being aware of this tip, it was really a mess when I needed to grab an info for a customer while in a middle of something else for another customer.
+Google Chrome offers a capability that helps me a lot every day, and, I think, can help you a lot too: The &quot;People&quot; feature.</p>
+<p>It is a mechanism built in Chrome to use multiple user profiles with the same OS User account.</p>
+<p>It basically works as a &quot;named incognito mode&quot; except that it keeps the history and cookies for the user profile.
+Open Chrome and type <strong>chrome://settings/people</strong> in the address bar</p>
+<p><img src="/images/2017/10/chrome_managepeople.png" alt="chrome_managepeople.png" /></p>
+<p>Click the &quot;Manage other people&quot; section</p>
+<p><img src="/images/2017/10/chrome_managed_people.png" alt="chrome_managed_people.png" /></p>
+<p>Click the &quot;ADD PERSON&quot; to add a new user profile (give it a name and optionnally select an icon, It can avoid confusion between sessions), you can also create a dedicated desktop shortcut for the user profile.</p>
+<p><img src="/images/2017/10/chrome_add_people.png" alt="chrome_add_people" />
+<img src="/images/2017/10/chrome_user_picker.png" alt="chrome_user_picker" /></p>
+<p>Now that you have other people available, in Chrome upper right corner you will see the name of the current user.
+You can click that name to quickly open a &quot;session&quot; with another user profile.
+In this menu, you can also directly access the &quot;Manage people&quot; window.
+Open a user profile, log into the system (e.g. Office 365) you want to bind this user (You can even remember the password,...).
+Then switch to another user profile and log into another Office 365 tenant with another account.
+With this cool feature, I can now be simultaneously logged in as different users on different tenants without the need of signing in / signing out every time I switch.    
+As always, I hope that will help.</p>
+<p>Best regards,</p>
+<p>Yannick</p>
 
     </div>
 </div>

@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SharePoint, JavaScript and user permissions context - Devs and Admins concerns" />
+            <meta property="og:description" content="Here is some observations about JavaScript and user permissions in SharePoint" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/06/sharepoint-js-user-permissions-context-devs-admins-concerns" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+        <meta property="og:image" content="/images/2017/06/user-permissions.png?r=202007160439" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-06-05 22:41:35Z" />
         <meta property="article:modified_time" content="2017-06-05 22:41:35Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="User Permissions" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="SharePoint, JavaScript and user permissions context - Devs and Admins concerns" />
+            <meta name="twitter:description" content="Here is some observations about JavaScript and user permissions in SharePoint" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/06/sharepoint-js-user-permissions-context-devs-admins-concerns" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007150757" />
+            <meta name="twitter:image" content="/images/2017/06/user-permissions.png?r=202007160439" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, JavaScript, JS, SharePoint, SharePoint Online, User Permissions, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,38 +205,60 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007150757" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/06/user-permissions.png?r=202007160439" alt="SharePoint, JavaScript and user permissions context - Devs and Admins concerns" />
         </div>
    
     <div class="content">
-        <p>Hello SharePoint guys, In this post, I want to focus on concerns all SharePoint developers and administrators should be aware of.</p>
+        <p>Hello SharePoint guys,</p>
+<p>In this post, I want to focus on concerns all SharePoint developers and administrators should be aware of.</p>
 <blockquote>
 <p>JavaScript code is running in the users'browsers, in other words, with and only with the permissions of the current user.</p>
 </blockquote>
-<p><img src="/images/2017/06/user-permissions.png" alt="user-permissions" />It actually means two things:</p>
+<p>It actually means two things:</p>
 <ol>
 <li><em>A JS code, on its own, will never be able to do more than what the current user is allowed to do.</em></li>
 <li><em>A JS code will be able to do more than what you, as a user, expect it to if you are a privileged user with enough permissions.</em></li>
 </ol>
 <p>While it is a consideration for developers to take into account, it <strong>is also</strong> a security concern to take care of for governance and people responsible of security and content privacy. Let's figure it out!</p>
 <h2 id="no-more-privileges-than-the-current-user">No more privileges than the current user</h2>
-<p><img src="/images/2017/06/js.png" alt="js" />A developer who plan to implement a JS customization (either SPFx or simply embedded piece of JS) will always have to make sure the current user has the required privileges on the required assets for the application to run properly. Typically, the end user should, ideally, see an error message mentioning he is not allowed to perform the current operation.</p>
+<p><img src="/images/2017/06/js.png" alt="js" /></p>
+<p>A developer who plan to implement a JS customization (either SPFx or simply embedded piece of JS) will always have to make sure the current user has the required privileges on the required assets for the application to run properly.
+Typically, the end user should, ideally, see an error message mentioning he is not allowed to perform the current operation.</p>
 <h3 id="my-spfx-application-must-be-able-to-do-more-than-what-the-current-user-is-allowed-to-e.g.write-to-a-list-the-user-has-read-only-access-on-how-can-i-address-that">My SPFx application must be able to do more than what the current user is allowed to (e.g. Write to a list the user has read-only access on), how can I address that ?</h3>
-<p>There is <strong>no way</strong> that JS code running in a browser can achieve that because it would mean there is a security breach. However, a trusted third party (SharePoint Provider Hosted Add-ins, or fully external apps or web API with app-only permissions) could totally have the required &quot;elevated&quot; privileges. It is then possible to address the requirements via this third-party. The JS code will communicate with this third-party and kindly request it to do the job. <strong>Warning:</strong> With a full external app/API with app-only, you have to take care of the authentication (and maybe authorization) by your own mechanism.</p>
+<p>There is <strong>no way</strong> that JS code running in a browser can achieve that because it would mean there is a security breach.
+However, a trusted third party (SharePoint Provider Hosted Add-ins, or fully external apps or web API with app-only permissions) could totally have the required &quot;elevated&quot; privileges.
+It is then possible to address the requirements via this third-party.
+The JS code will communicate with this third-party and kindly request it to do the job.</p>
+<p><strong>Warning:</strong> With a full external app/API with app-only, you have to take care of the authentication (and maybe authorization) by your own mechanism.</p>
 <blockquote>
 <h3 id="info"><strong>Info</strong></h3>
-<p>The available technologies and techniques are numerous. The third party API could be written in any language (C#, VB.NET, Java, Node.js, Python, PowerShell, ...) as far as it has HTTP capabilities and it can be hosted on any kind of system. In a full OnPrem environment, it must be hosted on an app server while in a SharePoint Online or hybrid environment, the Web API can be an Azure Website or Azure Function (or any other cloud service).</p>
+<p>The available technologies and techniques are numerous.
+The third party API could be written in any language (C#, VB.NET, Java, Node.js, Python, PowerShell, ...) as far as it has HTTP capabilities and it can be hosted on any kind of system. In a full OnPrem environment, it must be hosted on an app server while in a SharePoint Online or hybrid environment, the Web API can be an Azure Website or Azure Function (or any other cloud service).</p>
 </blockquote>
 <h2 id="an-elevated-privileges-user-can-possibly-execute-malicious-code">An elevated privileges user can possibly execute malicious code</h2>
-<p>An administrator must realize that, in SharePoint classic pages*, any user with Design (or similar) permission level can embed a custom JavaScript on a page that will run under the permissions of the current page visitor. If a malicious user wants to get or manipulate information he has not access to, it might be pretty easy for him to let a privileged user execute a malicious code and perform bad actions on his behalf. Moreover, a well-intent &quot;IT amateur&quot; user who barely knows how to copy/paste a JS snippet might include scripts from unsafe sources to SharePoint site home page (Yes I personally faced this...).</p>
+<p>An administrator must realize that, in SharePoint classic pages*, any user with Design (or similar) permission level can embed a custom JavaScript on a page that will run under the permissions of the current page visitor.
+If a malicious user wants to get or manipulate information he has not access to, it might be pretty easy for him to let a privileged user execute a malicious code and perform bad actions on his behalf.
+Moreover, a well-intent &quot;IT amateur&quot; user who barely knows how to copy/paste a JS snippet might include scripts from unsafe sources to SharePoint site home page (Yes I personally faced this...).</p>
 <h6 id="in-sharepoint-online-only-if-the-custom-script-setting-is-enabled">*   (In SharePoint Online, only if the Custom Script setting is enabled)</h6>
-<p><img src="/images/2017/06/anger-477044_640.png" alt="Anger-477044_640.png" />Since custom scripts are embedded directly on various pages, it is very hard and practically impossible for administrators to monitor and analyze all these pieces of code especially in large organizations. It results in potential security threats because of the lack of control the administrators are reduced to. Administrators have alternatives to prevent this :</p>
+<p><img src="/images/2017/06/anger-477044_640.png" alt="Anger-477044_640.png" /></p>
+<p>Since custom scripts are embedded directly on various pages, it is very hard and practically impossible for administrators to monitor and analyze all these pieces of code especially in large organizations.
+It results in potential security threats because of the lack of control the administrators are reduced to. Administrators have alternatives to prevent this :</p>
 <ul>
 <li>The ideal solution would be a strict governance plan that ensures there is no way an unsafe user has enough permissions or can possibly get enough permissions to embed a malicious code in a page. Unfortunately, such strict governance is often causing the users to step back from SharePoint.</li>
-<li>Currently only on SharePoint Online, you can make sure the Custom Script setting is disabled (set to NoScript) everywhere. However, this solution has also its bunch of drawbacks (check this out <a href="https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f">https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f</a>). It also prevents all kind of SharePoint customization through JS embedding.</li>
+<li>Currently only on SharePoint Online, you can make sure the Custom Script setting is disabled (set to NoScript) everywhere. However, this solution has also its bunch of drawbacks (check this out <a href="https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f">https://support.office.com/en-us/article/Turn-scripting-capabilities-on-or-off-1f2c515f-5d7e-448a-9fd7-835da935584f</a>).
+It also prevents all kind of SharePoint customization through JS embedding.</li>
 </ul>
 <h3 id="we-have-several-js-customizations-vital-for-our-organization-and-we-trust-them.is-there-a-way-to-only-allow-these-ones">We have several JS customizations vital for our organization and we trust them. Is there a way to only allow these ones ?</h3>
-<p><strong>YES !</strong> Actually, it is exactly the main benefit of the SharePoint Framework (SPFx) from an administrative perspective. Modern SharePoint sites (which are the main target for SPFx solutions) are, by default, in NoScript mode (Custom Script disabled) and there is no way to embed JavaScript. On the other hand, SPFx solutions are specifically allowed by the administrators. Administrators have to upload the solution package of the SPFx solution to the AppCatalog, a Dialog box will then appear and indicate where the JavaScript sources will come from. <img src="/images/2017/07/trust-spfx1.png" alt="trust spfx" />This message, actually asks the administrator if he does or doesn't trust the JavaScript code. That way administrators can, at least, monitor what JS code can run on the SharePoint they are responsible for.   As always, I hope this post will be useful for developers and administrators around. Leave some comments ! Yannick</p>
+<p><strong>YES !</strong> Actually, it is exactly the main benefit of the SharePoint Framework (SPFx) from an administrative perspective.
+Modern SharePoint sites (which are the main target for SPFx solutions) are, by default, in NoScript mode (Custom Script disabled) and there is no way to embed JavaScript.
+On the other hand, SPFx solutions are specifically allowed by the administrators.
+Administrators have to upload the solution package of the SPFx solution to the AppCatalog, a Dialog box will then appear and indicate where the JavaScript sources will come from.</p>
+<p><img src="/images/2017/07/trust-spfx1.png" alt="trust spfx" /></p>
+<p>This message, actually asks the administrator if he does or doesn't trust the JavaScript code.
+That way administrators can, at least, monitor what JS code can run on the SharePoint they are responsible for.  
+As always, I hope this post will be useful for developers and administrators around.</p>
+<p>Leave some comments!</p>
+<p>Yannick</p>
 
     </div>
 </div>
