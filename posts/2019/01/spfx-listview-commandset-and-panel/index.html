@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SPFX ListView Command Set and Panel" />
+            <meta property="og:description" content="Let's see how we can implement a Panel UI in a SharePoint Framework list view command set extension" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/01/spfx-listview-commandset-and-panel" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160951" />
+        <meta property="og:image" content="/images/2019/01/cmd-panelvisible.png?r=202007171108" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-01-03 11:34:19Z" />
         <meta property="article:modified_time" content="2019-01-03 11:34:19Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="SPFx extensions" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="SPFX ListView Command Set and Panel" />
+            <meta name="twitter:description" content="Let's see how we can implement a Panel UI in a SharePoint Framework list view command set extension" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/01/spfx-listview-commandset-and-panel" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160951" />
+            <meta name="twitter:image" content="/images/2019/01/cmd-panelvisible.png?r=202007171108" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JS, SharePoint, SharePoint Framework, SharePoint Online, SPFx, SPFx extensions, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,19 +205,37 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160951" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/01/cmd-panelvisible.png?r=202007171108" alt="SPFX ListView Command Set and Panel" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint fellows, In this post, I would like to tackle a user experience I wanted to implement in one of my projects in the SharePoint modern experience: A contextual command opening a form contained in a panel.</p>
+        <p>Hi SharePoint fellows,</p>
+<p>In this post, I would like to tackle a user experience I wanted to implement in one of my projects in the SharePoint modern experience: A contextual command opening a form contained in a panel.</p>
 <h2 id="lets-use-spfx-extensions">Let's use SPFx extensions</h2>
-<p>A contextual command means I would need to implement a ListView Command Set extension. Using this kind of solution, I am able to add a contextual button in the command bar and in the contextual item menu. For those of you familiar with the classic experience development, it is the successor of Custom Actions located in the ribbon and the ECB. From the official documentation, we can find a very well explained tutorial explaining how to implement this custom command.</p>
+<p>A contextual command means I would need to implement a ListView Command Set extension.
+Using this kind of solution, I am able to add a contextual button in the command bar and in the contextual item menu. For those of you familiar with the classic experience development, it is the successor of Custom Actions located in the ribbon and the ECB.
+From the official documentation, we can find a very well explained tutorial explaining how to implement this custom command.</p>
 <h2 id="i-dont-want-a-dialog">I don't want a dialog !</h2>
-<p>When the need comes for a custom UI in the context of a ListView command set, the offered possibility is the use of the Dialog API. This API wraps prepared Office UI Fabric dialogs, either standard prompt or alert or with custom dialog content. It is quite easy to use once you know how to do it ;) Check out the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/guidance/using-custom-dialogs-with-spfx">official tutorial to learn more</a>. In most cases, the dialog approach is a good fit, when UI is quite small and the user action flow is straight-forward, it's probably not worthy to do anything else. In my case, however, I needed a larger, more complex and dynamic UI. I had not a good feeling about using a dialog for that. Moreover, A nice-to-have I had in mind was that the user could be able to still see the content of the list while working in the custom form, the dialog wouldn't fit this one.</p>
+<p>When the need comes for a custom UI in the context of a ListView command set, the offered possibility is the use of the Dialog API. This API wraps prepared Office UI Fabric dialogs, either standard prompt or alert or with custom dialog content. It is quite easy to use once you know how to do it ;)
+Check out the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/guidance/using-custom-dialogs-with-spfx">official tutorial to learn more</a>.</p>
+<p>In most cases, the dialog approach is a good fit, when UI is quite small and the user action flow is straight-forward, it's probably not worthy to do anything else.
+In my case, however, I needed a larger, more complex and dynamic UI.
+I had not a good feeling about using a dialog for that.
+Moreover, A nice-to-have I had in mind was that the user could be able to still see the content of the list while working in the custom form, the dialog wouldn't fit this one.</p>
 <h2 id="what-about-a-panel-instead">What about a panel instead ?</h2>
-<p>Using the Office UI Fabric React library, we can easily use a Panel and implement our own content in it. The only thing we need is to call the <em><strong>render()</strong></em> method from the <em><strong>ReactDOM</strong></em>. It actually turns out to be a bit tricky, because this <em><strong>render()</strong></em> method requires to pass in a container DOM element. in ListView Command Set SPFx extensions, unlike the Application Customizers, we don't have direct access to the any DOM element through standardized available placeholders. That said, we are developing in JavaScript, that means we can still manipulate everything in the DOM !</p>
+<p>Using the Office UI Fabric React library, we can easily use a Panel and implement our own content in it.
+The only thing we need is to call the <strong>render()</strong> method from the <strong>ReactDOM</strong>.
+It actually turns out to be a bit tricky, because this <strong>render()</strong> method requires to pass in a container DOM element.
+In ListView Command Set SPFx extensions, unlike the Application Customizers, we don't have direct access to the any DOM element through standardized available placeholders.
+That said, we are developing in JavaScript, that means we can still manipulate everything in the DOM !</p>
 <h3 id="dom-injection-is-officially-discouraged">DOM Injection is officially discouraged !</h3>
-<p>Those who know me will be aware that I'm pretty in line with Microsoft's recommendation about NOT doing DOM injection in SharePoint UI development. It actually means you should avoid messing around with the standard SharePoint UI. The SharePoint developers struggle to deliver the best user experience with many advanced features, and there are new stuff almost every week ! The DOM of the SharePoint pages is continuously evolving. you <strong>CAN'T</strong> and <strong>SHOULDN'T <strong>rely on the existence or the format or content of any particular HTML element because you have no assurance it will be there and remain the same forever. Moreover, altering these elements might end up in breaking a standard SharePoint UI feature. With this recommendation taken into account, we can, however, be pretty sure that one special HTML element will always be there; the _</strong><body></strong>_ element. We won't alter or remove any child element from it but instead adding one simple <em><strong><div></strong></em> element that will be the container for our React control.</p>
+<p>Those who know me will be aware that I'm pretty in line with Microsoft's recommendation about NOT doing DOM injection in SharePoint UI development.
+It actually means you should avoid messing around with the standard SharePoint UI.
+The SharePoint developers struggle to deliver the best user experience with many advanced features, and there are new stuff almost every week!
+The DOM of the SharePoint pages is continuously evolving. you <strong>CAN'T</strong> and <strong>SHOULDN'T</strong> rely on the existence or the format or content of any particular HTML element because you have no assurance it will be there and remain the same forever.
+Moreover, altering these elements might end up in breaking a standard SharePoint UI feature.
+With this recommendation taken into account, we can, however, be pretty sure that one special HTML element will always be there; the <strong><body></strong> element.
+We won't alter or remove any child element from it but instead adding one simple <strong><div></strong> element that will be the container for our React control.</p>
 <h2 id="lets-implement-it">Let's implement it !</h2>
 <p>As a sample, let's assume the following requirements:</p>
 <ul>
@@ -225,50 +245,234 @@
 <li>When the button is clicked, a panel pops up</li>
 <li>The panel contains a simple form allowing to update the Title field of the item</li>
 </ul>
-<p>We will create such a solution in the form of a ListView Command Set solution. I won't go too much into the basic details here, If you need more details, you can check the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api">following tutorial</a>.</p>
+<p>We will create such a solution in the form of a ListView Command Set solution.
+I won't go too much into the basic details here, ff you need more details, you can check the <a href="https://docs.microsoft.com/en-us/sharepoint/dev/spfx/extensions/get-started/building-simple-cmdset-with-dialog-api">following tutorial</a>.</p>
 <h3 id="the-prerequisites">The prerequisites</h3>
-<p>The main thing we will require is to install the React dependencies in our solution in order to be able to use the Office UI Fabric React component. I also install the PnP JS library dependencies for the sake of simplicity When your solution is scaffolded, type the following command in your console</p>
-<blockquote>
-<p><em><strong>npm install react react-dom @types/react @types/react-dom @pnp/common @pnp/logging @pnp/odata @pnp/sp --save</strong></em></p>
-</blockquote>
-<p>For some reasons I didn't dig into, the latest versions of React libraries caused the solution not being able to build (something related to React prop types, ...). If you run into the same problem, here are the React version that worked I just grab from another extension solution that I had:</p>
-<p><em><strong>&quot;dependencies&quot;: {</strong></em></p>
-<p><em><strong>.....</strong></em></p>
-<p><em>**      &quot;react&quot;: &quot;16.3.2&quot;,**</em></p>
-<p><em>**      &quot;react-dom&quot;: &quot;16.3.2&quot;,**</em></p>
-<p><em>**      &quot;@types/react&quot;: &quot;16.4.2&quot;,**</em></p>
-<p><em>**      &quot;@types/react-dom&quot;: &quot;16.0.5&quot;**</em></p>
-<p><em><strong>},</strong></em></p>
+<p>The main thing we will require is to install the React dependencies in our solution in order to be able to use the Office UI Fabric React component.
+I also install the PnP JS library dependencies for the sake of simplicity When your solution is scaffolded, type the following command in your console</p>
+<pre><code class="language-bash">npm install react react-dom @types/react @types/react-dom @pnp/common @pnp/logging @pnp/odata @pnp/sp --save
+</code></pre>
+<p>For some reasons I didn't dig into, the latest versions of React libraries caused the solution not being able to build (something related to React prop types, ...).
+If you run into the same problem, here are the React version that worked I just grab from another extension solution that I had:</p>
+<pre><code class="language-json">&quot;dependencies&quot;: {
+.....
+  &quot;react&quot;: &quot;16.3.2&quot;,
+  &quot;react-dom&quot;: &quot;16.3.2&quot;,
+  &quot;@types/react&quot;: &quot;16.4.2&quot;,
+  &quot;@types/react-dom&quot;: &quot;16.0.5&quot;
+},
+</code></pre>
 <h3 id="okay-ready-to-code">Okay, ready to code !</h3>
-<p>First, let's create a React component that will render the Panel and its content. In my solution, I have a component source file called <em><strong>CustomPanel.tsx</strong></em> within the <em><strong>src/components</strong></em> folder. <code>\nimport * as React from 'react'; import { TextField, DefaultButton, PrimaryButton, DialogFooter, autobind, Panel, Spinner, SpinnerType } from &quot;office-ui-fabric-react&quot;; import { sp } from &quot;@pnp/sp&quot;;  export interface ICustomPanelState {     saving: boolean; }  export interface ICustomPanelProps {     onClose: () =&gt; void;     isOpen: boolean;     currentTitle: string;     itemId: number;     listId: string; }  export default class CustomPanel extends React.Component&lt;ICustomPanelProps, ICustomPanelState&gt; {      private editedTitle: string = null;      constructor(props: ICustomPanelProps) {         super(props);         this.state = {             saving: false         };     }      @autobind     private _onTitleChanged(title: string) {         this.editedTitle = title;     }      @autobind     private _onCancel() {         this.props.onClose();     }      @autobind     private _onSave() {         this.setState({ saving: true });         sp.web.lists.getById(this.props.listId).items.getById(this.props.itemId).update({             'Title': this.editedTitle         }).then(() =&gt; {             this.setState({ saving: false });             this.props.onClose();         });     }      public render(): React.ReactElement&lt;ICustomPanelProps&gt; {         let { isOpen, currentTitle } = this.props;         return (             &lt;Panel isOpen={isOpen}&gt;                 &lt;h2&gt;This is a custom panel with your own content&lt;/h2&gt;                 &lt;TextField value={currentTitle} onChanged={this._onTitleChanged} label=&quot;Item title&quot; placeholder=&quot;Choose the new title&quot; /&gt;                 {this.state.saving &amp;&amp; &lt;Spinner type={SpinnerType.large} label=&quot;Saving...&quot; /&gt;}                 &lt;DialogFooter&gt;                     &lt;DefaultButton text=&quot;Cancel&quot; onClick={this._onCancel} /&gt;                     &lt;PrimaryButton text=&quot;Save&quot; onClick={this._onSave} /&gt;                 &lt;/DialogFooter&gt;             &lt;/Panel&gt;         );     } }\n</code> This component renders a simple form contained in a Panel component. When the Save button is clicked, A REST call (using PnP JS) will update the title of the current item. In our Extension main class, let's do some changes, First we need to create the container for our SPFx component : <a href="https://gist.github.com/ypcode/e684899943a91b28ddfa6cd42fae3a2b">https://gist.github.com/ypcode/e684899943a91b28ddfa6cd42fae3a2b</a> We create the DOM element in the extension initialization step and keep a reference to it. <a href="https://gist.github.com/ypcode/4802dca7403f90aa91419615ba765175">https://gist.github.com/ypcode/4802dca7403f90aa91419615ba765175</a> We implement the methods that will help display and close the Panel. Notice that we grab the List ID our component needs from the current page context. <a href="https://gist.github.com/ypcode/dcd238272e2ae1fac4f99bcabd1e1cc1">https://gist.github.com/ypcode/dcd238272e2ae1fac4f99bcabd1e1cc1</a> And we finally edit the extension life cycle handlers to suit our needs. The command has a token <em><strong>CMD_PANEL</strong></em>. The button shows up only if a single list item is selected, and when clicked, will open up the panel passing it in the arguments that will help us working on the selected item. Since we used a custom token for our command, we will need to update the manifest accordingly. Edit the content of the <em><strong>YourCommandSet.manifest.json</strong></em> and change the value of the <em><strong>items</strong></em> property to :</p>
-<p><em><strong>&quot;items&quot;: {</strong></em></p>
-<p><em>**       &quot;CMD_PANEL&quot;: {**</em></p>
-<p><em>**              &quot;title&quot;: { &quot;default&quot;: &quot;Open editor&quot; },**</em></p>
-<p><em>**              &quot;iconImageUrl&quot;: &quot;icons/request.png&quot;,**</em></p>
-<p><em>**              &quot;type&quot;: &quot;command&quot;**</em></p>
-<p><em>**        }**</em></p>
-<p><em><strong>}</strong></em></p>
-<p>In order to try our extension without actually deploying it, we will update the <em><strong>serve.json</strong></em> file located in the <em><strong>/config</strong></em> folder. This will allow us to directly open a browser to a page we will configure and append the proper query string to it to go into debug mode.</p>
+<p>First, let's create a React component that will render the Panel and its content.
+In my solution, I have a component source file called <strong>CustomPanel.tsx</strong> within the <strong>src/components</strong> folder.</p>
+<pre><code class="language-typescript">import * as React from 'react';
+import { TextField, DefaultButton, PrimaryButton, DialogFooter, autobind, Panel, Spinner, SpinnerType } from &quot;office-ui-fabric-react&quot;;
+import { sp } from &quot;@pnp/sp&quot;;
+
+export interface ICustomPanelState {
+    saving: boolean;
+}
+
+export interface ICustomPanelProps {
+    onClose: () =&gt; void;
+    isOpen: boolean;
+    currentTitle: string;
+    itemId: number;
+    listId: string;
+}
+
+export default class CustomPanel extends React.Component&lt;ICustomPanelProps, ICustomPanelState&gt; {
+
+    private editedTitle: string = null;
+
+    constructor(props: ICustomPanelProps) {
+        super(props);
+        this.state = {
+            saving: false
+        };
+    }
+
+    @autobind
+    private _onTitleChanged(title: string) {
+        this.editedTitle = title;
+    }
+
+    @autobind
+    private _onCancel() {
+        this.props.onClose();
+    }
+
+    @autobind
+    private _onSave() {
+        this.setState({ saving: true });
+        sp.web.lists.getById(this.props.listId).items.getById(this.props.itemId).update({
+            'Title': this.editedTitle
+        }).then(() =&gt; {
+            this.setState({ saving: false });
+            this.props.onClose();
+        });
+    }
+
+    public render(): React.ReactElement&lt;ICustomPanelProps&gt; {
+        let { isOpen, currentTitle } = this.props;
+        return (
+            &lt;Panel isOpen={isOpen}&gt;
+                &lt;h2&gt;This is a custom panel with your own content&lt;/h2&gt;
+                &lt;TextField value={currentTitle} onChanged={this._onTitleChanged} label=&quot;Item title&quot; placeholder=&quot;Choose the new title&quot; /&gt;
+                {this.state.saving &amp;&amp; &lt;Spinner type={SpinnerType.large} label=&quot;Saving...&quot; /&gt;}
+                &lt;DialogFooter&gt;
+                    &lt;DefaultButton text=&quot;Cancel&quot; onClick={this._onCancel} /&gt;
+                    &lt;PrimaryButton text=&quot;Save&quot; onClick={this._onSave} /&gt;
+                &lt;/DialogFooter&gt;
+            &lt;/Panel&gt;
+        );
+    }
+}
+</code></pre>
+<p>This component renders a simple form contained in a Panel component.
+When the Save button is clicked, A REST call (using PnP JS) will update the title of the current item. In our Extension main class, let's do some changes.</p>
+<p>First we need to create the container for our SPFx component :</p>
+<pre><code class="language-typescript">// ...
+import CustomPanel, { ICustomPanelProps } from &quot;./components/CustomPanel&quot;;
+
+import { sp } from &quot;@pnp/sp&quot;;
+import { autobind, assign } from '@uifabric/utilities';
+// ...
+
+const LOG_SOURCE: string = 'CustomFormPanelCommandSet';
+
+export default class CustomFormPanelCommandSet extends BaseListViewCommandSet&lt;ICustomFormPanelCommandSetProperties&gt; {
+
+  private panelPlaceHolder: HTMLDivElement = null;
+
+  @override
+  public onInit(): Promise&lt;void&gt; {
+    Log.info(LOG_SOURCE, 'Initialized CommandSetWithPanelCommandSet');
+    // Setup the PnP JS with SPFx context
+    sp.setup({
+      spfxContext: this.context
+    });
+
+    // Create the container for our React component
+    this.panelPlaceHolder = document.body.appendChild(document.createElement(&quot;div&quot;));
+    return Promise.resolve();
+  }
+
+// ...
+}
+</code></pre>
+<p>We create the DOM element in the extension initialization step and keep a reference to it.</p>
+<pre><code class="language-typescript">// Other code here...
+
+import * as React from 'react';
+import * as ReactDom from 'react-dom';
+
+// Other code here...
+
+
+export default class CustomFormPanelCommandSet extends BaseListViewCommandSet&lt;ICustomFormPanelCommandSetProperties&gt; {
+
+  // Other code here...
+  
+  private _showPanel(itemId: number, currentTitle: string) {
+    this._renderPanelComponent({
+      isOpen: true,
+      currentTitle,
+      itemId,
+      listId: this.context.pageContext.list.id.toString(),
+      onClose: this._dismissPanel
+    });
+  }
+
+  @autobind
+  private _dismissPanel() {
+    this._renderPanelComponent({ isOpen: false });
+  }
+
+  private _renderPanelComponent(props: any) {
+    const element: React.ReactElement&lt;ICustomPanelProps&gt; = React.createElement(CustomPanel, assign({
+      onClose: null,
+      currentTitle: null,
+      itemId: null,
+      isOpen: false,
+      listId: null
+    }, props));
+    ReactDom.render(element, this.panelPlaceHolder);
+  }
+}
+</code></pre>
+<p>We implement the methods that will help display and close the Panel.
+Notice that we grab the List ID our component needs from the current page context.</p>
+<pre><code class="language-typescript">// imports ...
+export default class CustomFormPanelCommandSet extends BaseListViewCommandSet&lt;ICustomFormPanelCommandSetProperties&gt; {
+//...
+  @override
+  public onListViewUpdated(event: IListViewCommandSetListViewUpdatedParameters): void {
+    const openEditorCommand: Command = this.tryGetCommand('CMD_PANEL');
+    openEditorCommand.visible = event.selectedRows.length === 1;
+  }
+
+  @override
+  public onExecute(event: IListViewCommandSetExecuteEventParameters): void {
+
+    switch (event.itemId) {
+      case 'CMD_PANEL':
+        let selectedItem = event.selectedRows[0];
+        const listItemId = selectedItem.getValueByName('ID') as number;
+        const title = selectedItem.getValueByName(&quot;Title&quot;);
+        this._showPanel(listItemId, title);
+        break;
+      default:
+        throw new Error('Unknown command');
+    }
+  }
+//...
+}
+</code></pre>
+<p>And we finally edit the extension life cycle handlers to suit our needs.
+The command has a token <strong>CMD_PANEL</strong>.
+The button shows up only if a single list item is selected, and when clicked, will open up the panel passing it in the arguments that will help us working on the selected item.
+Since we used a custom token for our command, we will need to update the manifest accordingly.
+Edit the content of the <strong>YourCommandSet.manifest.json</strong> and change the value of the <strong>items</strong> property to :</p>
+<pre><code class="language-json">&quot;items&quot;: {
+       &quot;CMD_PANEL&quot;: {
+              &quot;title&quot;: { &quot;default&quot;: &quot;Open editor&quot; },
+              &quot;iconImageUrl&quot;: &quot;icons/request.png&quot;,
+              &quot;type&quot;: &quot;command&quot;
+        }
+}
+</code></pre>
+<p>In order to try our extension without actually deploying it, we will update the <em><strong>serve.json</strong></em> file located in the <strong>/config</strong> folder.
+This will allow us to directly open a browser to a page we will configure and append the proper query string to it to go into debug mode.</p>
 <p>Edit the content of the <em><strong>serveConfigurations</strong> <strong>default</strong></em> entry and only change the <em><strong>pageUrl</strong></em> value to the URL of a list view page (<em>e.g.  <a href="https://contoso.sharepoint.com/sites/comsite/Lists/Test/AllItems.aspx">https://contoso.sharepoint.com/sites/comsite/Lists/Test/AllItems.aspx</a></em>).</p>
 <p>The rest should be just fine. If, however, you run into trouble using it, make sure the specified GUID matches the one in your manifest file</p>
 <p><img src="/images/2019/01/cmd-panel-servejson.png" alt="cmd-panel-servejson" /></p>
 <p><img src="/images/2019/01/cmd-panel-manifest.png" alt="cmd-panel-manifest" /></p>
 <p>With all that in place, we should be good to go, let's give it a try, (make sure your last active browser window was one in your logged in session)</p>
-<p><em><strong>&gt; gulp serve</strong></em></p>
+<pre><code class="language-bash">gulp serve
+</code></pre>
 <p><img src="/images/2019/01/cmd-loaddebugscript.png" alt="cmd-loaddebugscript" /></p>
 <p>You are asked if you want to continue debugging script, click &quot;<em><strong>Load debug scripts</strong></em>&quot;</p>
-<p><img src="/images/2019/01/cmd-buttonvisible.png" alt="cmd-buttonvisible" /> Select an item and see the <em><strong>Open editor</strong></em> button appearing in the command bar, click this button to see the following panel showing up <img src="/images/2019/01/cmd-panelvisible.png" alt="cmd-panelvisible" /> And there is it, we can now open up a panel with our custom content within the context of an SPFx ListView Command Set extension.</p>
+<p><img src="/images/2019/01/cmd-buttonvisible.png" alt="cmd-buttonvisible" /></p>
+<p>Select an item and see the <em><strong>Open editor</strong></em> button appearing in the command bar, click this button to see the following panel showing up</p>
+<p><img src="/images/2019/01/cmd-panelvisible.png" alt="cmd-panelvisible" /></p>
+<p>And there is it, we can now open up a panel with our custom content within the context of an SPFx ListView Command Set extension.</p>
 <h2 id="it-works"><em><strong>It works</strong></em> !</h2>
-<p>As a conclusion, I'd like to emphasize that according to the requirements, I feel a panel might be much more intuitive and less intrusive than a dialog, My personal opinion is also that it is, somehow, more in line with most of the standard UI, and I like when my customization seem to be just a part of the original product, because I've seen too often many different customization from different teams that ends up in making the page looking like a patch work.... I personally hate it ! But I digress.</p>
+<p>As a conclusion, I'd like to emphasize that according to the requirements, I feel a panel might be much more intuitive and less intrusive than a dialog.
+My personal opinion is also that it is, somehow, more in line with most of the standard UI, and I like when my customization seem to be just a part of the original product, because I've seen too often many different customization from different teams that ends up in making the page looking like a patch work....
+I personally hate it ! But I digress.</p>
 <p>In this solution however, the Panel takes up the whole viewport height which is slightly different from the standard UI panels.</p>
-<p>The way to do it here is through DOM injection, I am not a fan of using this approach, at least in the first place, Microsoft gives us great tooling to build stuff, but it is supposed to be used in a proper way... Think of it as, You will probably be able to stick a screw in a wall with a hammer, but most likely, you will damage the wall, the screw, and the whole thing will look horrible. You'd rather use an adapted screwdriver instead !</p>
+<p>The way to do it here is through DOM injection, I am not a fan of using this approach, at least in the first place, Microsoft gives us great tooling to build stuff, but it is supposed to be used in a proper way...
+Think of it as, you will probably be able to stick a screw in a wall with a hammer, but most likely, you will damage the wall, the screw, and the whole thing will look horrible.
+You'd rather use an adapted screwdriver instead !</p>
 <p>In our solution, I think we're good because:</p>
 <ul>
 <li>We don't affect anything in the existing DOM</li>
 <li>We rely on the only thing that will probably remain forever (except if HTML basics changes completely, which is unlikely...)</li>
 </ul>
 <p>However, I think the best solution would be to have from Microsoft an official API similar to Dialog for using Panels as well, this would prevent us from doing any kind of DOM injection and maybe avoid to inspire bad ideas to people</p>
-<p>Hope all this was interesting. Tell me what you think!</p>
+<p>Hope all this was interesting.</p>
+<p>Tell me what you think!</p>
 <p>Cheers,</p>
 <p>Yannick</p>
 

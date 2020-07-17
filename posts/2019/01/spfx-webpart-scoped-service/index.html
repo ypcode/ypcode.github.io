@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SPFx WebPart scoped service" />
+            <meta property="og:description" content="See how to implement a service scoped to a particular WebPart instance" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/01/spfx-webpart-scoped-service" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007160951" />
+        <meta property="og:image" content="/images/2019/01/static_scopewp.png?r=202007171108" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-01-25 13:05:45Z" />
         <meta property="article:modified_time" content="2019-01-25 13:05:45Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="SPFx extensions" />
                 <meta property="article:tag" content="TypeScript" />
         <meta name="twitter:title" content="SPFx WebPart scoped service" />
+            <meta name="twitter:description" content="See how to implement a service scoped to a particular WebPart instance" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/01/spfx-webpart-scoped-service" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007160951" />
+            <meta name="twitter:image" content="/images/2019/01/static_scopewp.png?r=202007171108" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JavaScript, JS, SharePoint, SharePoint Framework, SharePoint Online, SPFx, SPFx extensions, TypeScript" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,23 +205,217 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007160951" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/01/static_scopewp.png?r=202007171108" alt="SPFx WebPart scoped service" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint devs ! In this post, I will tackle something that you'd better keep in mind if, like me, you prefer to organize your code in layers and services. You may have read my post a few months ago about <a href="https://ypcode.wordpress.com/2018/07/30/elegant-di-in-spfx/">Dependency Injection in SPFx</a>. This one explained quite clearly how to use the SPFx ServiceScope class but didn't really focused on an important part: Root scope and Child scope.  </p>
+        <p>Hi SharePoint devs ! In this post, I will tackle something that you'd better keep in mind if, like me, you prefer to organize your code in layers and services. You may have read my post a few months ago about <a href="/posts/2018/07/30/elegant-di-spfx/">Dependency Injection in SPFx</a>. This one explained quite clearly how to use the SPFx ServiceScope class but didn't really focused on an important part: Root scope and Child scope.  </p>
 <h2 id="servicescope-whats-that-again">ServiceScope ? What's that again ?</h2>
-<p>The ServiceScope class is acting as a container for service instances, it allows you to use the preconfigured instances of system services. This mean being more efficient rather than reinstantiate a new service everywhere is needed. It also allows to define your own services. ServiceScope is also really handy if you want to deal with dependency injection concerns. It allows, for example, using different implementations of a service contract according to a specific context. (TEST or PROD context, different data providers, ...)</p>
+<p>The ServiceScope class is acting as a container for service instances, it allows you to use the preconfigured instances of system services. This mean being more efficient rather than reinstantiate a new service everywhere is needed. It also allows to define your own services.
+ServiceScope is also really handy if you want to deal with dependency injection concerns.
+It allows, for example, using different implementations of a service contract according to a specific context. (TEST or PROD context, different data providers, ...)</p>
 <h2 id="default-implementation">Default implementation</h2>
-<p>The ServiceScope pattern built by SPFx engineers enforce a service contract to always have a default implementation. In the code exhibit below, I define a ListService that retrieves basic information about a SharePoint list <code>\nimport { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;; import { SPHttpClient } from &quot;@microsoft/sp-http&quot;;  /**  * The List service contract  */ export interface IListService {     configure(webUrl: string, listId: string);     getListData(): Promise&lt;IListData&gt;; }  export interface IListData {     Title: string;     ItemsCount: number; }  const SERVICE_KEY_TOKEN = &quot;ListService&quot;;  /**  * List service default implementation  */ export class ListService implements IListService {      private _listId: string;     private _webUrl: string;      constructor(private serviceScope: ServiceScope) {}      /**      * Set the configuration of the service      * @param webUrl The URL of the SharePoint web      * @param listId THe ID of the list to work on      */     public configure(webUrl: string, listId: string) {         this._webUrl = webUrl;         this._listId = listId;     }          /**      * Gets basic information about the configured SharePoint list      */     public getListData(): Promise&lt;IListData&gt; {         const apiUrl = `${this._webUrl}/_api/web/lists(guid'${this._listId}')?$select=Title,ItemCount`;         const client = this.serviceScope.consume(SPHttpClient.serviceKey);         return client.get(apiUrl, SPHttpClient.configurations.v1)         .then(r =&gt; r.json())         .then(r =&gt; ({             Title: r.Title,             ItemsCount: r.ItemCount         } as IListData));     }      public static serviceKey: ServiceKey&lt;IListService&gt; = ServiceKey.create(SERVICE_KEY_TOKEN, ListService); }\n</code> And that's all we need to do to have to our custom service available in our solution. Specifically, the line 53 where we create the service key. This instruction creates a unique identifier for our service and make sure the ServiceScope will know the default implementation for our service.</p>
+<p>The ServiceScope pattern built by SPFx engineers enforce a service contract to always have a default implementation.
+In the code exhibit below, I define a ListService that retrieves basic information about a SharePoint list</p>
+<pre><code class="language-typescript">import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;
+import { SPHttpClient } from &quot;@microsoft/sp-http&quot;;
+
+/**
+ * The List service contract
+ */
+export interface IListService {
+    configure(webUrl: string, listId: string);
+    getListData(): Promise&lt;IListData&gt;;
+}
+
+export interface IListData {
+    Title: string;
+    ItemsCount: number;
+}
+
+const SERVICE_KEY_TOKEN = &quot;ListService&quot;;
+
+/**
+ * List service default implementation
+ */
+export class ListService implements IListService {
+
+    private _listId: string;
+    private _webUrl: string;
+
+    constructor(private serviceScope: ServiceScope) {}
+
+    /**
+     * Set the configuration of the service
+     * @param webUrl The URL of the SharePoint web
+     * @param listId THe ID of the list to work on
+     */
+    public configure(webUrl: string, listId: string) {
+        this._webUrl = webUrl;
+        this._listId = listId;
+    }    
+
+    /**
+     * Gets basic information about the configured SharePoint list
+     */
+    public getListData(): Promise&lt;IListData&gt; {
+        const apiUrl = `${this._webUrl}/_api/web/lists(guid'${this._listId}')?$select=Title,ItemCount`;
+        const client = this.serviceScope.consume(SPHttpClient.serviceKey);
+        return client.get(apiUrl, SPHttpClient.configurations.v1)
+        .then(r =&gt; r.json())
+        .then(r =&gt; ({
+            Title: r.Title,
+            ItemsCount: r.ItemCount
+        } as IListData));
+    }
+
+    public static serviceKey: ServiceKey&lt;IListService&gt; = ServiceKey.create(SERVICE_KEY_TOKEN, ListService);
+}
+</code></pre>
+<p>And that's all we need to do to have to our custom service available in our solution.
+Specifically, the line 53 where we create the service key.
+This instruction creates a unique identifier for our service and make sure the ServiceScope will know the default implementation for our service.</p>
 <h2 id="root-scope">Root Scope</h2>
-<p>With the code above, we implemented a default implementation that will be available in the ServiceScope. In the WebPart code, to get an instance of our service, you can use <em><strong>let service = this.context.serviceScope.consume(ListService.serviceKey);</strong></em> But we need to consider one thing, the _**this.context.serviceScope **_is a reference to the default ServiceScope, more precisely the Root Scope, or in other words, a scope global to the whole page.</p>
+<p>With the code above, we implemented a default implementation that will be available in the ServiceScope.
+In the WebPart code, to get an instance of our service, you can use</p>
+<pre><code class="language-typescript">let service = this.context.serviceScope.consume(ListService.serviceKey);
+</code></pre>
+<p>But we need to consider one thing, the <strong>this.context.serviceScope</strong> is a reference to the default ServiceScope, more precisely the Root Scope, or in other words, a scope global to the whole page.</p>
 <h4 id="what-does-it-mean">What does it mean ?</h4>
-<p>It means that the same scope is shared by all your components and all the service instances it contains ! This is not a problem at all if your service instance doesn't keep any state tied to your component instance. However,  if that is the case, that might cause some issues! Why? Because if you have several instances of the same WebPart on the page, they will all share the same service instance ! If you change the state of the service, it will be changed for all your instances. Let's see an example; I created of small WebPart responsible for displaying the configured list title and its number of items. It is using the ListService described above through the <em><strong>this.context.serviceScope</strong></em>. In the property change handler, I use the service <em><strong>configure()</strong></em> method to pass the WebPart properties and needed context. <img src="/images/2019/01/single-webpart-scope.gif" alt="single-webpart-scope" /> That seems to work well, no big deal here :) Let's see if I add a second WebPart. <img src="/images/2019/01/2wp-rootscope.gif" alt="2wp-rootscope.gif" /> We can see that both WebParts are actually using the same configuration instance even if their properties remain different ! That must be addressed because, most likely, several instances of a same WebPart will be added to page with different configurations. In the case of our services will use a WebPart specific configuration, we will need a WebPart-scoped serviceScope. The ServiceScope API allows to do that and is smart enough so that we can only specified what is specific to a scope or pertains to the root scope: <strong>Child scopes</strong>.</p>
+<p>It means that the same scope is shared by all your components and all the service instances it contains !
+This is not a problem at all if your service instance doesn't keep any state tied to your component instance.
+However, if that is the case, that might cause some issues!
+Why? Because if you have several instances of the same WebPart on the page, they will all share the same service instance !
+If you change the state of the service, it will be changed for all your instances.
+Let's see an example; I created of small WebPart responsible for displaying the configured list title and its number of items.
+It is using the ListService described above through the <strong>this.context.serviceScope</strong>.
+In the property change handler, I use the service <strong>configure()</strong> method to pass the WebPart properties and needed context.</p>
+<p><img src="/images/2019/01/single-webpart-scope.gif" alt="single-webpart-scope" /></p>
+<p>That seems to work well, no big deal here :)
+Let's see if I add a second WebPart.</p>
+<p><img src="/images/2019/01/2wp-rootscope.gif" alt="2wp-rootscope.gif" /></p>
+<p>We can see that both WebParts are actually using the same configuration instance even if their properties remain different !
+That must be addressed because, most likely, several instances of a same WebPart will be added to page with different configurations.
+In the case of our services will use a WebPart specific configuration, we will need a WebPart-scoped serviceScope.
+The ServiceScope API allows to do that and is smart enough so that we can only specified what is specific to a scope or pertains to the root scope: <strong>Child scopes</strong>.</p>
 <h2 id="child-scopes">Child Scopes</h2>
-<p>A child scope is, as its name tells, a child of the root scope, it means that it might have its specific instances, but all the other instances are fetched from the parent scope (the root scope in our case). We can create a child scope by using the <em><strong>startNewChild()</strong></em> method of a service scope instance, it has to be configured and its finish() method should have been executed for this new scope to be ready to use. Then we have to deal with the child scope referencing because the <em><strong>this.context.serviceScope</strong></em> will still refer to the root scope. Inspired by my dependency injection experience in other technologies, I came up with a class implementation that you need to use in the <em><strong>onInit()</strong></em> method of your SPFx component. <code>\n import { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;; import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;  interface IServiceConfiguration {     serviceKey: any;     config: (serviceInstance: any) =&gt; void; }  export class ComponentServices {     constructor(private serviceScope: ServiceScope) {      }      public registerScopedServiceInstance&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, instance: TService): TService {         this.serviceScope.provide(serviceKey, instance);         return instance;     }      public registerScopedService&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, serviceType: new (serviceScope: ServiceScope) =&gt; any): TService {         return this.serviceScope.createAndProvide(serviceKey, serviceType);     }      private _serviceConfigurations: { [id: string] : IServiceConfiguration} = {};     public configureService&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, config: (serviceInstance: TService) =&gt; void) {         this._serviceConfigurations[serviceKey.id] = {             serviceKey,             config         };     }      public static init&lt;TProps&gt;(componentContext: BaseComponentContext,         properties: TProps,         configureServices: (startup: ComponentServices, ctx: BaseComponentContext, props: TProps) =&gt; Promise&lt;void&gt;): Promise&lt;ServiceScope&gt; {          console.log('ComponentContext: ', componentContext);         console.log('Properties: ', properties);          if (!configureServices) {             return Promise.resolve();         }          return new Promise((resolve, reject) =&gt; {             try {                 const childScope = componentContext.serviceScope.startNewChild();                 const startup = new ComponentServices(childScope);                 configureServices(startup, componentContext, properties)                     .then(() =&gt; {                         console.log('Services are configured.');                         childScope.finish();                         childScope.whenFinished(() =&gt; {                             ComponentServices.serviceScope = childScope;                              for (let k in startup._serviceConfigurations) {                                 const configHandle = startup._serviceConfigurations[k];                                 const serviceInstance = childScope.consume(configHandle.serviceKey);                                 configHandle.config(serviceInstance);                             }                              resolve(childScope);                         });                     }).catch(err =&gt; reject(err));             } catch (error) {                 reject(error);             }         });     }      public static serviceScope: ServiceScope; }\n</code> Then, in the <em><strong>onInit()</strong></em> method of your component, you can write something like <a href="https://gist.github.com/ypcode/f24c1036a2feb00364248c3416aa5464">https://gist.github.com/ypcode/f24c1036a2feb00364248c3416aa5464</a> Let's see the output with that code in place <img src="/images/2019/01/2wp-ownscope.gif" alt="2wp-ownscope" /> Now, we can see each WebPart has its own service scope and work properly.</p>
+<p>A child scope is, as its name tells, a child of the root scope, it means that it might hold specific instances of services, but all the other instances are fetched from the parent scope (the root scope in our case).
+We can create a child scope by using the <strong>startNewChild()</strong> method of a service scope instance, it has to be configured and its finish() method should have been executed for this new scope to be ready to use.
+Then we have to deal with the child scope referencing because the <strong>this.context.serviceScope</strong> will still refer to the root scope.
+Inspired by my dependency injection experience in other technologies, I came up with a class implementation that you need to use in the <em><strong>onInit()</strong></em> method of your SPFx component.</p>
+<pre><code class="language-typescript">
+import { BaseComponentContext } from &quot;@microsoft/sp-component-base&quot;;
+import { ServiceScope, ServiceKey } from &quot;@microsoft/sp-core-library&quot;;
+
+interface IServiceConfiguration {
+    serviceKey: any;
+    config: (serviceInstance: any) =&gt; void;
+}
+
+export class ComponentServices {
+    constructor(private serviceScope: ServiceScope) {
+
+    }
+
+    public registerScopedServiceInstance&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, instance: TService): TService {
+        this.serviceScope.provide(serviceKey, instance);
+        return instance;
+    }
+
+    public registerScopedService&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, serviceType: new (serviceScope: ServiceScope) =&gt; any): TService {
+        return this.serviceScope.createAndProvide(serviceKey, serviceType);
+    }
+
+    private _serviceConfigurations: { [id: string] : IServiceConfiguration} = {};
+    public configureService&lt;TService&gt;(serviceKey: ServiceKey&lt;TService&gt;, config: (serviceInstance: TService) =&gt; void) {
+        this._serviceConfigurations[serviceKey.id] = {
+            serviceKey,
+            config
+        };
+    }
+
+    public static init&lt;TProps&gt;(componentContext: BaseComponentContext,
+        properties: TProps,
+        configureServices: (startup: ComponentServices, ctx: BaseComponentContext, props: TProps) =&gt; Promise&lt;void&gt;): Promise&lt;ServiceScope&gt; {
+
+        console.log('ComponentContext: ', componentContext);
+        console.log('Properties: ', properties);
+
+        if (!configureServices) {
+            return Promise.resolve();
+        }
+
+        return new Promise((resolve, reject) =&gt; {
+            try {
+                const childScope = componentContext.serviceScope.startNewChild();
+                const startup = new ComponentServices(childScope);
+                configureServices(startup, componentContext, properties)
+                    .then(() =&gt; {
+                        console.log('Services are configured.');
+                        childScope.finish();
+                        childScope.whenFinished(() =&gt; {
+                            ComponentServices.serviceScope = childScope;
+
+                            for (let k in startup._serviceConfigurations) {
+                                const configHandle = startup._serviceConfigurations[k];
+                                const serviceInstance = childScope.consume(configHandle.serviceKey);
+                                configHandle.config(serviceInstance);
+                            }
+
+                            resolve(childScope);
+                        });
+                    }).catch(err =&gt; reject(err));
+            } catch (error) {
+                reject(error);
+            }
+        });
+    }
+
+    public static serviceScope: ServiceScope;
+}
+</code></pre>
+<p>Then, in the <strong>onInit()</strong> method of your component, you can write something like</p>
+<pre><code class="language-typescript">// ...  
+private listDataService: IListService;
+
+  public onInit(): Promise&lt;void&gt; {
+    return ComponentServices.init(this.context,
+      this.properties, (startup, ctx, props) =&gt; {
+
+        // // Register a new scoped instance of the service
+        startup.registerScopedService(ListService.serviceKey, ListService);
+        // Configure the service instance with the component specific properties
+        startup.configureService(ListService.serviceKey, service =&gt; {
+          service.configure(ctx.pageContext.web.absoluteUrl, props.listId);
+        });
+      
+        // Must return a resolved promise 
+        // (useless here but needed in case on async needs in the config process)
+        return Promise.resolve();
+      }).then(serviceScope =&gt; {
+
+        // Consume the list service
+        // Instead of keeping a service reference assigned here,
+        // one can use ComponentServices.serviceScope.consume(ListService.serviceKey);
+        this.listDataService = serviceScope.consume(ListService.serviceKey);
+        // ...
+      }).catch(error =&gt; {
+        console.log('Error on init: ', error);
+      });
+  }
+
+    // ...  
+</code></pre>
+<p>Let's see the output with that code in place</p>
+<p><img src="/images/2019/01/2wp-ownscope.gif" alt="2wp-ownscope" /></p>
+<p>Now, we can see each WebPart has its own service scope and work properly.</p>
 <h2 id="webpart-scoped-service-scope">WebPart-scoped service scope</h2>
-<p>This is how we can make sure services we develop in our SPFx solutions that the proper instance is used in the right context. Somehow, if you are working on this kind of &quot;WebPart-scoped&quot; (or component-scoped) services intended to be used by others, make sure they are properly documented so the consumer developers will know what he/she should take care of! Hopefully, you liked this post, give your feedback ! You can find the shared repo of my lab <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-wp-servicescope">here</a> Cheers, Yannick</p>
+<p>This is how we can make sure services we develop in our SPFx solutions that the proper instance is used in the right context.
+Somehow, if you are working on this kind of &quot;WebPart-scoped&quot; (or component-scoped) services intended to be used by others, make sure they are properly documented so the consumer developers will know what he/she should take care of!
+Hopefully, you liked this post, give your feedback !
+You can find the shared repo of my lab <a href="https://github.com/ypcode/ypcode-spfx-samples/tree/master/spfx-wp-servicescope">here</a></p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>
