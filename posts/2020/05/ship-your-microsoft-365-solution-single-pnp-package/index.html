@@ -64,8 +64,9 @@ pre[class*=language-] {
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Ship your Microsoft 365 solution as a single PnP package" />
+            <meta property="og:description" content="Let's see how we can ship a Microsoft 365 solution included SPFx applications as a single PnP package" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2020/05/ship-your-microsoft-365-solution-single-pnp-package" />
-        <meta property="og:image" content="https://ypcode.github.io/images/template.xml-screenshot.png?r=202007171019" />
+        <meta property="og:image" content="/images/2020/05/template.xml-screenshot.png?r=202007171039" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2020-05-11 06:00:54Z" />
         <meta property="article:modified_time" content="2020-05-11 06:00:54Z" />
@@ -82,9 +83,10 @@ pre[class*=language-] {
                 <meta property="article:tag" content="SPFx extensions" />
                 <meta property="article:tag" content="Tenant" />
         <meta name="twitter:title" content="Ship your Microsoft 365 solution as a single PnP package" />
+            <meta name="twitter:description" content="Let's see how we can ship a Microsoft 365 solution included SPFx applications as a single PnP package" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2020/05/ship-your-microsoft-365-solution-single-pnp-package" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/template.xml-screenshot.png?r=202007171019" />
+            <meta name="twitter:image" content="/images/2020/05/template.xml-screenshot.png?r=202007171039" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Microsoft 365, Office 365, PnP, PowerShell, SharePoint, SharePoint Framework, SharePoint Online, SharePointFullPage, SingleWebPartAppPage, SPFx, SPFx extensions, Tenant" />
         <meta name="twitter:site" content="@yp_code" />
@@ -212,15 +214,22 @@ pre[class*=language-] {
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/template.xml-screenshot.png?r=202007171019" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2020/05/template.xml-screenshot.png?r=202007171039" alt="Ship your Microsoft 365 solution as a single PnP package" />
         </div>
    
     <div class="content">
-        <p>Hi Microsoft 365 devs,
-In this blog post, I will show you how easy it is, thanks to the PnP provisioning engine, to ship a solution as a single package.
+        <p>Hi Microsoft 365 devs,</p>
+<p>In this blog post, I will show you how easy it is, thanks to the PnP provisioning engine, to ship a solution as a single package.
 All the dependencies (at least most of them for now) can be included in that package and thus significantly reduce the needs for a complex multi-steps setup procedure tackling several different administration areas across Azure, Office 365, on the site level and so on.</p>
 <h2 id="some-context">Some context</h2>
-<p>Recently I have been working on a complete rework of my side project <a href="https://github.com/pnp/sp-site-designs-studio">Site Designs Studio V2</a>. It is a rewrite of the application that was originally a single WebPart. It is no longer the case, it is now a standalone modern application and I wanted to include some features that need some consistency and make some assumptions on the context in which the application is executed. Concretely, it means that it is installed as a dedicated site collection (a modern communication site) with its home page being the SPFx app part page. It relies on some dedicated document libraries (only one currently to store the site designs preview images). To be as consistent as possible, I wanted the application not to be available as a WebPart or an app part page on any other site. It means I have to hide it from toolbox and deploy it programmatically on a modern page which I change the layout. Moreover to be able to grant and revoke permissions through the Site Designs REST API in a user friendly way, I needed to implement a custom people picker that needs a Microsoft Graph permission. If you follow me it means that... to install the application we need the following steps:</p>
+<p>Recently I have been working on a complete rework of my side project</p>
+<p><a href="https://github.com/pnp/sp-site-designs-studio">Site Designs Studio V2</a>.</p>
+<p>It is a rewrite of the application that was originally a single WebPart.
+It is no longer the case, it is now a standalone modern application and I wanted to include some features that need some consistency and make some assumptions on the context in which the application is executed. Concretely, it means that it is installed as a dedicated site collection (a modern communication site) with its home page being the SPFx app part page.
+It relies on some dedicated document libraries (only one currently to store the site designs preview images).
+To be as consistent as possible, I wanted the application not to be available as a WebPart or an app part page on any other site.
+It means I have to hide it from toolbox and deploy it programmatically on a modern page which I change the layout. Moreover to be able to grant and revoke permissions through the Site Designs REST API in a user friendly way, I needed to implement a custom people picker that needs a Microsoft Graph permission.
+If you follow me it means that... to install the application we need the following steps:</p>
 <ol>
 <li>Create a modern communication site</li>
 <li>Create a library in it to store site designs preview images.</li>
@@ -230,20 +239,32 @@ All the dependencies (at least most of them for now) can be included in that pac
 <li>Add the instance of the application to the page</li>
 <li>Change the layout of the page</li>
 </ol>
-<p>Well... that can easily be done from a PnP PowerShell or Office 365 CLI script. But it means some code to maintain and a set of files that need to be shipped altogether. Moreover, it means extra overhead to handle &quot;partial&quot; setup or update matters !</p>
+<p>Well... that can easily be done from a PnP PowerShell or Office 365 CLI script.
+But it means some code to maintain and a set of files that need to be shipped altogether.
+Moreover, it means extra overhead to handle &quot;partial&quot; setup or update matters !</p>
 <h2 id="an-application-package">An application package</h2>
-<p>In the good old days of Farm Trusted solutions (hmmm... no :D), we used to basically have 1 single package to ship (in most scenarios) that could have all needed assets included with the DLLs, various assets and artifacts XML definitions using the Feature Framework. It's no longer the case with SharePoint Online*, we have now SPFx packages (.sppkg) that can contain the JS code and some assets but not much more. * to be accurate, declarative XML for SharePoint artifacts are still supported even in SPFx packages. I avoid that as much as possible because it's quite limited and still have the good old limitations of Feature Framework (Try to update artifacts, you'll realize :D) So WSPs had some con's and used to bring annoying challenges, but still, I liked the concept of one single distributable package.</p>
+<p>In the good old days of Farm Trusted solutions (hmmm... no :D), we used to basically have 1 single package to ship (in most scenarios) that could have all needed assets included with the DLLs, various assets and artifacts XML definitions using the Feature Framework.
+It's no longer the case with SharePoint Online*, we have now SPFx packages (.sppkg) that can contain the JS code and some assets but not much more. * to be accurate, declarative XML for SharePoint artifacts are still supported even in SPFx packages.
+I avoid that as much as possible because it's quite limited and still have the good old limitations of Feature Framework (Try to update artifacts, you'll realize :D)
+So WSPs had some con's and used to bring annoying challenges, but still, I liked the concept of one single distributable package.</p>
 <h2 id="a-bit-of-history">A bit of History...</h2>
 <p>For the past 4-5 years, the PnP initiative has built an open-source and community driven software called the PnP provisioning engine that allow to provision basically EVERYTHING in SharePoint using a declarative template formatted as XML (JSON is also supported, but I think I never seen any template in JSON so far :D), from a conceptual perspective, it looks pretty similar to what we were used to back then with WSPs and definitions XML and CAML and all. From a technical perspective, however, it is totally different because it uses remote APIs. It means 2 things :</p>
 <ol>
 <li>It is available for SharePoint On Prem and SharePoint Online</li>
 <li>The engine basically does, programmatically, what we can do manually from the user interface. it blows up the need of complex base templates and dependencies on the target site</li>
 </ol>
-<p>For many years, the PnP provisioning engine allows you to create a definition of all the changes you want to apply to a SharePoint site collection. Moreover, you can update and reapply the same template to the same target and it will apply, on its own, only the latest changes (with some exceptions...). You can extract (and then apply) templates with the PnP engine as XML ! It's an awesome capability to import and export sites, it can even be used for data migration with a bit &quot;extra&quot; work. Wait... there's even better ! if you specify the output to have a &quot;.pnp&quot; file extension, it will actually extract the definition and all referenced assets in a ZIP archive (an OpenXml format file to be exact). The engine is actually implemented in the <a href="https://github.com/pnp/PnP-Sites-Core">PnP Core library,</a> it means you can use it directly in your own .NET application. It is also wrapped in the <a href="https://docs.microsoft.com/en-us/powershell/sharepoint/sharepoint-pnp/sharepoint-pnp-cmdlets?view=sharepoint-ps">PnP PowerShell commands set</a> meaning you can simply install those cmdlets and leverage all the power of the engine.</p>
+<p>For many years, the PnP provisioning engine allows you to create a definition of all the changes you want to apply to a SharePoint site collection.
+Moreover, you can update and reapply the same template to the same target and it will apply, on its own, only the latest changes (with some exceptions...).
+You can extract (and then apply) templates with the PnP engine as XML !
+It's an awesome capability to import and export sites, it can even be used for data migration with a bit &quot;extra&quot; work. Wait... there's even better!
+If you specify the output to have a &quot;.pnp&quot; file extension, it will actually extract the definition and all referenced assets in a ZIP archive (an OpenXml format file to be exact).
+The engine is actually implemented in the <a href="https://github.com/pnp/PnP-Sites-Core">PnP Core library,</a> it means you can use it directly in your own .NET application. It is also wrapped in the <a href="https://docs.microsoft.com/en-us/powershell/sharepoint/sharepoint-pnp/sharepoint-pnp-cmdlets?view=sharepoint-ps">PnP PowerShell commands set</a> meaning you can simply install those cmdlets and leverage all the power of the engine.</p>
 <h2 id="a-tenant-wide-package">A tenant-wide package</h2>
-<p>Since 2018 (I can't remember exactly when it was realeased), the PnP engine not only supports site collection templates, but also templates that can be used against the whole tenant in SharePoint Online Microsoft 365. That's right, you can now, with a single template, provision entire site collections, and apply template to each of them ! The <a href="https://github.com/pnp/PnP-Provisioning-Schema/blob/master/ProvisioningSchema-2020-02.md">schema</a> is actually already written in a way that it (or will) supports many of the software across Microsoft 365 (SharePoint, Teams, OneDrive, Azure AD). We have to take care that, to apply such tenant, the current credentials must have the sufficient privileges on the tenant (e.g. SharePoint global administrator).</p>
+<p>Since 2018 (I can't remember exactly when it was realeased), the PnP engine not only supports site collection templates, but also templates that can be used against the whole tenant in SharePoint Online Microsoft 365.
+That's right, you can now, with a single template, provision entire site collections, and apply template to each of them ! The <a href="https://github.com/pnp/PnP-Provisioning-Schema/blob/master/ProvisioningSchema-2020-02.md">schema</a> is actually already written in a way that it (or will) supports many of the software across Microsoft 365 (SharePoint, Teams, OneDrive, Azure AD). We have to take care that, to apply such tenant, the current credentials must have the sufficient privileges on the tenant (e.g. SharePoint global administrator).</p>
 <h2 id="my-solution-distributable-package">My solution distributable package</h2>
-<p>PnP tenant template allowed me to basically write declaratively all the steps of my setup procedure in a single XML file. You can have <a href="https://github.com/pnp/sp-site-designs-studio/blob/master/setup/PnPPowershell/debug/sdsv2-template.xml">a look at the entire file here</a>. Let's see each of the steps in the PnP declarative way</p>
+<p>PnP tenant template allowed me to basically write declaratively all the steps of my setup procedure in a single XML file. You can have <a href="https://github.com/pnp/sp-site-designs-studio/blob/master/setup/PnPPowershell/debug/sdsv2-template.xml">a look at the entire file here</a>.
+Let's see each of the steps in the PnP declarative way</p>
 <ol>
 <li>Create a modern communication site</li>
 </ol>
@@ -353,8 +374,8 @@ Apply-PnPTenantTemplate -Path .\myTemplate.pnp
 </code></pre>
 <p>You might want to ship along with the .pnp file the commands above in a PowerShell script file with some relevant default parameters, but it is not at all a requirement !</p>
 <p>I hope you found this post interesting, feel free to reach out with some feedback or questions !</p>
-<p>Cheers !
-Yannick</p>
+<p>Cheers !</p>
+<p>Yannick</p>
 
     </div>
 </div>
