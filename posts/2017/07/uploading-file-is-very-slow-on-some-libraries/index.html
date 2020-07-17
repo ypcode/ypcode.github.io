@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Uploading file is very slow on some libraries" />
+            <meta property="og:description" content="A bit of deeper investigation my friend Christopher Clément and I did in order to troubleshoot some slowness we encountered when uploading files in a document library" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2017/07/uploading-file-is-very-slow-on-some-libraries" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007171112" />
+        <meta property="og:image" content="/images/2017/07/upload_document-512.png?r=202007171013" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-07-31 05:15:59Z" />
         <meta property="article:modified_time" content="2017-07-31 05:15:59Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="SharePoint Online" />
                 <meta property="article:tag" content="Upload" />
         <meta name="twitter:title" content="Uploading file is very slow on some libraries" />
+            <meta name="twitter:description" content="A bit of deeper investigation my friend Christopher Clément and I did in order to troubleshoot some slowness we encountered when uploading files in a document library" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/07/uploading-file-is-very-slow-on-some-libraries" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007171112" />
+            <meta name="twitter:image" content="/images/2017/07/upload_document-512.png?r=202007171013" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="Content Type, Document Library, Document Set, Event Receiver, Performance, SharePoint, SharePoint Online, Upload" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,11 +205,14 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007171112" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2017/07/upload_document-512.png?r=202007171013" alt="Uploading file is very slow on some libraries" />
         </div>
    
     <div class="content">
-        <p>Hello everyone, <img src="/images/2017/07/upload_document-512.png" alt="Upload_Document-512" />Today we will talk about a problem that can arise when uploading documents in a library =&gt; slowness! When I say &quot;we&quot;, I mean my colleague Christopher Clement and myself. Having faced this problem together, we figured we would write together about it!</p>
+        <p>Hello everyone,</p>
+<p>Today we will talk about a problem that can arise when uploading documents in a library: <strong>slowness!</strong>
+When I say &quot;we&quot;, I mean my colleague Christopher Clément and myself.
+Having faced this problem together, we figured we would write together about it!</p>
 <h2 id="context"><strong>Context</strong></h2>
 <p>In the case we studied, the upload of a document in an empty library took 200ms whereas the same document in another library of the same site took 18 seconds! The differences between the two libraries Lib 1</p>
 <ul>
@@ -219,32 +224,76 @@
 <li>32136 items</li>
 <li>72 content types including 70 derived from the &quot;Document Set&quot; content type</li>
 </ul>
-<p>Wait, WHAT??!! 30000 items?? That’s the reason, it is poorly indexed, and so on, and so on... In fact, no, that wasn’t the cause of the issue, the indexing and structure were correct, so let's move on to the other difference, <strong>the number of content types</strong>. Actually, this library uses a significant number of content types inheriting from Document Set.</p>
+<p>Wait, WHAT??!! 30000 items?? That’s the reason, it is poorly indexed, and so on, and so on...
+In fact, no, that wasn’t the cause of the issue, the indexing and structure were correct, so let's move on to the other difference; <strong>the number of content types</strong>.</p>
+<p>Actually, this library uses a significant number of content types inheriting from Document Set.</p>
 <h2 id="document-set"><strong>Document Set</strong></h2>
-<p><img src="/images/2017/07/documentseticon.png" alt="documentseticon" />As a reminder, a Document Set is a super folder that brings interesting features such as the configuration of a custom page and &quot;shared metadata&quot;. This second feature is the reason why Document Sets are used here, it allows to share or rather propagate its own metadata to all the documents that it contains. A feature that we had used several times on previous projects. The difference here is the large number of different content types.</p>
+<p><img src="/images/2017/07/documentseticon.png" alt="documentseticon" /></p>
+<p>As a reminder, a Document Set is a super folder that brings interesting features such as the configuration of a custom page and &quot;shared metadata&quot;.
+This second feature is the reason why Document Sets are used here, it allows to share or rather propagate its own metadata to all the documents that it contains.
+A feature that we had used several times on previous projects.
+The difference here is the large number of different content types.</p>
 <h2 id="tests"><strong>Tests</strong></h2>
-<p><strong>Note :</strong> If the problem we have encountered has occurred on an on-premise environment, you should know that we performed the tests on the on-premise AND on an Office 365 environment with the same results. Our test scenario was to upload a “test.txt” document containing only the word &quot;test&quot; in libraries with different configurations. On our production library, we have the following configuration: <img src="/images/2017/07/lib-config.png" alt="lib config" /></p>
+<p><strong>Note :</strong> If the problem we have encountered has occurred on an on-premise environment, you should know that we performed the tests on the on-premise AND on an Office 365 environment with the same results.
+Our test scenario was to upload a “test.txt” document containing only the word &quot;test&quot; in libraries with different configurations.
+On our production library, we have the following configuration:</p>
+<p><img src="/images/2017/07/lib-config.png" alt="lib config" /></p>
 <ul>
 <li>2643 document sets</li>
 <li>32136 items in total (including documents sets)</li>
 <li>72 content types</li>
 </ul>
-<p>The upload on this library of our file &quot;test.txt&quot; takes between 5 and 20 seconds to respond, depending on the solicitation of the resources on the server. In our tests, the response time was 18 seconds. So we started by measuring the response time for the upload of the same document on a brand new library without any specific configuration. <img src="/images/2017/07/investigation-upload-speed-no-docset.png" alt="investigation-upload-speed-no-docset.png" /> The response time (0.87 seconds) is minimal compared to our production library. The next step was to gradually add content types (inheriting from Document Set) to measure the impact for different numbers of Content Types added. We're talking about the content types that are configured on the list, not the “documents sets” items added to the library. Here are the results: For <strong>1</strong> content type inheriting from <strong><em>Document Set</em></strong>: 312 ms<img src="/images/2017/07/investigation-upload-speed-1docset.png" alt="investigation-upload-speed-1docset.png" />For <strong>30</strong> content types inheriting from <strong><em>Document Set</em></strong>: 4.93s<img src="/images/2017/07/investigation-upload-speed-31docsets.png" alt="investigation-upload-speed-31docsets.png" />For <strong>50</strong> content types inheriting from <strong><em>Document Set</em></strong>: 11.18s<img src="/images/2017/07/investigation-upload-speed-51docsets.png" alt="investigation-upload-speed-51docsets" /> We clearly observe that the number of Document Set content types available in the list impacts the time required for the upload of a document.</p>
+<p>The upload on this library of our file &quot;test.txt&quot; takes between 5 and 20 seconds to respond, depending on the current load of the server.
+In our tests, the response time was 18 seconds.
+So we started by measuring the response time for the upload of the same document on a brand new library without any specific configuration.</p>
+<p><img src="/images/2017/07/investigation-upload-speed-no-docset.png" alt="investigation-upload-speed-no-docset.png" /></p>
+<p>The response time (0.87 seconds) is minimal compared to our production library.
+The next step was to gradually add content types (inheriting from Document Set) to measure the impact for different numbers of Content Types added.</p>
+<p>We're talking about the content types that are configured on the list, not the “documents sets” items added to the library.</p>
+<p>Here are the results: For <strong>1</strong> content type inheriting from <strong><em>Document Set</em></strong>: 312 ms!</p>
+<p><a href="/images/2017/07/investigation-upload-speed-1docset.png">investigation-upload-speed-1docset.png</a></p>
+<p>For <strong>30</strong> content types inheriting from <strong><em>Document Set</em></strong>: 4.93s</p>
+<p><img src="/images/2017/07/investigation-upload-speed-31docsets.png" alt="investigation-upload-speed-31docsets.png" /></p>
+<p>For <strong>50</strong> content types inheriting from <strong><em>Document Set</em></strong>: 11.18s</p>
+<p><img src="/images/2017/07/investigation-upload-speed-51docsets.png" alt="investigation-upload-speed-51docsets" /></p>
+<p>We clearly observe that the number of Document Set content types available in the list impacts the time required for the upload of a document.</p>
 <h2 id="why"><strong>Why ?</strong></h2>
-<p><img src="/images/2017/07/gear-sh.png" alt="Gear SH" />We have already noticed in the past that the functionality of a Document Set is provided by Event Receivers added to the list,  there are actually 4: ItemAdding, ItemAdded, ItemUpdating and ItemUpdated. So we checked on that side if that could be the reason. We were astonished at what we found out.<img src="/images/2017/07/dossiers_eventreceivers_count.png" alt="dossiers_eventreceivers_count" /> **283 Event Receivers are attached to the library **!<img src="/images/2017/07/list_eventreceivers.png" alt="list_eventreceivers.png" /></p>
+<p><img src="/images/2017/07/gear-sh.png" alt="Gear SH" /></p>
+<p>We have already noticed in the past that the functionality of a Document Set is provided by Event Receivers added to the list, there are actually 4: ItemAdding, ItemAdded, ItemUpdating and ItemUpdated.
+So we checked on that side if that could be the reason.
+We were astonished by what we found out.</p>
+<p><img src="/images/2017/07/dossiers_eventreceivers_count.png" alt="dossiers_eventreceivers_count" /></p>
+<p>**283 Event Receivers are attached to the library **!</p>
+<p><img src="/images/2017/07/list_eventreceivers.png" alt="list_eventreceivers.png" /></p>
 <ul>
 <li>283 Event Receivers (285 - 2 header lines)</li>
 <li>They are <strong>ALL</strong> in Synchronous mode, even those in -ed which are not by default.</li>
 </ul>
-<p>We could have thought that Event Receivers would have been added once for all DocumentSet content types, but no! <strong>For each Content Type added, 4 Event Receivers are added to the list.</strong> Synchronous events receivers are executed before the response is returned to the client. In our case, at least 140 event receivers are executed each time an item is added, and another 140 are executed at each update. Moreover, if you ever had the opportunity to develop a custom (server side) event receiver, you might have realized that you configure it through its type (.NET Class) fully qualified name. That means, somehow, it is dynamically (and probably lazily) loaded. It must have its footprint has well on the performance. This explains the slowness.</p>
+<p>We could have thought that Event Receivers would have been added once for all DocumentSet content types, but no!</p>
+<p><strong>For each Content Type added, 4 Event Receivers are added to the list.</strong></p>
+<p>Synchronous events receivers are executed before the response is returned to the client.
+In our case, at least 140 event receivers are executed each time an item is added, and another 140 are executed at each update.
+Moreover, if you ever had the opportunity to develop a custom (server side) event receiver, you might have realized that you configure it through its type (.NET Class) fully qualified name.
+That means, somehow, it is dynamically (and probably lazily) loaded.
+It must have its footprint has well on the performance. This explains the slowness.</p>
 <h2 id="resolution"><strong>Resolution</strong></h2>
 <p>Solving this problem can be done in 2 ways according to your needs</p>
 <h3 id="reducing-the-number-of-content-types"><em>1 : Reducing the number of content types</em></h3>
-<p>If the number of content types inheriting from &quot;Document Set&quot; may decrease, reduce it to the maximum, a unique &quot;Document Set&quot; content type would be ideal. Migrate your existing documents to this unique content type. If you need to migrate content types from existing documents, I invite you to read these posts which explain a way to do it: (<a href="https://ypcode.wordpress.com/2016/12/08/cross-sharepoint-platform-maintenance-tools-using-pnp-powershell/">https://ypcode.wordpress.com/2016/12/08/cross-sharepoint-platform-maintenance-tools-using-pnp-powershell/</a>) (<a href="https://ypcode.wordpress.com/2017/07/22/powershell-quicktip-3-characters-to-improve-a-script/">https://ypcode.wordpress.com/2017/07/22/powershell-quicktip-3-characters-to-improve-a-script/</a>) Then delete content types inheriting from &quot;Document Set&quot; that are no longer used in the library. This will remove related event receivers.</p>
+<p>If the number of content types inheriting from &quot;Document Set&quot; may decrease, reduce it to the maximum, a unique &quot;Document Set&quot; content type would be ideal.</p>
+<p>Migrate your existing documents to this unique content type.
+If you need to migrate content types from existing documents, I invite you to read these posts which explain a way to do it:</p>
+<ul>
+<li>(<a href="/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell/">Cross SharePoint platform Maintenance Tools using PnP PowerShell</a></li>
+<li><a href="/posts/2017/07/powershell-quicktip-3-characters-improve-script/">PowerShell QuickTip: 3 characters to improve a script'</a></li>
+</ul>
+<p>Then delete content types inheriting from &quot;Document Set&quot; that are no longer used in the library.
+This will remove related event receivers.</p>
 <h3 id="division-of-the-structure-into-several-libraries"><em>2 : Division of the structure into several libraries</em></h3>
 <p>If you need to keep several types of &quot;Document Set&quot; content type, we recommend that you divide the content between several libraries, each using one of your content types.</p>
 <h3 id="resolution-bis-on-premise-only"><strong>Resolution bis (on-premise only)</strong></h3>
-<p>We also noticed that the auto-increment of the database was set to 1 mega, we increased this size to reduce SQL work when uploading document. Hoping this helps! <a href="https://christopherclementen.wordpress.com/">Christopher</a> and Yannick</p>
+<p>We also noticed that the auto-increment of the database was set to 1 mega, we increased this size to reduce SQL work when uploading document.</p>
+<p>Hoping this helps!</p>
+<p><a href="https://christopherclementen.wordpress.com/">Christopher</a> and Yannick</p>
 
     </div>
 </div>

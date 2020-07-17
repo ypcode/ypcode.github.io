@@ -59,8 +59,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="SPFx WebParts responsive to Modern Page sections" />
+            <meta property="og:description" content="With some CSS, let's make our WebPart responsive according to the page sections and columns to which they are added" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2019/01/spfx-webparts-responsive-to-modern-page-sections" />
-        <meta property="og:image" content="https://ypcode.github.io/images/code.jpg?r=202007171112" />
+        <meta property="og:image" content="/images/2019/10/twocolumns-withresponsive.png?r=202007171013" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-01-10 14:49:48Z" />
         <meta property="article:modified_time" content="2019-01-10 14:49:48Z" />
@@ -73,9 +74,10 @@
                 <meta property="article:tag" content="SPFx" />
                 <meta property="article:tag" content="Web Development" />
         <meta name="twitter:title" content="SPFx WebParts responsive to Modern Page sections" />
+            <meta name="twitter:description" content="With some CSS, let's make our WebPart responsive according to the page sections and columns to which they are added" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2019/01/spfx-webparts-responsive-to-modern-page-sections" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/code.jpg?r=202007171112" />
+            <meta name="twitter:image" content="/images/2019/10/twocolumns-withresponsive.png?r=202007171013" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JS, Office UI Fabric, Responsive UI, SharePoint, SharePoint Framework, SharePoint Online, SPFx, Web Development" />
         <meta name="twitter:site" content="@yp_code" />
@@ -203,53 +205,419 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/code.jpg?r=202007171112" alt="code image" />
+            <img class="content-item-featured-image" src="/images/2019/10/twocolumns-withresponsive.png?r=202007171013" alt="SPFx WebParts responsive to Modern Page sections" />
         </div>
    
     <div class="content">
-        <p>Hi SharePoint fellows ! Today, I am writing about the outcome of some research I made on how to display the content of my custom WebPart according to the layout column it is inserted in.</p>
+        <p>Hi SharePoint fellows !</p>
+<p>Today, I am writing about the outcome of some research I made on how to display the content of my custom WebPart according to the layout column it is inserted in.</p>
 <h2 id="responsive-web-pages">Responsive Web pages</h2>
-<p>In the last 10 years or so, the key when designing web pages is that they are responsive. It means, that, its layout is intuitive and user-friendly whatever the device used to display it. Desktop computers, smartphones, tablets and so on, they come with various display size, ratio, resolutions, etc... Anyway, the user experience should be optimal when visiting a web page from desktop or smartphone. With the arrival of SharePoint Modern user experience, this concept of one of the key. It mainly relies on a UI Framework from Microsoft called Office UI Fabric, most of the current Microsoft web-based interfaces relies on this framework nowadays. You can learn more about it <a href="https://developer.microsoft.com/en-us/fabric">here</a>. This framework comes with a lot of reusable UI components but also provide core features mainly based on CSS for the UI to be responsive and consistent in styling.</p>
+<p>In the last 10 years or so, the key when designing web pages is that they are responsive.
+It means, that, its layout is intuitive and user-friendly whatever the device used to display it.
+Desktop computers, smartphones, tablets and so on, they come with various display size, ratio, resolutions, etc... Anyway, the user experience should be optimal when visiting a web page from desktop or smartphone.
+With the arrival of SharePoint Modern user experience, this concept of one of the keys.
+It mainly relies on a UI Framework from Microsoft called Office UI Fabric, most of the current Microsoft web-based interfaces relies on this framework nowadays. You can learn more about it <a href="https://developer.microsoft.com/en-us/fabric">here</a>.
+This framework comes with a lot of reusable UI components but also provide core features mainly based on CSS for the UI to be responsive and consistent in styling.</p>
 <h2 id="office-ui-fabric-layout">Office UI Fabric layout</h2>
-<p>In this post, I will focus on the layout handling in the Office UI Fabric core. It is quite similar to the Bootstrap Grid layout (for those who heard about it). It allows, just by using some specific CSS classes to have a consistent and responsive layout in your UI. The concept is simple, the width of the container (whatever it is) is split into 12 columns. By using some classes, you specify whether you want your element to be 12 columns wide or only 4 columns wide, for instance, ... The smart part here, is these classes exist adapted for a variety of displays scales</p>
-<p>small</p>
-<p>320px - 479px</p>
-<p>medium</p>
-<p>480px - 639px</p>
-<p>large</p>
-<p>640px - 1023px</p>
-<p>extra large</p>
-<p>1024px - 1365px</p>
-<p>exta extra large</p>
-<p>1366px - 1919px</p>
-<p>extra extra extra large</p>
-<p>1920px and up</p>
-<p>When you apply a class for a specific scale, you apply it for this specific one and all the larger scales. I won't dig more into the details since it is very well <a href="https://developer.microsoft.com/en-us/fabric#/styles/layout">explained here</a>.</p>
+<p>In this post, I will focus on the layout handling in the Office UI Fabric core.
+It is quite similar to the Bootstrap Grid layout (for those who heard about it).
+It allows, just by using some specific CSS classes to have a consistent and responsive layout in your UI.
+The concept is simple, the width of the container (whatever it is) is split into 12 columns.
+By using some classes, you specify whether you want your element to be 12 columns wide or only 4 columns wide, for instance, ...
+The smart part here, is that these classes exist adapted for a variety of displays scales</p>
+<table>
+<thead>
+<tr>
+<th>name</th>
+<th>resolution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>small</td>
+<td>320px - 479px</td>
+</tr>
+<tr>
+<td>medium</td>
+<td>480px - 639px</td>
+</tr>
+<tr>
+<td>large</td>
+<td>640px - 1023px</td>
+</tr>
+<tr>
+<td>extra large</td>
+<td>1024px - 1365px</td>
+</tr>
+<tr>
+<td>exta extra large</td>
+<td>1366px - 1919px</td>
+</tr>
+<tr>
+<td>extra extra extra large</td>
+<td>1920px and up</td>
+</tr>
+</tbody>
+</table>
+<p>When you apply a class for a specific scale, you apply it for this specific one and all the larger scales.
+I won't dig more into the details since it is very well <a href="https://developer.microsoft.com/en-us/fabric#/styles/layout">explained here</a>.</p>
 <h2 id="sharepoint-modern-pages-sections">SharePoint Modern Pages sections</h2>
-<p>If you have used the Modern Pages in SharePoint during the last couples of years, you probably noticed, the appearing of the section layouts, It allows to split your sections in columns according to some ratio (one column, two colums, three columns, one third, two thirds). Formerly, you only could stack your components in full-width sections. This column splitting is relying on the same principle as Office UI Fabric layout. For instance, if your section is split into 3 columns, each column will have the following CSS classes: <strong><em>CanvasSection CanvasSection-col CanvasSection-sm12 CanvasSection-xl4</em></strong> You might have noticed that the section layout will only take place in displays wide enough corresponding to the <strong>XL</strong> breakpoint (1024px minimum), for smaller displays, it will render as a full width block.</p>
+<p>If you have used the Modern Pages in SharePoint during the last couples of years, you probably noticed, the appearing of the section layouts.
+It allows to split your sections in columns according to some ratio (one column, two colums, three columns, one third, two thirds).
+Formerly, you only could stack your components in full-width sections.
+This column splitting is relying on the same principle as Office UI Fabric layout.
+For instance, if your section is split into 3 columns, each column will have the following CSS classes: <strong><em>CanvasSection CanvasSection-col CanvasSection-sm12 CanvasSection-xl4</em></strong>
+You might have noticed that the section layout will only take place in displays wide enough corresponding to the <strong>XL</strong> breakpoint (1024px minimum), for smaller displays, it will render as a full width block.</p>
 <h2 id="being-responsive-with-office-ui-fabric">Being responsive with Office UI Fabric</h2>
-<p>With Office UI Fabric, we can specify that our elements will display on two columns above a specific display size, and on a full width column below that step. <code>\n&lt;div className=&quot;ms-Grid-row&quot;&gt;   &lt;h1&gt;Without section responsive (OUIF Half)&lt;/h1&gt;   &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;     Block 1   &lt;/div&gt;   &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;     Block 2   &lt;/div&gt;   &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;     Block 3   &lt;/div&gt;   &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;     Block 4   &lt;/div&gt;   &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;     Block 5   &lt;/div&gt; &lt;/div&gt;\n</code> The HTML extract above will result as <img src="/images/2019/01/ouif-half.png" alt="ouif-half" /> with my browser taking my whole display width, if I reduce the window size however, it will look like <img src="/images/2019/01/ouif-full.png" alt="ouif-full" /> Because I used the <strong>ms-sm12</strong> to indicate it should take 12 columns on 12 from the SM (small) breakpoint and <strong>ms-xl6</strong> to indicate it should take 6 columns on 12 starting from the XL breakpoint. That works very well with a full width section !</p>
+<p>With Office UI Fabric, we can specify that our elements will display on two columns above a specific display size, and on a full width column below that step.</p>
+<pre><code class="language-html">&lt;div className=&quot;ms-Grid-row&quot;&gt;
+  &lt;h1&gt;Without section responsive (OUIF Half)&lt;/h1&gt;
+  &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+    Block 1
+  &lt;/div&gt;
+  &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+    Block 2
+  &lt;/div&gt;
+  &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+    Block 3
+  &lt;/div&gt;
+  &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+    Block 4
+  &lt;/div&gt;
+  &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+    Block 5
+  &lt;/div&gt;
+&lt;/div&gt;
+</code></pre>
+<p>The HTML extract above will result as</p>
+<p><img src="/images/2019/01/ouif-half.png" alt="ouif-half" /></p>
+<p>with my browser taking my whole display width, if I reduce the window size however, it will look like</p>
+<p><img src="/images/2019/01/ouif-full.png" alt="ouif-full" /></p>
+<p>Because I used the <strong>ms-sm12</strong> to indicate it should take 12 columns on 12 from the SM (small) breakpoint and <strong>ms-xl6</strong> to indicate it should take 6 columns on 12 starting from the XL breakpoint.
+That works very well with a full width section !</p>
 <h2 id="with-a-different-section-layout">With a different section layout</h2>
-<p>Let's see now if we change the layout of the section <img src="/images/2019/01/twocolumns-withoutresponsive.png" alt="twocolumns-withoutresponsive" /> The content will still take the whole width of its container. That might become less readable, and obviously, not user-friendly...</p>
+<p>Let's see now if we change the layout of the section</p>
+<p><img src="/images/2019/01/twocolumns-withoutresponsive.png" alt="twocolumns-withoutresponsive" /></p>
+<p>The content will still take the whole width of its container.
+That might become less readable, and obviously, not user-friendly...</p>
 <h2 id="a-piece-of-css-to-act-like-office-ui-fabric-layout-with-sections">A piece of CSS to act like Office UI Fabric layout with sections</h2>
-<p>I, then, came up with just a bunch of CSS lines that will allow to use the same principle as Office UI Fabric layout but according to the container section (or column more exactly). There is no rocket science here, just a principle of CSS applied about nested selectors <code>\n@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';  .CanvasSection.CanvasSection-col {     &amp;.CanvasSection-xl12 {         .OneColumnSection-1 {             @include ms-Grid-col;             @include ms-xl1;         }          .OneColumnSection-2 {             @include ms-Grid-col;             @include ms-xl2;         }          .OneColumnSection-3 {             @include ms-Grid-col;             @include ms-xl3;         }          .OneColumnSection-4 {             @include ms-Grid-col;             @include ms-xl4;         }          .OneColumnSection-5 {             @include ms-Grid-col;             @include ms-xl5;         }          .OneColumnSection-6 {             @include ms-Grid-col;             @include ms-xl6;         }          .OneColumnSection-7 {             @include ms-Grid-col;             @include ms-xl7;         }          .OneColumnSection-8 {             @include ms-Grid-col;             @include ms-xl8;         }          .OneColumnSection-9 {             @include ms-Grid-col;             @include ms-xl9;         }          .OneColumnSection-10 {             @include ms-Grid-col;             @include ms-xl10;         }          .OneColumnSection-11 {             @include ms-Grid-col;             @include ms-xl11;         }          .OneColumnSection-12 {             @include ms-Grid-col;             @include ms-xl12;         }     }      &amp;.CanvasSection-xl6 {         .TwoColumnsSection-1 {             @include ms-Grid-col;             @include ms-xl1;         }          .TwoColumnsSection-2 {             @include ms-Grid-col;             @include ms-xl2;         }          .TwoColumnsSection-3 {             @include ms-Grid-col;             @include ms-xl3;         }          .TwoColumnsSection-4 {             @include ms-Grid-col;             @include ms-xl4;         }          .TwoColumnsSection-5 {             @include ms-Grid-col;             @include ms-xl5;         }          .TwoColumnsSection-6 {             @include ms-Grid-col;             @include ms-xl6;         }          .TwoColumnsSection-7 {             @include ms-Grid-col;             @include ms-xl7;         }          .TwoColumnsSection-8 {             @include ms-Grid-col;             @include ms-xl8;         }          .TwoColumnsSection-9 {             @include ms-Grid-col;             @include ms-xl9;         }          .TwoColumnsSection-10 {             @include ms-Grid-col;             @include ms-xl10;         }          .TwoColumnsSection-11 {             @include ms-Grid-col;             @include ms-xl11;         }          .TwoColumnsSection-12 {             @include ms-Grid-col;             @include ms-xl12;         }     }      &amp;.CanvasSection-xl4 {         .OneThird-1, .ThreeColumnsSection-1 {             @include ms-Grid-col;             @include ms-xl1;         }          .OneThird-2, .ThreeColumnsSection-2 {             @include ms-Grid-col;             @include ms-xl2;         }          .OneThird-3, .ThreeColumnsSection-3 {             @include ms-Grid-col;             @include ms-xl3;         }          .OneThird-4, .ThreeColumnsSection-4 {             @include ms-Grid-col;             @include ms-xl4;         }          .OneThird-5, .ThreeColumnsSection-5 {             @include ms-Grid-col;             @include ms-xl5;         }          .OneThird-6, .ThreeColumnsSection-6 {             @include ms-Grid-col;             @include ms-xl6;         }          .OneThird-7, .ThreeColumnsSection-7 {             @include ms-Grid-col;             @include ms-xl7;         }          .OneThird-8, .ThreeColumnsSection-8 {             @include ms-Grid-col;             @include ms-xl8;         }          .OneThird-9, .ThreeColumnsSection-9 {             @include ms-Grid-col;             @include ms-xl9;         }          .OneThird-10, .ThreeColumnsSection-10 {             @include ms-Grid-col;             @include ms-xl10;         }          .OneThird-11, .ThreeColumnsSection-11 {             @include ms-Grid-col;             @include ms-xl11;         }          .OneThird-12, .ThreeColumnsSection-12 {             @include ms-Grid-col;             @include ms-xl12;         }     }      &amp;.CanvasSection-xl8 {         .TwoThirds-1 {             @include ms-Grid-col;             @include ms-xl1;         }          .TwoThirds-2 {             @include ms-Grid-col;             @include ms-xl2;         }          .TwoThirds-3 {             @include ms-Grid-col;             @include ms-xl3;         }          .TwoThirds-4 {             @include ms-Grid-col;             @include ms-xl4;         }          .TwoThirds-5 {             @include ms-Grid-col;             @include ms-xl5;         }          .TwoThirds-6 {             @include ms-Grid-col;             @include ms-xl6;         }          .TwoThirds-7 {             @include ms-Grid-col;             @include ms-xl7;         }          .TwoThirds-8 {             @include ms-Grid-col;             @include ms-xl8;         }          .TwoThirds-9 {             @include ms-Grid-col;             @include ms-xl9;         }          .TwoThirds-10 {             @include ms-Grid-col;             @include ms-xl10;         }          .TwoThirds-11 {             @include ms-Grid-col;             @include ms-xl11;         }          .TwoThirds-12 {             @include ms-Grid-col;             @include ms-xl12;         }     } }\n</code> You can copy the SCSS above and copy it to a file named <strong><em>CanvasSection.scss</em></strong> for example. <strong>Take care!</strong>  It must not be in a <strong><em>.module.scss</em></strong> file because it will append unique hash to the CSS class names, and it is not intended here. You can then apply one of the following classes to your elements to specify how that should render according to their container section layout:</p>
+<p>I, then, came up with just a bunch of CSS lines that will allow to use the same principle as Office UI Fabric layout but according to the container section (or column more exactly).
+There is no rocket science here, just a principle of CSS applied about nested selectors</p>
+<pre><code class="language-scss">@import '~@microsoft/sp-office-ui-fabric-core/dist/sass/SPFabricCore.scss';
+
+.CanvasSection.CanvasSection-col {
+    &amp;.CanvasSection-xl12 {
+        .OneColumnSection-1 {
+            @include ms-Grid-col;
+            @include ms-xl1;
+        }
+
+        .OneColumnSection-2 {
+            @include ms-Grid-col;
+            @include ms-xl2;
+        }
+
+        .OneColumnSection-3 {
+            @include ms-Grid-col;
+            @include ms-xl3;
+        }
+
+        .OneColumnSection-4 {
+            @include ms-Grid-col;
+            @include ms-xl4;
+        }
+
+        .OneColumnSection-5 {
+            @include ms-Grid-col;
+            @include ms-xl5;
+        }
+
+        .OneColumnSection-6 {
+            @include ms-Grid-col;
+            @include ms-xl6;
+        }
+
+        .OneColumnSection-7 {
+            @include ms-Grid-col;
+            @include ms-xl7;
+        }
+
+        .OneColumnSection-8 {
+            @include ms-Grid-col;
+            @include ms-xl8;
+        }
+
+        .OneColumnSection-9 {
+            @include ms-Grid-col;
+            @include ms-xl9;
+        }
+
+        .OneColumnSection-10 {
+            @include ms-Grid-col;
+            @include ms-xl10;
+        }
+
+        .OneColumnSection-11 {
+            @include ms-Grid-col;
+            @include ms-xl11;
+        }
+
+        .OneColumnSection-12 {
+            @include ms-Grid-col;
+            @include ms-xl12;
+        }
+    }
+
+    &amp;.CanvasSection-xl6 {
+        .TwoColumnsSection-1 {
+            @include ms-Grid-col;
+            @include ms-xl1;
+        }
+
+        .TwoColumnsSection-2 {
+            @include ms-Grid-col;
+            @include ms-xl2;
+        }
+
+        .TwoColumnsSection-3 {
+            @include ms-Grid-col;
+            @include ms-xl3;
+        }
+
+        .TwoColumnsSection-4 {
+            @include ms-Grid-col;
+            @include ms-xl4;
+        }
+
+        .TwoColumnsSection-5 {
+            @include ms-Grid-col;
+            @include ms-xl5;
+        }
+
+        .TwoColumnsSection-6 {
+            @include ms-Grid-col;
+            @include ms-xl6;
+        }
+
+        .TwoColumnsSection-7 {
+            @include ms-Grid-col;
+            @include ms-xl7;
+        }
+
+        .TwoColumnsSection-8 {
+            @include ms-Grid-col;
+            @include ms-xl8;
+        }
+
+        .TwoColumnsSection-9 {
+            @include ms-Grid-col;
+            @include ms-xl9;
+        }
+
+        .TwoColumnsSection-10 {
+            @include ms-Grid-col;
+            @include ms-xl10;
+        }
+
+        .TwoColumnsSection-11 {
+            @include ms-Grid-col;
+            @include ms-xl11;
+        }
+
+        .TwoColumnsSection-12 {
+            @include ms-Grid-col;
+            @include ms-xl12;
+        }
+    }
+
+    &amp;.CanvasSection-xl4 {
+        .OneThird-1, .ThreeColumnsSection-1 {
+            @include ms-Grid-col;
+            @include ms-xl1;
+        }
+
+        .OneThird-2, .ThreeColumnsSection-2 {
+            @include ms-Grid-col;
+            @include ms-xl2;
+        }
+
+        .OneThird-3, .ThreeColumnsSection-3 {
+            @include ms-Grid-col;
+            @include ms-xl3;
+        }
+
+        .OneThird-4, .ThreeColumnsSection-4 {
+            @include ms-Grid-col;
+            @include ms-xl4;
+        }
+
+        .OneThird-5, .ThreeColumnsSection-5 {
+            @include ms-Grid-col;
+            @include ms-xl5;
+        }
+
+        .OneThird-6, .ThreeColumnsSection-6 {
+            @include ms-Grid-col;
+            @include ms-xl6;
+        }
+
+        .OneThird-7, .ThreeColumnsSection-7 {
+            @include ms-Grid-col;
+            @include ms-xl7;
+        }
+
+        .OneThird-8, .ThreeColumnsSection-8 {
+            @include ms-Grid-col;
+            @include ms-xl8;
+        }
+
+        .OneThird-9, .ThreeColumnsSection-9 {
+            @include ms-Grid-col;
+            @include ms-xl9;
+        }
+
+        .OneThird-10, .ThreeColumnsSection-10 {
+            @include ms-Grid-col;
+            @include ms-xl10;
+        }
+
+        .OneThird-11, .ThreeColumnsSection-11 {
+            @include ms-Grid-col;
+            @include ms-xl11;
+        }
+
+        .OneThird-12, .ThreeColumnsSection-12 {
+            @include ms-Grid-col;
+            @include ms-xl12;
+        }
+    }
+
+    &amp;.CanvasSection-xl8 {
+        .TwoThirds-1 {
+            @include ms-Grid-col;
+            @include ms-xl1;
+        }
+
+        .TwoThirds-2 {
+            @include ms-Grid-col;
+            @include ms-xl2;
+        }
+
+        .TwoThirds-3 {
+            @include ms-Grid-col;
+            @include ms-xl3;
+        }
+
+        .TwoThirds-4 {
+            @include ms-Grid-col;
+            @include ms-xl4;
+        }
+
+        .TwoThirds-5 {
+            @include ms-Grid-col;
+            @include ms-xl5;
+        }
+
+        .TwoThirds-6 {
+            @include ms-Grid-col;
+            @include ms-xl6;
+        }
+
+        .TwoThirds-7 {
+            @include ms-Grid-col;
+            @include ms-xl7;
+        }
+
+        .TwoThirds-8 {
+            @include ms-Grid-col;
+            @include ms-xl8;
+        }
+
+        .TwoThirds-9 {
+            @include ms-Grid-col;
+            @include ms-xl9;
+        }
+
+        .TwoThirds-10 {
+            @include ms-Grid-col;
+            @include ms-xl10;
+        }
+
+        .TwoThirds-11 {
+            @include ms-Grid-col;
+            @include ms-xl11;
+        }
+
+        .TwoThirds-12 {
+            @include ms-Grid-col;
+            @include ms-xl12;
+        }
+    }
+}
+</code></pre>
+<p>You can copy the SCSS above and copy it to a file named <strong><em>CanvasSection.scss</em></strong> for example.</p>
+<p><strong>Take care!</strong>  It must not be in a <strong><em>.module.scss</em></strong> file because it will append unique hash to the CSS class names, and it is not intended here.</p>
+<p>You can then apply one of the following classes to your elements to specify how that should render according to their container section layout:</p>
 <ul>
-<li><p>OneColumnSection-x</p>
-</li>
-<li><p>TwoColumnsSection-x</p>
-</li>
-<li><p>ThreeColumnsSection-x</p>
-</li>
-<li><p>OneThird-x</p>
-</li>
-<li><p>TwoThirds-x</p>
-</li>
+<li>OneColumnSection-x</li>
+<li>TwoColumnsSection-x</li>
+<li>ThreeColumnsSection-x</li>
+<li>OneThird-x</li>
+<li>TwoThirds-x</li>
 </ul>
 <p>The <strong>x</strong> should be replaced by a number between 1 and 12 indicating how many columns it should span on.</p>
 <h2 id="lets-see-in-practice">Let's see in practice</h2>
-<p>Let's append a new piece of HTML to our previous one <code>\n &lt;div className=&quot;ms-Grid-row&quot;&gt;             &lt;h1&gt;Without section responsive (OUIF Half)&lt;/h1&gt;             &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;               Block 1             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;               Block 2             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;               Block 3             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;               Block 4             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;               Block 5             &lt;/div&gt;           &lt;/div&gt;           &lt;div className=&quot;ms-Grid-row&quot;&gt;             &lt;h1&gt;With section responsive (One column: half , 2/3 columns : 8, Two columns: full)  &lt;/h1&gt;             &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;               Block 1             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;               Block 2             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;               Block 3             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;               Block 4             &lt;/div&gt;             &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;               Block 5             &lt;/div&gt;           &lt;/div&gt;\n</code> And see what it looks like with One column, the result is exactly the same <img src="/images/2019/01/onecolumn-withresponsive.png" alt="onecolumn-withresponsive.png" /> With 2 columns instead, <img src="/images/2019/01/twocolumns-withresponsive.png" alt="twocolumns-withresponsive.png" /> And VOILA !</p>
+<p>Let's append a new piece of HTML to our previous one</p>
+<pre><code class="language-html"> &lt;div className=&quot;ms-Grid-row&quot;&gt;
+    &lt;h1&gt;Without section responsive (OUIF Half)&lt;/h1&gt;
+    &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+      Block 1
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+      Block 2
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+      Block 3
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+      Block 4
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-sm12 ms-xl6 ${styles.outline}`}&gt;
+      Block 5
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;div className=&quot;ms-Grid-row&quot;&gt;
+    &lt;h1&gt;With section responsive (One column: half , 2/3 columns : 8, Two columns: full)  &lt;/h1&gt;
+    &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;
+      Block 1
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;
+      Block 2
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;
+      Block 3
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;
+      Block 4
+    &lt;/div&gt;
+    &lt;div className={`ms-Grid-col ms-xl6 OneColumnSection-6 TwoThirds-8 TwoColumnsSection-12 ThreeColumnsSection-12 OneThird-12 ${styles.outline}`}&gt;
+      Block 5
+    &lt;/div&gt;
+  &lt;/div&gt;
+</code></pre>
+<p>And see what it looks like with One column, the result is exactly the same</p>
+<p><img src="/images/2019/01/onecolumn-withresponsive.png" alt="onecolumn-withresponsive.png" /></p>
+<p>With 2 columns instead:</p>
+<p><img src="/images/2019/01/twocolumns-withresponsive.png" alt="twocolumns-withresponsive.png" /></p>
+<p>And VOILA !</p>
 <h2 id="conclusion">Conclusion</h2>
-<p>This is a trick you can use and I came up with relying on some research I made. However, I could not find any official statement that these CSS classes used in section layout will remain untouched. This means this solution might be broken at some point. Will probably need some official guidance or officially fixed CSS classes from Microsoft for this trick to be a long term valid thing ! Hope you liked it and give your feedback !   Cheers, Yannick</p>
+<p>This is a trick you can use and I came up with relying on some research I made. However,
+I could not find any official statement that these CSS classes used in section layout will remain untouched.
+This means this solution might be broken at some point.
+Will probably need some official guidance or officially fixed CSS classes from Microsoft for this trick to be a long term valid thing !</p>
+<p>Hope you liked it and give your feedback !  </p>
+<p>Cheers,</p>
+<p>Yannick</p>
 
     </div>
 </div>
