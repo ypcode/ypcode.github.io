@@ -23,6 +23,11 @@
 <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
 </noscript>
+<style>
+pre[class*=language-] {    
+    margin-bottom: 1.5em;
+}
+</style>
 
 <!-- Global site tag (gtag.js) - Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
@@ -59,8 +64,9 @@
         <meta property="og:site_name" content="YPcode" />
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Working with Office365 CLI and JSON parameters" />
+            <meta property="og:description" content="Let's see how we can work with parameters in JSON format with the Office 365 CLI" />
         <meta property="og:url" content="https://ypcode.github.io/posts/2020/05/working-with-office365-cli-json-parameters" />
-        <meta property="og:image" content="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171013" />
+        <meta property="og:image" content="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171019" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2020-05-18 05:00:13Z" />
         <meta property="article:modified_time" content="2020-05-18 05:00:13Z" />
@@ -69,9 +75,10 @@
                 <meta property="article:tag" content="Office 365" />
                 <meta property="article:tag" content="Office365 CLI" />
         <meta name="twitter:title" content="Working with Office365 CLI and JSON parameters" />
+            <meta name="twitter:description" content="Let's see how we can work with parameters in JSON format with the Office 365 CLI" />
         <meta name="twitter:url" content="https://ypcode.github.io/posts/2020/05/working-with-office365-cli-json-parameters" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171013" />
+            <meta name="twitter:image" content="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171019" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="JSON, Microsoft 365, Office 365, Office365 CLI" />
         <meta name="twitter:site" content="@yp_code" />
@@ -199,11 +206,12 @@
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171013" alt="code image" />
+            <img class="content-item-featured-image" src="https://ypcode.github.io/images/2020/05/o365cli-json.png?r=202007171019" alt="Working with Office365 CLI and JSON parameters" />
         </div>
    
     <div class="content">
-        <p>Hi Microsoft 365 fellows, In this post, I will give you some tips to work with Office 365 CLI commands that need some JSON as parameters.</p>
+        <p>Hi Microsoft 365 fellows,</p>
+<p>In this post, I will give you some tips to work with Office 365 CLI commands that need some JSON as parameters.</p>
 <h2 id="the-office-365-cli">The Office 365 CLI</h2>
 <p>If you happened to be following just a bit what's going on in the SharePoint and Microsoft 365 community, you probably already know what the Office 365 CLI is !</p>
 <h3 id="if-you-dont">If you don't</h3>
@@ -260,7 +268,11 @@ printf -v webPartPropsJson '`{&quot;myChoices&quot;:[&quot;%s&quot;,&quot;%s&quo
 o365 spo page clientsidewebpart add -u $site -n $pageName --webPartId $webPartId --webPartProperties $webPartPropsJson
 </code></pre>
 <h2 id="thats-it">That's it !</h2>
-<p>Yes it looks very simple ! But I can promise that if you don't know exactly how to format  and escape properly these values you might go crazy trying all sorts of combinations with quotes, double quotes, triple quotes, Backticks and so on... Now you probably know how you need to format :) Hope you will find it useful ! Cheers Yannick</p>
+<p>Yes it looks very simple ! But I can promise that if you don't know exactly how to format  and escape properly these values you might go crazy trying all sorts of combinations with quotes, double quotes, triple quotes, Backticks and so on...
+Now you probably know how you need to format :)</p>
+<p>Hope you will find it useful !</p>
+<p>Cheers</p>
+<p>Yannick</p>
 
     </div>
 </div>
