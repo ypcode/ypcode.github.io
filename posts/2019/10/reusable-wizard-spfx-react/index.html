@@ -8,10 +8,11 @@
     <link rel="icon" href="/images/favicon.png" type="image/png" />
     <link rel="canonical" href="https://ypcode.io/posts/2019/10/reusable-wizard-spfx-react" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css?v=202007180230" />
+    <link rel="stylesheet" href="/css/site.css?v=202007180335" />
     <meta name="generator" content="PVX WebContentGenerator" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/js/framework.js?v=202007180230"></script>
+    <script src="/js/framework.js?v=202007180335"></script>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
@@ -67,7 +68,7 @@ pre[class*=language-] {
         <meta property="og:title" content="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
             <meta property="og:description" content="I built a base component that I share with you so you can customize it easily to have your own Wizard in your SPFx applications" />
         <meta property="og:url" content="https://ypcode.io/posts/2019/10/reusable-wizard-spfx-react" />
-        <meta property="og:image" content="/images/2019/10/wizard.png?r=202007180230" />
+        <meta property="og:image" content="/images/2019/10/wizard.png?r=202007180335" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2019-10-31 14:29:20Z" />
         <meta property="article:modified_time" content="2019-10-31 14:29:20Z" />
@@ -85,7 +86,7 @@ pre[class*=language-] {
             <meta name="twitter:description" content="I built a base component that I share with you so you can customize it easily to have your own Wizard in your SPFx applications" />
         <meta name="twitter:url" content="https://ypcode.io/posts/2019/10/reusable-wizard-spfx-react" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="/images/2019/10/wizard.png?r=202007180230" />
+            <meta name="twitter:image" content="/images/2019/10/wizard.png?r=202007180335" />
             <meta name="twitter:label1" content="Written by" />
             <meta name="twitter:data1" content="Yannick Plenevaux" />
             <meta name="twitter:label2" content="Filed under" />
@@ -215,7 +216,7 @@ pre[class*=language-] {
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="/images/2019/10/wizard.png?r=202007180230" alt="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
+            <img class="content-item-featured-image" src="/images/2019/10/wizard.png?r=202007180335" alt="Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric" />
         </div>
    
     <div class="content">
@@ -749,7 +750,7 @@ Also, if you have any idea of improvement or notice some issue, please, notify m
                     <h5 class="post-title card-title">
                         <a href="${item.RelativeUrl}">${item.Title}</a>
                     </h5>
-                    <span class="post-publishing-date">${item.PublishedOn}</span>
+                    <span class="post-publishing-date">${moment(item.PublishedOn).format("MMM DD, YYYY")}</span>
                     <p class="post-summary card-text">
                         ${item.Description||''}
                     </p>

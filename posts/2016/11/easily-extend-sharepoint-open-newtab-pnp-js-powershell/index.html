@@ -8,10 +8,11 @@
     <link rel="icon" href="/images/favicon.png" type="image/png" />
     <link rel="canonical" href="https://ypcode.io/posts/2016/11/easily-extend-sharepoint-open-newtab-pnp-js-powershell" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css?v=202007180230" />
+    <link rel="stylesheet" href="/css/site.css?v=202007180335" />
     <meta name="generator" content="PVX WebContentGenerator" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/js/framework.js?v=202007180230"></script>
+    <script src="/js/framework.js?v=202007180335"></script>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
@@ -67,7 +68,7 @@ pre[class*=language-] {
         <meta property="og:title" content="Easily extend SharePoint - "Open in a new tab" with JS & PnP PowerShell" />
             <meta property="og:description" content="Check out how to extend the SharePoint UI by provisioning javascript customization with PnP PowerShell" />
         <meta property="og:url" content="https://ypcode.io/posts/2016/11/easily-extend-sharepoint-open-newtab-pnp-js-powershell" />
-        <meta property="og:image" content="/images/common/js.png?r=202007180230" />
+        <meta property="og:image" content="/images/common/js.png?r=202007180335" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2016-11-30 22:43:08Z" />
         <meta property="article:modified_time" content="2016-11-30 22:43:08Z" />
@@ -79,7 +80,7 @@ pre[class*=language-] {
             <meta name="twitter:description" content="Check out how to extend the SharePoint UI by provisioning javascript customization with PnP PowerShell" />
         <meta name="twitter:url" content="https://ypcode.io/posts/2016/11/easily-extend-sharepoint-open-newtab-pnp-js-powershell" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="/images/common/js.png?r=202007180230" />
+            <meta name="twitter:image" content="/images/common/js.png?r=202007180335" />
             <meta name="twitter:label1" content="Written by" />
             <meta name="twitter:data1" content="Yannick Plenevaux" />
             <meta name="twitter:label2" content="Filed under" />
@@ -209,7 +210,7 @@ pre[class*=language-] {
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="/images/common/js.png?r=202007180230" alt="Easily extend SharePoint - "Open in a new tab" with JS & PnP PowerShell" />
+            <img class="content-item-featured-image" src="/images/common/js.png?r=202007180335" alt="Easily extend SharePoint - "Open in a new tab" with JS & PnP PowerShell" />
         </div>
    
     <div class="content">
@@ -327,7 +328,7 @@ Param (
                     <h5 class="post-title card-title">
                         <a href="${item.RelativeUrl}">${item.Title}</a>
                     </h5>
-                    <span class="post-publishing-date">${item.PublishedOn}</span>
+                    <span class="post-publishing-date">${moment(item.PublishedOn).format("MMM DD, YYYY")}</span>
                     <p class="post-summary card-text">
                         ${item.Description||''}
                     </p>
