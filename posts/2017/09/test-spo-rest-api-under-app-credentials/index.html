@@ -6,11 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>YPcode</title>
     <link rel="icon" href="/images/favicon.png" type="image/png" />
-    <link rel="canonical" href="https://ypcode.github.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
+    <link rel="canonical" href="https://ypcode.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css" />
+    <link rel="stylesheet" href="/css/site.css?v=202007180149" />
     <meta name="generator" content="PVX WebContentGenerator" />
-   
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/js/framework.js?v=202007180149"></script>
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
@@ -65,8 +66,8 @@ pre[class*=language-] {
         <meta property="og:type" content="article" />
         <meta property="og:title" content="Test the SharePoint Online REST API under App credentials" />
             <meta property="og:description" content="See the steps to issue test calls to SharePoint REST API with application credentials" />
-        <meta property="og:url" content="https://ypcode.github.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
-        <meta property="og:image" content="/images/2017/09/register-app.png?r=202007171039" />
+        <meta property="og:url" content="https://ypcode.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
+        <meta property="og:image" content="/images/2017/09/register-app.png?r=202007180148" />
         <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
         <meta property="article:published_time" content="2017-09-11 05:00:36Z" />
         <meta property="article:modified_time" content="2017-09-11 05:00:36Z" />
@@ -78,13 +79,15 @@ pre[class*=language-] {
                 <meta property="article:tag" content="SharePoint Online" />
         <meta name="twitter:title" content="Test the SharePoint Online REST API under App credentials" />
             <meta name="twitter:description" content="See the steps to issue test calls to SharePoint REST API with application credentials" />
-        <meta name="twitter:url" content="https://ypcode.github.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
+        <meta name="twitter:url" content="https://ypcode.io/posts/2017/09/test-spo-rest-api-under-app-credentials" />
             <meta name="twitter:card" content="summary_large_image" />
-            <meta name="twitter:image" content="/images/2017/09/register-app.png?r=202007171039" />
+            <meta name="twitter:image" content="/images/2017/09/register-app.png?r=202007180148" />
+            <meta name="twitter:label1" content="Written by" />
+            <meta name="twitter:data1" content="Yannick Plenevaux" />
             <meta name="twitter:label2" content="Filed under" />
             <meta name="twitter:data2" content="App Only, App Permissions, PnP, PowerShell, SharePoint, SharePoint Online" />
         <meta name="twitter:site" content="@yp_code" />
-    <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.github.io/feed" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.io/feed" />
 
 
     <script>
@@ -115,7 +118,7 @@ pre[class*=language-] {
                     <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M0,25.8v17.2h172v-17.2zM0,77.4v17.2h172v-17.2zM0,129v17.2h172v-17.2z"></path></g></g>
             </svg>
         </span>
-        <a href="https://ypcode.github.io/">
+        <a href="https://ypcode.io/">
             <h1 class="main-site-title">YPcode</h1>
             <hr class="sep main-site-title-sep"/>
             <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
@@ -132,7 +135,7 @@ pre[class*=language-] {
 </nav>
         
             <div class="main-site-author">
-                    <img class="main-site-author-picture" src="/images/me.png" />
+                    <img class="main-site-author-picture" src="/images/common/me.png" />
                     <h3 class="main-site-author-name">
                         Yannick Plenevaux
                     </h3>
@@ -208,7 +211,7 @@ pre[class*=language-] {
     </div>
 
         <div class="content-item-featured-image-container">
-            <img class="content-item-featured-image" src="/images/2017/09/register-app.png?r=202007171039" alt="Test the SharePoint Online REST API under App credentials" />
+            <img class="content-item-featured-image" src="/images/2017/09/register-app.png?r=202007180148" alt="Test the SharePoint Online REST API under App credentials" />
         </div>
    
     <div class="content">
@@ -285,6 +288,45 @@ With Postman, we can easily change the request headers and configuration to test
 <p>Yannick</p>
 
     </div>
+
+    <div class="foot-random-posts">
+        <div class="random-posts-container">
+<h5>Other posts</h5>
+<div id="random-posts" class="posts d-flex flex-wrap align-content-stretch">
+</div>
+
+<script>
+    WCG.execute((db) => {
+
+        const renderCard = (placeholderSelector, item) => {
+            const placeholder = $(placeholderSelector);
+            $(`<div class="post-card card box-shadow">
+                <a href="${item.RelativeUrl}">
+                    <img class="post-featured-image card-img-top" src="${item.FeaturedImage}" alt="${item.FeaturedImageAlt}" />
+                </a>
+                <div class="post-caption card-body">
+                    <h5 class="post-title card-title">
+                        <a href="${item.RelativeUrl}">${item.Title}</a>
+                    </h5>
+                    <span class="post-publishing-date">${item.PublishedOn}</span>
+                    <p class="post-summary card-text">
+                        ${item.Description||''}
+                    </p>
+                    <div class="post-keywords">
+                        ${item.Keywords.map(k => `<span class="post-keyword">#${k.replace(" ","")}</span>`).join(" ")}
+                    </div>
+                </div>
+            </div>
+            `).appendTo(placeholder);
+        };
+
+        const [firstPost, secondPost] = db.getRandomPosts(2);
+        renderCard("#random-posts", firstPost);
+        renderCard("#random-posts", secondPost);
+    });
+</script>
+</div>
+    </div>
 </div>
         </main>
 
@@ -293,8 +335,6 @@ With Postman, we can easily change the request headers and configuration to test
         </footer>
     </div>
 
-
-    <script src="/lib/jquery/dist/jquery.min.js"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/site.js"></script>
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
