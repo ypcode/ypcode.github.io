@@ -1,0 +1,640 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YPcode</title>
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://ypcode.io/posts/2020/07/use-csom-aspnetcore" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css?v=202007220100" />
+    <meta name="generator" content="PVX WebContentGenerator" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/js/framework.js?v=202007220100"></script>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
+</noscript>
+<style>
+pre[class*=language-] {    
+    margin-bottom: 1.5em;
+}
+</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-172372458-1');
+</script>
+
+<style>
+.social-links {
+    display: inline-flex;
+    width: 60%;
+    margin:auto;
+    justify-content: center;
+    color: #807070;
+}
+
+.social-links a {
+    margin-right: 15px;
+}
+
+.social-links a:hover {
+    color: #9e1e28;
+}
+
+    .social-links svg {
+        fill: currentColor;
+        height: 18px;
+    }
+</style>
+        <meta property="og:site_name" content="YPcode" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Use the CSOM Library in your ASP.NET Core apps" />
+            <meta property="og:description" content="Recently the support for .NET Standard in the CSOM library was released. It opens up a variety of new possibilities for SharePoint developers. In this post, let's see how we can leverage the CSOM library in a ASP.NET Core web application." />
+        <meta property="og:url" content="https://ypcode.io/posts/2020/07/use-csom-aspnetcore" />
+        <meta property="og:image" content="/images/2020/07/aspnetcore-csom/code_exhibit..png?r=202007220100" />
+        <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
+        <meta property="article:published_time" content="2020-07-21 18:00:00Z" />
+        <meta property="article:modified_time" content="2020-07-21 18:00:00Z" />
+                <meta property="article:tag" content=".NET Core" />
+                <meta property="article:tag" content=".NET Standard" />
+                <meta property="article:tag" content="ASP.NET Core" />
+                <meta property="article:tag" content="CSOM" />
+                <meta property="article:tag" content="SharePoint Online" />
+                <meta property="article:tag" content="Microsoft 365" />
+                <meta property="article:tag" content="C#" />
+        <meta name="twitter:title" content="Use the CSOM Library in your ASP.NET Core apps" />
+            <meta name="twitter:description" content="Recently the support for .NET Standard in the CSOM library was released. It opens up a variety of new possibilities for SharePoint developers. In this post, let's see how we can leverage the CSOM library in a ASP.NET Core web application." />
+        <meta name="twitter:url" content="https://ypcode.io/posts/2020/07/use-csom-aspnetcore" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="/images/2020/07/aspnetcore-csom/code_exhibit..png?r=202007220100" />
+            <meta name="twitter:label1" content="Written by" />
+            <meta name="twitter:data1" content="Yannick Plenevaux" />
+            <meta name="twitter:label2" content="Filed under" />
+            <meta name="twitter:data2" content=".NET Core, .NET Standard, ASP.NET Core, CSOM, SharePoint Online, Microsoft 365, C#" />
+        <meta name="twitter:site" content="@yp_code" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.io/feed" />
+
+
+    <script>
+        var initialSiteContentHeight = null;
+        function toggleMenu() {
+            var menu = document.querySelector(".menu");
+            var siteContent = document.querySelector(".site-content");
+            if (menu && siteContent) {
+                if (menu.classList.contains("visible")) {
+                    menu.classList.remove("visible");
+                } else {
+                    menu.classList.add("visible");
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="menu">
+        <span class="menu-hamburger-icon" onclick="toggleMenu();">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                x="0px" 
+                y="0px"
+                width="30" 
+                height="30"
+                viewBox="0 0 172 172"
+                style=" fill:#000000;">
+                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M0,25.8v17.2h172v-17.2zM0,77.4v17.2h172v-17.2zM0,129v17.2h172v-17.2z"></path></g></g>
+            </svg>
+        </span>
+        <a href="https://ypcode.io/">
+            <h1 class="main-site-title">YPcode</h1>
+            <hr class="sep main-site-title-sep"/>
+            <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
+        </a>
+        <nav class="navigation">
+    <ul>
+<li class="nav-item">
+    <span class="link-icon icon-home" ></span><a class="nav-link" href="/" >Home</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/about-me/" >About me</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/projects-contrib/" >Projects &amp; Contributions</a>
+</li>    </ul>
+</nav>
+        
+            <div class="main-site-author">
+                    <img class="main-site-author-picture" src="/images/common/me.png" />
+                    <h3 class="main-site-author-name">
+                        Yannick Plenevaux
+                    </h3>
+                        <h3 class="main-site-author-description">
+                                <span class="main-site-author-description-line">Microsoft 365 Solutions Architect</span>
+                                <span class="main-site-author-description-line">Office Development MVP</span>
+                        </h3>
+            </div>
+
+        <div class="menu-social-links">
+            <p class="social-links">
+
+    <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
+        title="Microsoft MVP" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <defs>
+                <style>
+                    .a {
+                        fill: currentColor;
+                    }
+
+                    .b {
+                        fill: #1d1d1d;
+                    }
+                </style>
+            </defs>
+            <rect class="a" width="50" height="50"></rect>
+            <path class="b"
+                d="M17.42,26.16a15.14,15.14,0,0,0-.22,1.59l-.07.48h0a14.16,14.16,0,0,0-.33-2l-1.82-7.89h-3.5v13h2.07V24.43c0-1.18,0-2.39-.09-3.61h.08l.35,2.3,2,8.19h2.28L20,23c.18-.9.31-1.63.39-2.18h.05q-.09,2-.09,2.94v7.55h2.14v-13H19.13Zm18.36.72h1a3.81,3.81,0,0,0,3-1.24,4.54,4.54,0,0,0,1.14-3.17,4.23,4.23,0,0,0-1-3.08A3.81,3.81,0,0,0,37,18.34H33.29v13h2.49Zm0-6.37h.83a1.62,1.62,0,0,1,1.25.52,2.25,2.25,0,0,1,.48,1.57c0,1.42-.57,2.13-1.7,2.13h-.86Zm-9.24,10.8h2.67l3.31-13H30l-1.8,8.5c-.09.47-.15.92-.19,1.34l-.05.35h-.06a12,12,0,0,0-.2-1.65l-1.8-8.54H23.32ZM25.26,46.75,3.75,25.24,25.24,3.75,46.75,25.26Z"
+                transform="translate(-0.25 -0.25)"></path>
+        </svg>
+        </a>
+
+    <a href="https://twitter.com/yp_code" target="_blank" title="Twitter" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+                d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://github.com/ypcode" target="_blank" title="GitHub" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path
+                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/yannickplenevaux" target="_blank" title="LinkedIn" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
+            </path>
+        </svg>
+    </a>
+
+
+</p>
+        </div>
+    </div>
+   
+    <div class="site-content">
+        <main role="main" class="pb-3">
+            <div class="content-item post">
+    
+    <div class="content-item-title">
+        <span class="post-publishing-date">Jul 21, 2020</span>
+        <h1>
+            Use the CSOM Library in your ASP.NET Core apps
+            <hr/>
+        </h1>
+    </div>
+
+        <div class="content-item-featured-image-container">
+            <img class="content-item-featured-image" src="/images/2020/07/aspnetcore-csom/code_exhibit..png?r=202007220100" alt="Use the CSOM Library in your ASP.Net Core apps" />
+        </div>
+   
+    <div class="content">
+        <p>Hi SharePoint devs!</p>
+<p>Recently the support for .NET Standard in the CSOM library was released. It opens up a variety of new possibilities for SharePoint developers.</p>
+<p>Let's create together an ASP.NET Core MVC web application, and let's use all the goodness of this framework while using our skills with the SharePoint Client Side Object Model library. It used not to be compatible with .NET Core applications, now it is .NET Standard compatible. It means the DLL can be used in any .NET Core project and all the platforms that uses it: non Windows OSes, Azure Function v3, Xamarin, ...</p>
+<h1 id="asp.net-core-mvc">ASP.NET Core MVC</h1>
+<p>If you are like me a SharePoint developer, you probably have a strong background in .NET and C#, and you might probably have not had many opportunities of working with the latest .NET web technologies such as ASP.NET Core.
+I personnally had a couple projects opportunities using it, but I mainly learned it on my spare time.
+And really I love it!</p>
+<h2 id="dependecy-injection-for-the-win">Dependecy Injection For The Win !</h2>
+<p>I am a big fan of dependency injection, separation of concerns, and clean code.
+I hate when my code is polluted with much noise that is necessary to make the code work, but not strictly related to the functional purpose of the code I am currently writing.
+In such cases, I will tend to refactor the code to be clean and a pleasure to read.
+In other words, I don't want my code to need a comment at each line to be understood.
+I digress a bit, but my point is, with dependency injection, I can easily create the units of code, the building blocks, responsible for their own goal, and then I can simply say: &quot;Hey, I need that block, give it to me!&quot;.
+I don't need to start instantiating a new service, need all the required configurations and so on it needs to work.</p>
+<h1 id="csom.net-core">CSOM &amp; .NET Core</h1>
+<p>The CSOM library that you are probably familiar with help us work against SharePoint remotely manipulating an object model. It is the remote counterpart of the SharePoint Server Object Model that is the historical main SharePoint API. That Server-Side API is only supported on SharePoint On-Prem since the code can only run on a SharePoint server.
+It is definitely no longer recommended since the Cloud-First strategy of Microsoft nowadays.
+On SharePoint Online, we have 3 means to programmatically work on the platform:</p>
+<ol>
+<li><p><strong>CSOM</strong>: a .NET Library, it is the more complete API surface, you can basically do anything that is programmatically doable in SharePoint with this library. However it is limited to .NET.</p>
+</li>
+<li><p><strong>SharePoint REST API</strong>: A RESTful API that allows to programmatically work against SharePoint from any technology that has HTTP capabilities. It can be used in C#, JavaScript, Java, Python, Go, or any other language. It has however still some gaps and inconsitencies. Not everything that is doable with CSOM is doable with the REST API (e.g. Create a Content Type with a specific ID, ...).
+Moreover, it is not always very consistent and aligned with the principles of a real RESTful API.</p>
+</li>
+<li><p><strong>Microsoft Graph</strong>: It is the most recent API that allows to work against some parts of SharePoint, it is much more aligned on the RESTful conventions and is THE one API to use across the Microsoft 365 suite. It is huge and targets much much more than just SharePoint. However, unfortunately, so far, it only covers a very small part of the SharePoint capabilities. Anyway, it is where the major investments from Microsoft are (between these 3). The new SharePoint API capabilities will be in Microsoft Graph!</p>
+</li>
+</ol>
+<p>All that said, you probably understood that, for now, the most easy to use AND complete API is still CSOM. It has been there since SharePoint 2013 and has evolved a lot.</p>
+<p>Unfortunately, CSOM used not to be compatible with .NET Core that is the future of .NET and has been around for several years now.
+But, today, after a veeery long time and high demand from the developers community, <strong>it finally is</strong>!</p>
+<h1 id="lets-create-an-app">Let's create an App</h1>
+<p>Let me show you how we can create a .NET Core MVC app that will use CSOM in the context of the current logged in user.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>To follow this post, you will need the following things:</p>
+<ul>
+<li>Access rights to your <a href="https://aad.portal.azure.com">Azure AD portal</a></li>
+<li>Have .NET Core v3.1 installed on your machine</li>
+<li>Have Visual Studio Code (or your preferred code editor, but I will use VS Code and the dotnet CLI)</li>
+</ul>
+<h2 id="lets-register-an-azure-ad-app">Let's register an Azure AD App</h2>
+<p>In order to authenticate our user, we will need to register a new application in our tenant.
+Sign in to the Azure AD Portal and go to <code>Azure Active Directory</code> &gt; <code>App Registrations</code>. Click the <code>New registration</code> button</p>
+<p>From the <code>Register an application</code> blade, select a name for your application.
+In the <code>Redirect URI</code> section, put the value <code>https://localhost:5001</code></p>
+<p><img src="/images/2020/07/aspnetcore-csom/register-new-app.png" alt="Register new app" /></p>
+<p>Click the <strong>Register</strong> button.</p>
+<p>From the <strong>Overview</strong> tab, copy the <code>Client Id</code> and <code>Tenant Id</code></p>
+<p><img src="/images/2020/07/aspnetcore-csom/tenantid-appid.png" alt="IDs" /></p>
+<p>From the <strong>Authentication</strong> tab, add another Redirect URI: <code>https://localhost:5001/signin-oidc</code></p>
+<p><img src="/images/2020/07/aspnetcore-csom/redirecturi-signin-oidc.png" alt="Redirect URI signin-oidc" /></p>
+<p>Also make sure the <code>ID Tokens</code> option is checked in the <strong>Implicit Grant</strong> section.</p>
+<p>From the <strong>Certificates &amp; Secrets</strong> tab, create a new client secret and copy it in a safe location</p>
+<p>From the <strong>API Permissions</strong> tab, click the <strong>Add a permission</strong> button and select the <code>SharePoint</code> API</p>
+<p><img src="/images/2020/07/aspnetcore-csom/add-sp-api-perm.png" alt="SPO-API" /></p>
+<p>Select the Delegated permission <code>AllSites.FullControl</code></p>
+<p><img src="/images/2020/07/aspnetcore-csom/spo_perm_AllSitesFullControl.png" alt="AllSites.FullControl" /></p>
+<blockquote>
+<p>NOTE:</p>
+<p>For the sake of simplicity in this example, I select the highest possible permission.
+In Production scenario, it is recommended to use the least necessary privilege to avoid troubles :)</p>
+</blockquote>
+<p>Since we are using here a high privilege permission, it is required to be consented by an adminstrator, you can do it easily on the current blade clicking the button <code>Grant admin consent for &lt;tenant&gt;</code></p>
+<h2 id="lets-create-a-new-mvc-app">Let's create a new MVC App</h2>
+<p>From a console, type the following command</p>
+<pre><code class="language-bash">dotnet new mvc -o MVC_CSOM
+cd MVC_CSOM
+code .
+</code></pre>
+<p>(Keep that console open, we will reuse it later).</p>
+<p>We have now a new scaffolded project open in code</p>
+<p><img src="/images/2020/07/aspnetcore-csom/new-mvc.png" alt="New MVC Project" /></p>
+<p>Let's install the packages we will need, open the <strong>MVC_CSOM.csproj</strong> file and make it look like :</p>
+<pre><code class="language-xml">&lt;Project Sdk=&quot;Microsoft.NET.Sdk.Web&quot;&gt;
+
+  &lt;PropertyGroup&gt;
+    &lt;TargetFramework&gt;netcoreapp3.1&lt;/TargetFramework&gt;
+  &lt;/PropertyGroup&gt;
+
+  &lt;ItemGroup&gt;
+    &lt;PackageReference Include=&quot;Microsoft.Identity.Web&quot; Version=&quot;0.2.0-preview&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.Identity.Web.UI&quot; Version=&quot;0.2.0-preview&quot; /&gt;
+    &lt;PackageReference Include=&quot;Microsoft.SharePointOnline.CSOM&quot; Version=&quot;16.1.20211.12000&quot; /&gt;
+  &lt;/ItemGroup&gt;
+
+&lt;/Project&gt;
+</code></pre>
+<p>From the console, type</p>
+<pre><code class="language-bash">dotnet restore
+</code></pre>
+<p>In the <strong>appsettings.json</strong> file, put the following content and replace the placeholders accordingly with the values we got earlier:</p>
+<pre><code class="language-json">{
+  &quot;AzureAd&quot;: {
+    &quot;Instance&quot;: &quot;https://login.microsoftonline.com/&quot;,
+    &quot;Domain&quot;: &quot;{tenant}.onmicrosoft.com&quot;,
+    &quot;TenantId&quot;: &quot;{tenant-id}&quot;,
+    &quot;ClientId&quot;: &quot;{client-id}&quot;,
+    &quot;ClientSecret&quot;:&quot;{client-secret}&quot;,
+    &quot;CallbackPath&quot;: &quot;/signin-oidc&quot;
+  },
+  &quot;SharePoint&quot;: {
+    &quot;Url&quot;: &quot;https://{tenant}.sharepoint.com/sites/{site}&quot;
+  },
+  &quot;Logging&quot;: {
+    &quot;LogLevel&quot;: {
+      &quot;Default&quot;: &quot;Information&quot;,
+      &quot;Microsoft&quot;: &quot;Warning&quot;,
+      &quot;Microsoft.Hosting.Lifetime&quot;: &quot;Information&quot;
+    }
+  },
+  &quot;AllowedHosts&quot;: &quot;*&quot;
+}
+
+</code></pre>
+<h2 id="lets-create-a-service-to-get-our-csom-clientcontext">Let's create a service to get our CSOM ClientContext</h2>
+<p>Create a folder <strong>/Services</strong> and add a file <strong>SharePointClientContextService.cs</strong> into it with the following content:</p>
+<pre><code class="language-csharp">using System;
+using System.Linq;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Identity.Web;
+using Microsoft.SharePoint.Client;
+
+namespace MVC_CSOM.Services
+{
+    public static class SharePointClientContextFactoryServiceConfiguration
+    {
+        public static IServiceCollection AddSharePointContextFactory(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped&lt;ISharePointClientContextFactory, SharePointClientContextFactory&gt;();
+            return serviceCollection;
+        }
+
+        public static IServiceCollection AddCurrentUserSharePointClientContext(this IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddSharePointContextFactory();
+
+            serviceCollection.AddScoped&lt;ClientContext&gt;((services) =&gt;
+            {
+                var clientContextFactory = services.GetService&lt;ISharePointClientContextFactory&gt;();
+                return clientContextFactory.GetClientContext();
+            });
+
+            return serviceCollection;
+        }
+    }
+
+    public interface ISharePointClientContextFactory
+    {
+        ClientContext GetClientContext(string siteUrl = null);
+    }
+
+    class SharePointClientContextFactory : ISharePointClientContextFactory
+    {
+        private readonly ITokenAcquisition _tokenAcquisition;
+        private readonly IConfiguration _configuration;
+
+        public SharePointClientContextFactory(IConfiguration configuration, ITokenAcquisition tokenAcquisition)
+        {
+            _configuration = configuration;
+            _tokenAcquisition = tokenAcquisition;
+        }
+
+        private string GetResourceUri(string siteUrl)
+        {
+            var uri = new Uri(siteUrl);
+            return $&quot;{uri.Scheme}://{uri.DnsSafeHost}&quot;;
+        }
+
+        private string[] GetSharePointResourceScope(string siteUrl, string[] scopes = null)
+        {
+            string resourceUri = GetResourceUri(siteUrl);
+            return scopes == null
+                ? new[] { $&quot;{resourceUri}/.default&quot; }
+                : scopes.Select(scope =&gt; $&quot;{resourceUri}/{scope}&quot;).ToArray();
+        }
+
+
+        private ClientContext GetClientContextInternal(string siteUrl, string[] scopes = null)
+        {
+            siteUrl ??= _configuration.GetValue&lt;string&gt;(&quot;SharePoint:Url&quot;);
+            if (string.IsNullOrEmpty(siteUrl))
+                throw new Exception(&quot;The SharePoint site URL is not specified or configured&quot;);
+
+            // Acquire the access token.
+            string[] effectiveScopes = GetSharePointResourceScope(siteUrl, scopes);
+            var clientContext = new ClientContext(siteUrl);
+            clientContext.ExecutingWebRequest += (object sender, WebRequestEventArgs e) =&gt;
+            {
+                string accessToken = _tokenAcquisition.GetAccessTokenForUserAsync(effectiveScopes).GetAwaiter().GetResult();
+                e.WebRequestExecutor.RequestHeaders.Add(&quot;Authorization&quot;, $&quot;Bearer {accessToken}&quot;);
+            };
+            return clientContext;
+        }
+
+        public ClientContext GetClientContext(string siteUrl = null)
+        {
+            return GetClientContextInternal(siteUrl);
+        }
+    }
+}
+</code></pre>
+<h2 id="lets-configure-our-services">Let's configure our services</h2>
+<p>Open the <strong>Startup.cs</strong> file and modify the <code>ConfigureServices()</code> method to look like:</p>
+<pre><code class="language-csharp">    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddMicrosoftWebAppAuthentication(Configuration)
+                .AddMicrosoftWebAppCallsWebApi(Configuration, new string[] { &quot;User.Read&quot; })
+                .AddDistributedTokenCaches();
+
+        services.AddDistributedMemoryCache();
+
+        services.AddSharePointContextFactory();
+
+            services.AddControllersWithViews(options =&gt;
+        {
+            var policy = new AuthorizationPolicyBuilder()
+                .RequireAuthenticatedUser()
+                .Build();
+            options.Filters.Add(new AuthorizeForScopesAttribute() { Scopes = new[] { &quot;User.Read&quot; } });
+            options.Filters.Add(new AuthorizeFilter(policy));
+        });
+        services.AddRazorPages();
+    }
+</code></pre>
+<p>Add the necessary using clauses at the top of the file</p>
+<pre><code class="language-csharp">using Microsoft.Identity.Web;
+using Microsoft.Identity.Web.TokenCacheProviders.Distributed;
+using MVC_CSOM.Services;
+</code></pre>
+<p>And add the following line in <code>Configure()</code> method</p>
+<pre><code class="language-csharp">// ...
+    app.UseAuthentication();
+// add just before app.UseAuthorization();
+//...
+</code></pre>
+<h2 id="lets-finally-use-csom">Let's (finally) use CSOM</h2>
+<p>Finally, the code we are really interested in, let's use CSOM, and also that awesome dependency injection mechanism.
+In the <strong>/Controllers/HomeController.cs</strong> file, let's modify the code to look like :</p>
+<pre><code class="language-csharp">using System.Diagnostics;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using MVC_CSOM.Models;
+using MVC_CSOM.Services;
+
+namespace MVC_CSOM.Controllers
+{
+    public class HomeController : Controller
+    {
+        private readonly ILogger&lt;HomeController&gt; _logger;
+        private readonly ISharePointClientContextFactory _spClientContextFactory;
+
+        public HomeController(ILogger&lt;HomeController&gt; logger, ISharePointClientContextFactory spClientContextFactory)
+        {
+            _spClientContextFactory = spClientContextFactory;
+            _logger = logger;
+        }
+
+        public async Task&lt;IActionResult&gt; Index()
+        {
+            using (var ctx = _spClientContextFactory.GetClientContext())
+            {
+                ctx.Load(ctx.Web);
+                await ctx.ExecuteQueryAsync();
+                ViewBag.WebTitle = ctx.Web.Title;
+                return View();
+            }
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+    }
+}
+</code></pre>
+<p>If you are not familiar with the Dependency Injection mechanism that takes place here. Here is what happens:
+Earlier in the <strong>Startup.cs</strong> file, we called <code>services.AddSharePointContextFactory();</code> meaning that we want an instance of a SharePoint Context Factory (<code>ISharePointClientContextFactory</code>) wherever it is requested.
+In the constructor of our controller, we mention we need an instance of that interface. The mechanism then get the relevant instance and passes it to the controller when it is instantiated.
+From a user code perspective, there is nothing more we need to know. We get the dependency we need, PERIOD.</p>
+<p>That <code>SharePointClientContextFactory</code> is a class we wrote earlier, you can take a look back to see what it is doing :)</p>
+<p>And here we go, CSOM can be used with the rights of the logged in user in our MVC Web app !
+In VS Code, you can hit F5 (and select <code>.NET Core</code> on first time) to run your app in debug mode.</p>
+<p>Note that I use here a <code>SharePointClientContextFactory</code> that has a <code>GetContext()</code> method. This method can either take no arguments and get the target site URL from the configuration file, or take the target site URL as its parameter. It would be the way to go if you need a client context on multiple different sites.</p>
+<p>However, if there is only one site you plan to target, and it is configured in the <code>appsettings.json</code> file. Exactly the case we have right now. Here is a second approach:</p>
+<p>Do the following changes:</p>
+<p>In <strong>Startup.cs</strong></p>
+<pre><code class="language-csharp">// Replace services.AddSharePointContextFactory(); by
+services.AddCurrentUserSharePointClientContext();
+</code></pre>
+<p>In <strong>/Controllers/HomeController.cs</strong></p>
+<pre><code class="language-csharp">//...
+ public class HomeController : Controller
+    {
+        private readonly ILogger&lt;HomeController&gt; _logger;
+        private readonly ClientContext ctx;
+
+        public HomeController(ILogger&lt;HomeController&gt; logger, ClientContext clientContext)
+        {
+            ctx = clientContext;
+            _logger = logger;
+        }
+
+        public async Task&lt;IActionResult&gt; Index()
+        {
+            ctx.Load(ctx.Web);
+            await ctx.ExecuteQueryAsync();
+            ViewBag.WebTitle = ctx.Web.Title;
+            return View();
+        }
+//...
+</code></pre>
+<p>The result is exactly the same but, here you simply say: &quot;Hey! gimme the Client Context for current user&quot; and use it!</p>
+<blockquote>
+<p>NOTE:
+Don't worry if you see <code>Microsoft.Identity.Client.MsalUiRequiredException</code> raised from time to time if you relaunch the app multiple times. The reason is because the cookie in your browser is no longer in sync with the server that caches the tokens in memory. In Production scenarios, it is recommended to use real distributed cache (e.g. Redis, or other dbms).</p>
+</blockquote>
+<h1 id="have-fun">Have fun !</h1>
+<p>You are now able to get some fun writing ASP .NET Core MVC apps and working against SharePoint Online using CSOM, how cool is that?!
+The project sample can be found <a href="https://github.com/ypcode/blog_samples/tree/master/MVC_CSOM">here on GitHub</a>
+Hopefully, you found this post useful! Feel free to comment and provide your feedback !</p>
+<p>Cheers,</p>
+<p>Yannick</p>
+
+    </div>
+
+    <div class="foot-random-posts">
+        <div class="random-posts-container">
+<h5>Other posts</h5>
+<div id="random-posts" class="posts d-flex flex-wrap align-content-stretch">
+</div>
+
+<script>
+    WCG.execute((db) => {
+
+        const renderCard = (placeholderSelector, item) => {
+            const placeholder = $(placeholderSelector);
+            $(`<div class="post-card card box-shadow">
+                <a href="${item.RelativeUrl}">
+                    <img class="post-featured-image card-img-top" src="${item.FeaturedImage}" alt="${item.FeaturedImageAlt}" />
+                </a>
+                <div class="post-caption card-body">
+                    <h5 class="post-title card-title">
+                        <a href="${item.RelativeUrl}">${item.Title}</a>
+                    </h5>
+                    <span class="post-publishing-date">${moment(item.PublishedOn).format("MMM DD, YYYY")}</span>
+                    <p class="post-summary card-text">
+                        ${item.Description||''}
+                    </p>
+                    <div class="post-keywords">
+                        ${item.Keywords.map(k => `<span class="post-keyword">#${k.replace(" ","")}</span>`).join(" ")}
+                    </div>
+                </div>
+            </div>
+            `).appendTo(placeholder);
+        };
+
+        const [firstPost, secondPost] = db.getRandomPosts(2);
+        renderCard("#random-posts", firstPost);
+        renderCard("#random-posts", secondPost);
+    });
+</script>
+</div>
+    </div>
+
+     <div class="post-comments">
+            <div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+this.page.url = 'https://ypcode.io/posts/2020/07/use-csom-aspnetcore';
+this.page.identifier = 'src\content\posts\2020-07-22-aspnetcore-csom.md';
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://ypcode-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    </div>
+</div>
+        </main>
+
+        <footer class="border-top footer">
+                &copy; Copyrights 2020 - YPcode - Yannick Plenevaux
+        </footer>
+    </div>
+
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
+
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-aspnet.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-csharp.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-css-extras.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-scss.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+
+
+
+</body>
+</html>
