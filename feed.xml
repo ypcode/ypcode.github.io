@@ -1,0 +1,1023 @@
+<?xml version="1.0"?>
+<rss xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="2">
+  <channel>
+    <title>YPcode</title>
+    <description>Experiences and research on Microsoft 365, Azure and modern web development</description>
+    <link>https://ypcode.io/</link>
+    <image>
+      <url>https://ypcode.io/images/favicon.png</url>
+      <title>YPcode</title>
+      <link>https://ypcode.io/</link>
+    </image>
+    <link href="https://ypcode.io/feed.xml" rel="self" type="application/rss+xml" xmlns="http://www.w3.org/2005/Atom" />
+    <pubDate>Fri, 24 Jul 2020 23:18:07 Z</pubDate>
+    <lastBuildDate>Fri, 24 Jul 2020 23:18:07 Z</lastBuildDate>
+    <generator>PVX WCG AtomGenerator</generator>
+    <analytics id="UA-172372458-1" engine="GoogleAnalytics" xmlns="http://webfeeds.org/rss/1.0" />
+    <ttl>60</ttl>
+    <item>
+      <title>Use the CSOM Library in your ASP.NET Core apps</title>
+      <description>Recently the support for .NET Standard in the CSOM library was released. It opens up a variety of new possibilities for SharePoint developers. In this post, let's see how we can leverage the CSOM library in a ASP.NET Core web application.</description>
+      <pubDate>Tue, 21 Jul 2020 18:00:00 </pubDate>
+      <link>https://ypcode.io/posts/2020/07/use-csom-aspnetcore</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/07/use-csom-aspnetcore</guid>
+      <content url="https://ypcode.io/images/2020/07/aspnetcore-csom/code_exhibit.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>.NET Core</category>
+      <category>.NET Standard</category>
+      <category>ASP.NET Core</category>
+      <category>CSOM</category>
+      <category>SharePoint Online</category>
+      <category>Microsoft 365</category>
+      <category>C#</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Working with Office365 CLI and JSON parameters</title>
+      <description>Let's see how we can work with parameters in JSON format with the Office 365 CLI</description>
+      <pubDate>Mon, 18 May 2020 05:00:13 </pubDate>
+      <link>https://ypcode.io/posts/2020/05/working-with-office365-cli-json-parameters</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/05/working-with-office365-cli-json-parameters</guid>
+      <content url="https://ypcode.io/images/2020/05/o365cli-json.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JSON</category>
+      <category>Microsoft 365</category>
+      <category>Office 365</category>
+      <category>Office365 CLI</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Ship your Microsoft 365 solution as a single PnP package</title>
+      <description>Let's see how we can ship a Microsoft 365 solution included SPFx applications as a single PnP package</description>
+      <pubDate>Mon, 11 May 2020 06:00:54 </pubDate>
+      <link>https://ypcode.io/posts/2020/05/ship-your-microsoft-365-solution-single-pnp-package</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/05/ship-your-microsoft-365-solution-single-pnp-package</guid>
+      <content url="https://ypcode.io/images/2020/05/template.xml-screenshot.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Microsoft 365</category>
+      <category>Office 365</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SharePointFullPage</category>
+      <category>SingleWebPartAppPage</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>Tenant</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Site Designs Studio V2 is out!</title>
+      <description>Here is the new version of Site Designs Studio</description>
+      <pubDate>Mon, 04 May 2020 07:55:58 </pubDate>
+      <link>https://ypcode.io/posts/2020/05/site-designs-studio-v2-is-out</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/05/site-designs-studio-v2-is-out</guid>
+      <content url="https://ypcode.io/images/2020/05/sds_screenshot.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JSON</category>
+      <category>Office 365</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <category>SPFx</category>
+      <category>Tenant</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Explore Microsoft Graph Subscriptions – Part III: Handle subscription lifetime</title>
+      <description>See how and why handling the lifetime of your Microsoft Graph subscriptions</description>
+      <pubDate>Mon, 09 Mar 2020 06:30:22 </pubDate>
+      <link>https://ypcode.io/posts/2020/03/explore-microsoft-graph-subscriptions-part-iii</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/03/explore-microsoft-graph-subscriptions-part-iii</guid>
+      <content url="https://ypcode.io/images/2020/03/msgraph-webhooks-partiii.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>Azure</category>
+      <category>Azure Functions</category>
+      <category>Microsoft 365</category>
+      <category>Microsoft Graph</category>
+      <category>PnP</category>
+      <category>Subscriptions</category>
+      <category>TypeScript</category>
+      <category>Webhook</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Explore Microsoft Graph Subscriptions - Part II: Azure Function'd like a Pro</title>
+      <description>Let's leverage Azure Functions to implement the endpoints of our subscriptions</description>
+      <pubDate>Mon, 13 Jan 2020 06:30:11 </pubDate>
+      <link>https://ypcode.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-ii</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-ii</guid>
+      <content url="https://ypcode.io/images/2020/01/msgraph-webhooks-partii.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Azure</category>
+      <category>Azure Functions</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>JSON</category>
+      <category>Microsoft 365</category>
+      <category>Microsoft Graph</category>
+      <category>Node.js</category>
+      <category>Subscriptions</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Explore Microsoft Graph Subscriptions - Part I</title>
+      <description>Let's explore together that cool feature offered in Microsoft Graph and implement some custom logic to react to events occuring in your corporate data</description>
+      <pubDate>Mon, 06 Jan 2020 07:44:12 </pubDate>
+      <link>https://ypcode.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-i</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/01/explore-microsoft-graph-subscriptions-part-i</guid>
+      <content url="https://ypcode.io/images/2020/01/msgraph-webhooks-parti.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Azure</category>
+      <category>Azure Functions</category>
+      <category>JavaScript</category>
+      <category>JSON</category>
+      <category>Microsoft 365</category>
+      <category>Microsoft Graph</category>
+      <category>Office 365</category>
+      <category>Subscriptions</category>
+      <category>Webhook</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SPFx/React DEBUG vs PRODUCTION builds</title>
+      <description>Check some differences that might exists between DEBUG and PRODUCTION builds of your SPFx applications</description>
+      <pubDate>Wed, 18 Dec 2019 15:14:33 </pubDate>
+      <link>https://ypcode.io/posts/2019/12/spfx-react-debug-vs-production-builds</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/12/spfx-react-debug-vs-production-builds</guid>
+      <content url="https://ypcode.io/images/2019/12/react_prod_vs_debug.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>--ship</category>
+      <category>Build</category>
+      <category>DEBUG</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>PRODUCTION</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>User preferences in your SPFx solutions</title>
+      <description>See an easy way to save the end-user preferences in your SPFx solutions</description>
+      <pubDate>Mon, 18 Nov 2019 06:00:49 </pubDate>
+      <link>https://ypcode.io/posts/2019/11/user-preferences-in-your-spfx-solutions</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/11/user-preferences-in-your-spfx-solutions</guid>
+      <content url="https://ypcode.io/images/2019/11/user_prefs_sample01.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Office 365</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Build a reusable Wizard component for your SPFx solutions using React and Office UI Fabric</title>
+      <description>I built a base component that I share with you so you can customize it easily to have your own Wizard in your SPFx applications</description>
+      <pubDate>Thu, 31 Oct 2019 14:29:20 </pubDate>
+      <link>https://ypcode.io/posts/2019/10/reusable-wizard-spfx-react</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/10/reusable-wizard-spfx-react</guid>
+      <content url="https://ypcode.io/images/2019/10/wizard.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Office 365</category>
+      <category>Office UI Fabric</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Deploy corporate SPFx app pages</title>
+      <description>Check out how to deploy a corporate SPFx app part page to your SharePoint</description>
+      <pubDate>Mon, 23 Sep 2019 05:30:34 </pubDate>
+      <link>https://ypcode.io/posts/2019/09/deploy-corporate-spfx-app-pages</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/09/deploy-corporate-spfx-app-pages</guid>
+      <content url="https://ypcode.io/images/2019/09/scriptexec.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JSON</category>
+      <category>Office 365</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SharePointFullPage</category>
+      <category>SingleWebPartAppPage</category>
+      <category>SPA</category>
+      <category>SPFx</category>
+      <category>Tenant</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Be schizophrenic at debugging SPFx too ! (Edge Canary - revision)</title>
+      <description>See how to easily deal with multiple user profiles when debugging your application in Edge Canary (Chromium)</description>
+      <pubDate>Fri, 23 Aug 2019 08:32:28 </pubDate>
+      <link>https://ypcode.io/posts/2019/08/be-schizophrenic-debugging-spfx-too-edgecanary-rev</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/08/be-schizophrenic-debugging-spfx-too-edgecanary-rev</guid>
+      <content url="https://ypcode.io/images/2019/08/edge_canary_config01.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Debugging</category>
+      <category>HTML</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Microsoft Edge Canary</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <category>VSCode</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SPFx - scoped context services</title>
+      <description>Let's talk about services scopes to a particular context</description>
+      <pubDate>Mon, 19 Aug 2019 12:02:51 </pubDate>
+      <link>https://ypcode.io/posts/2019/08/spfx-scoped-context-services</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/08/spfx-scoped-context-services</guid>
+      <content url="https://ypcode.io/images/2019/08/workbench_webparts_instances.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JS</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Be efficient at writing SharePoint Site Designs</title>
+      <description>I share a small trick with you to be more productive when writing the JSON of your Site Scripts</description>
+      <pubDate>Fri, 31 May 2019 10:31:10 </pubDate>
+      <link>https://ypcode.io/posts/2019/05/efficient-writing-sharepoint-site-designs</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/05/efficient-writing-sharepoint-site-designs</guid>
+      <content url="https://ypcode.io/images/2019/05/myscript.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JSON</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>A modern "Save List as Template"</title>
+      <pubDate>Mon, 15 Apr 2019 05:30:13 </pubDate>
+      <link>https://ypcode.io/posts/2019/04/modern-save-list-as-template</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/04/modern-save-list-as-template</guid>
+      <content url="https://ypcode.io/images/2019/04/template-download.gif?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Add in-place scripted tutorials in your SPFx components</title>
+      <pubDate>Mon, 08 Apr 2019 06:00:54 </pubDate>
+      <link>https://ypcode.io/posts/2019/04/add-in-place-tutorials-spfx</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/04/add-in-place-tutorials-spfx</guid>
+      <content url="https://ypcode.io/images/2019/04/howitlookslike.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Office UI Fabric</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>Tutorial</category>
+      <category>TypeScript</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Be schizophrenic at debugging SPFx too !</title>
+      <description>See how to easily deal with multiple user profiles when debugging your application in Google Chrome</description>
+      <pubDate>Fri, 08 Feb 2019 15:03:49 </pubDate>
+      <link>https://ypcode.io/posts/2019/02/be-schizophrenic-debugging-spfx-too</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/02/be-schizophrenic-debugging-spfx-too</guid>
+      <content url="https://ypcode.io/images/2019/02/debugging_chrome_profiles.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Chrome</category>
+      <category>JS</category>
+      <category>Office 365</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>TypeScript</category>
+      <category>VSCode</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SPFx WebPart scoped service</title>
+      <description>See how to implement a service scoped to a particular WebPart instance</description>
+      <pubDate>Fri, 25 Jan 2019 13:05:45 </pubDate>
+      <link>https://ypcode.io/posts/2019/01/spfx-webpart-scoped-service</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/01/spfx-webpart-scoped-service</guid>
+      <content url="https://ypcode.io/images/2019/01/static_scopewp.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SPFx WebParts responsive to Modern Page sections</title>
+      <description>With some CSS, let's make our WebPart responsive according to the page sections and columns to which they are added</description>
+      <pubDate>Thu, 10 Jan 2019 14:49:48 </pubDate>
+      <link>https://ypcode.io/posts/2019/01/spfx-webparts-responsive-to-modern-page-sections</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/01/spfx-webparts-responsive-to-modern-page-sections</guid>
+      <content url="https://ypcode.io/images/2019/01/twocolumns-withresponsive.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JS</category>
+      <category>Office UI Fabric</category>
+      <category>Responsive UI</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SPFX ListView Command Set and Panel</title>
+      <description>Let's see how we can implement a Panel UI in a SharePoint Framework list view command set extension</description>
+      <pubDate>Thu, 03 Jan 2019 11:34:19 </pubDate>
+      <link>https://ypcode.io/posts/2019/01/spfx-listview-commandset-and-panel</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2019/01/spfx-listview-commandset-and-panel</guid>
+      <content url="https://ypcode.io/images/2019/01/cmd-panelvisible.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>SPFx extensions</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Second time as a speaker at aOS Luxembourg</title>
+      <description>My second fantastic opportunity as a speaker :)</description>
+      <pubDate>Fri, 07 Dec 2018 05:06:43 </pubDate>
+      <link>https://ypcode.io/posts/2018/12/second-time-speaker-aos-luxembourg</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/12/second-time-speaker-aos-luxembourg</guid>
+      <content url="https://ypcode.io/images/2018/12/img_0022.jpg?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Speaking</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Elegant DI in SPFx</title>
+      <description>Based on some research, in this post, I describe a mean to write elegant dependency injection in your code using a declarative style</description>
+      <pubDate>Mon, 30 Jul 2018 05:00:34 </pubDate>
+      <link>https://ypcode.io/posts/2018/07/elegant-di-spfx</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/07/elegant-di-spfx</guid>
+      <content url="https://ypcode.io/images/2018/07/spfx-elegant-di.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Issues with SPFx packages version</title>
+      <description>If you encounter some issues with SPFx packages version, this post might be worth reading</description>
+      <pubDate>Sun, 17 Jun 2018 16:50:09 </pubDate>
+      <link>https://ypcode.io/posts/2018/06/issues-spfx-packages-version</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/06/issues-spfx-packages-version</guid>
+      <content url="https://ypcode.io/images/common/npm_medium.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Excel and PowerShell to maintain your SPFx localized resources</title>
+      <description>I share with you one of my tips to better manage and track the localized resources in my SPFx solutions</description>
+      <pubDate>Fri, 08 Jun 2018 05:00:35 </pubDate>
+      <link>https://ypcode.io/posts/2018/06/excel-powershell-maintain-spfx-loc</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/06/excel-powershell-maintain-spfx-loc</guid>
+      <content url="https://ypcode.io/images/2018/06/loc-excel.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Excel</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Convert CAML List Schema to Site Scripts</title>
+      <description>Use a small tool I wrote to create a site script from a List schema XML</description>
+      <pubDate>Sun, 15 Apr 2018 22:27:57 </pubDate>
+      <link>https://ypcode.io/posts/2018/04/convert-caml-list-schema-to-site-scripts</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/04/convert-caml-list-schema-to-site-scripts</guid>
+      <content url="https://ypcode.io/images/2018/04/promoted.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Office 365</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Install Site Designs Studio with PnP PowerShell</title>
+      <description>a few steps to install Site Designs Studio leveraging PnP Powershell</description>
+      <pubDate>Wed, 28 Mar 2018 05:00:14 </pubDate>
+      <link>https://ypcode.io/posts/2018/03/install-site-designs-studio-pnp-powershell</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/03/install-site-designs-studio-pnp-powershell</guid>
+      <content url="https://ypcode.io/images/2018/03/installed-page.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Office 365</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <category>SPFx</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Site Designs Studio 1.0</title>
+      <description>Check out the SPFx application I wrote to manage Site Designs and Site Scripts in your tenant</description>
+      <pubDate>Mon, 26 Mar 2018 05:00:05 </pubDate>
+      <link>https://ypcode.io/posts/2018/03/site-designs-studio-1_0</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2018/03/site-designs-studio-1_0</guid>
+      <content url="https://ypcode.io/images/2018/03/sss-sitescriptedit.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>Office 365</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>Site Designs</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SharePoint add-in, custom Web API and SPFx (v1.1)</title>
+      <pubDate>Fri, 29 Dec 2017 21:44:43 </pubDate>
+      <link>https://ypcode.io/posts/2017/12/sharepoint-add-in-custom-web-api-spfx-v1_1</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/12/sharepoint-add-in-custom-web-api-spfx-v1_1</guid>
+      <content url="https://ypcode.io/images/2017/12/webpart_output.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>ASP.NET</category>
+      <category>Document Library</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SharePoint2016</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>QuickTip - Visual Studio Team Services and Microsoft Teams</title>
+      <description>Integrate Microsoft Teams with Visual Studio Team Services and get rid of e-mail notifications</description>
+      <pubDate>Thu, 16 Nov 2017 22:25:21 </pubDate>
+      <link>https://ypcode.io/posts/2017/11/quicktip-visual-studio-team-services-microsoft-teams</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/11/quicktip-visual-studio-team-services-microsoft-teams</guid>
+      <content url="https://ypcode.io/images/common/ms-teams.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>NoEmails</category>
+      <category>Teams</category>
+      <category>VSTS</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Call your protected API from SPFx solutions</title>
+      <description>An easy way to basically protect your API to restrict access to the users of your tenant</description>
+      <pubDate>Mon, 23 Oct 2017 05:00:37 </pubDate>
+      <link>https://ypcode.io/posts/2017/10/call-protected-api-spfx</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/10/call-protected-api-spfx</guid>
+      <content url="https://ypcode.io/images/2017/10/api-works.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Office 365</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>Tenant</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>QuickTip - Be efficiently schizophrenic with Office 365 and Chrome</title>
+      <description>See that quicktip to be efficient as a professional working with multiple Office 365 accounts</description>
+      <pubDate>Mon, 09 Oct 2017 05:00:47 </pubDate>
+      <link>https://ypcode.io/posts/2017/10/quicktip-be-efficiently-schizophrenic-office-365-chrome</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/10/quicktip-be-efficiently-schizophrenic-office-365-chrome</guid>
+      <content url="https://ypcode.io/images/2017/10/chrome_managepeople.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Azure</category>
+      <category>Chrome</category>
+      <category>Misc</category>
+      <category>Office 365</category>
+      <category>QuickTip</category>
+      <category>SharePoint Online</category>
+      <category>Tenant</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Easy ways to subscribe to a SharePoint List Webhook</title>
+      <description>In this post, I share the easy ways I know to subscribe to a SharePoint List Webhook</description>
+      <pubDate>Mon, 18 Sep 2017 06:00:43 </pubDate>
+      <link>https://ypcode.io/posts/2017/09/easy-ways-subscribe-to-sharepoint-list-webhook</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/09/easy-ways-subscribe-to-sharepoint-list-webhook</guid>
+      <content url="https://ypcode.io/images/2017/09/webhook300.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Azure Functions</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>Remote Provisionning</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Webhook</category>
+      <category>SPEditor</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Setup SharePoint Modern Pages and SPFx customizations with PnP PowerShell</title>
+      <description>See how you can setup your SPFx customizations using PnP PowerShell cmdlets</description>
+      <pubDate>Tue, 12 Sep 2017 06:00:26 </pubDate>
+      <link>https://ypcode.io/posts/2017/09/setup-sharepoint-modern-pages-spfx-customizations-pnp-powershell</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/09/setup-sharepoint-modern-pages-spfx-customizations-pnp-powershell</guid>
+      <content url="https://ypcode.io/images/2016/12/powershell.jpg?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>Remote Provisionning</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Test the SharePoint Online REST API under App credentials</title>
+      <description>See the steps to issue test calls to SharePoint REST API with application credentials</description>
+      <pubDate>Mon, 11 Sep 2017 05:00:36 </pubDate>
+      <link>https://ypcode.io/posts/2017/09/test-spo-rest-api-under-app-credentials</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/09/test-spo-rest-api-under-app-credentials</guid>
+      <content url="https://ypcode.io/images/2017/09/register-app.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Quicktip PnP PowerShell - Avoid being prompted for credentials</title>
+      <description>The most handy way to use authenticate with PnP PowerShell</description>
+      <pubDate>Thu, 07 Sep 2017 05:00:21 </pubDate>
+      <link>https://ypcode.io/posts/2017/09/quicktip-pnp-powershell-avoid-being-prompted-for-credentials</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/09/quicktip-pnp-powershell-avoid-being-prompted-for-credentials</guid>
+      <content url="https://ypcode.io/images/2017/08/pnp-superhero.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>QuickTip</category>
+      <category>Remote Provisionning</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Embrace the power of SPFx WebPart properties</title>
+      <description>In this post, you will see what is the super power that modern WebPart properties thanks to their metadata</description>
+      <pubDate>Tue, 05 Sep 2017 05:00:26 </pubDate>
+      <link>https://ypcode.io/posts/2017/09/embrace-the-power-spfx-webpart-properties</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/09/embrace-the-power-spfx-webpart-properties</guid>
+      <content url="https://ypcode.io/images/2017/09/configure-wp-content-link.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>HTML</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>QuickTip JS : avoid bad string building using Short-circuit</title>
+      <description>See that quicktip to avoid string building issues when values are falsy</description>
+      <pubDate>Mon, 14 Aug 2017 06:30:09 </pubDate>
+      <link>https://ypcode.io/posts/2017/08/quicktip-js-avoid-bad-string-building-using-shortcircuit</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/08/quicktip-js-avoid-bad-string-building-using-shortcircuit</guid>
+      <content url="https://ypcode.io/images/2017/08/sample11.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JS</category>
+      <category>Misc</category>
+      <category>QuickTip</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>TypeScript - (inter)face the Thruth</title>
+      <description>Some advices about the interfaces in Typescript to avoid being tricked as I have been throughout my experiences</description>
+      <pubDate>Mon, 07 Aug 2017 05:00:36 </pubDate>
+      <link>https://ypcode.io/posts/2017/08/typescript-interface-the-thruth</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/08/typescript-interface-the-thruth</guid>
+      <content url="https://ypcode.io/images/common/typescript_logo_new.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>PnP</category>
+      <category>QuickTip</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Uploading file is very slow on some libraries</title>
+      <description>A bit of deeper investigation my friend Christopher Clément and I did in order to troubleshoot some slowness we encountered when uploading files in a document library</description>
+      <pubDate>Mon, 31 Jul 2017 05:15:59 </pubDate>
+      <link>https://ypcode.io/posts/2017/07/uploading-file-is-very-slow-on-some-libraries</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/07/uploading-file-is-very-slow-on-some-libraries</guid>
+      <content url="https://ypcode.io/images/2017/07/upload_document-512.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Content Type</category>
+      <category>Document Library</category>
+      <category>Document Set</category>
+      <category>Event Receiver</category>
+      <category>Performance</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Upload</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Handle separation of concerns (SoC) properly with the SharePoint Framework</title>
+      <description>In this post, I discuss a topic dear to my developer's hear; Separation of Concerns</description>
+      <pubDate>Fri, 28 Jul 2017 17:02:36 </pubDate>
+      <link>https://ypcode.io/posts/2017/07/handle-soc-properly-with-spfx</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/07/handle-soc-properly-with-spfx</guid>
+      <content url="https://ypcode.io/images/2017/07/soc.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>PowerShell QuickTip: 3 characters to improve a script</title>
+      <description>This is a quicktip to improve your PowerShell scripts</description>
+      <pubDate>Sat, 22 Jul 2017 14:45:02 </pubDate>
+      <link>https://ypcode.io/posts/2017/07/powershell-quicktip-3-characters-improve-script</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/07/powershell-quicktip-3-characters-improve-script</guid>
+      <content url="https://ypcode.io/images/2016/12/powershell.jpg?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Misc</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>QuickTip</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Implement engaging WebPart with the SharePoint Framework and jQuery UI</title>
+      <description>Let's see how convenient it is to build an engaging application with SPFx and a bit of jQuery UI</description>
+      <pubDate>Thu, 13 Jul 2017 13:00:30 </pubDate>
+      <link>https://ypcode.io/posts/2017/07/implement-engaging-webpart-spfx-jquery-ui</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/07/implement-engaging-webpart-spfx-jquery-ui</guid>
+      <content url="https://ypcode.io/images/2017/07/workbench-local-fake-data.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>HTML</category>
+      <category>JavaScript</category>
+      <category>jQuery</category>
+      <category>jQuery UI</category>
+      <category>JS</category>
+      <category>PnP</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>10 reasons why you should start using the SharePoint Framework now!</title>
+      <pubDate>Thu, 06 Jul 2017 00:00:00 </pubDate>
+      <link>https://ypcode.io/posts/2017/07/10-reasons-spfx</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/07/10-reasons-spfx</guid>
+      <content url="https://ypcode.io/images/2017/07/yeoman-sp-prompts1.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>HTML</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>SharePoint</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint Online</category>
+      <category>SPFx</category>
+      <category>TypeScript</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Leverage app-only features with SPFx, PnP and Azure Functions</title>
+      <description>Check out a way to leverage features that requires more privileges than the current user has in your SPFx applications</description>
+      <pubDate>Thu, 29 Jun 2017 22:45:40 </pubDate>
+      <link>https://ypcode.io/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/06/leverage-app-only-features-spfx-pnp-azure-functions</guid>
+      <content url="https://ypcode.io/images/2017/06/azure-function.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>App Principal</category>
+      <category>Azure Functions</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>Remote Provisionning</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>TypeScript</category>
+      <category>Uncategorized</category>
+      <category>User Permissions</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SharePoint, JavaScript and user permissions context - Devs and Admins concerns</title>
+      <description>Here is some observations about JavaScript and user permissions in SharePoint</description>
+      <pubDate>Mon, 05 Jun 2017 22:41:35 </pubDate>
+      <link>https://ypcode.io/posts/2017/06/sharepoint-js-user-permissions-context-devs-admins-concerns</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/06/sharepoint-js-user-permissions-context-devs-admins-concerns</guid>
+      <content url="https://ypcode.io/images/2017/06/user-permissions.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>User Permissions</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Register Full control Tenant-scoped app principal in SharePoint Online</title>
+      <description>In this post, I describe the steps to register a tenant scoped SharePoint app with full control privileges</description>
+      <pubDate>Sun, 28 May 2017 01:04:19 </pubDate>
+      <link>https://ypcode.io/posts/2017/05/register-full-control-tenant-scoped-app-principal-spo</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/05/register-full-control-tenant-scoped-app-principal-spo</guid>
+      <content url="https://ypcode.io/images/2017/05/appregnew.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>App Principal</category>
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Tenant</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Expose on public web your SharePoint Online information</title>
+      <description>A lab where I show you how to expose publicly some information from your SharePoint Online</description>
+      <pubDate>Thu, 11 May 2017 14:00:06 </pubDate>
+      <link>https://ypcode.io/posts/2017/05/expose-public-web-sharepoint-online-info</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/05/expose-public-web-sharepoint-online-info</guid>
+      <content url="https://ypcode.io/images/2017/05/productssplist1.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>PnP</category>
+      <category>SharePoint</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Build a SharePoint Webhook with Node.js</title>
+      <pubDate>Thu, 19 Jan 2017 09:23:51 </pubDate>
+      <link>https://ypcode.io/posts/2017/01/build-sharepoint-webhook-nodejs</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/01/build-sharepoint-webhook-nodejs</guid>
+      <content url="https://ypcode.io/images/common/sharepoint.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>App Only</category>
+      <category>App Permissions</category>
+      <category>Express.js</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>SharePoint</category>
+      <category>SharePoint Online</category>
+      <category>Web Development</category>
+      <category>Webhook</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Get familiar with Node.js - Part 4: Productivity Tools</title>
+      <description>Let's talk about some tools to increase your productivity when developing Node applications</description>
+      <pubDate>Fri, 06 Jan 2017 02:16:10 </pubDate>
+      <link>https://ypcode.io/posts/2017/01/get-familiar-nodejs-part4</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/01/get-familiar-nodejs-part4</guid>
+      <content url="https://ypcode.io/images/2017/01/vscode.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Express.js</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>TypeScript</category>
+      <category>VSCode</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Get familar with Node.js - Part 3: Express.js</title>
+      <description>Let's quickly build a real server world web application with one of the most popular Node.js framework</description>
+      <pubDate>Thu, 05 Jan 2017 15:50:02 </pubDate>
+      <link>https://ypcode.io/posts/2017/01/get-familiar-nodejs-part3</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/01/get-familiar-nodejs-part3</guid>
+      <content url="https://ypcode.io/images/2017/01/myexpressapp01_struct01.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Express.js</category>
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Get familar with Node.js - Part 2: NPM</title>
+      <description>In this post, I explain some concepts and tips about the Node Package Manager (NPM)</description>
+      <pubDate>Mon, 02 Jan 2017 21:46:50 </pubDate>
+      <link>https://ypcode.io/posts/2017/01/get-familiar-nodejs-part2</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2017/01/get-familiar-nodejs-part2</guid>
+      <content url="https://ypcode.io/images/2016/12/mycustommodule.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Get familar with Node.js - Part 1: the basics</title>
+      <description>Let's get familiar with the basic concepts of Node.js</description>
+      <pubDate>Thu, 15 Dec 2016 00:29:35 </pubDate>
+      <link>https://ypcode.io/posts/2016/12/get-familiar-nodejs-part1</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2016/12/get-familiar-nodejs-part1</guid>
+      <content url="https://ypcode.io/images/2016/12/nodejs-logo.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>JS</category>
+      <category>Node.js</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Introducing SharePoint Framework &amp; its Modern Toolchain</title>
+      <description>Let's have a look at SharePoint Framework and the tools that might be not well known from many of us</description>
+      <pubDate>Wed, 14 Dec 2016 00:00:00 </pubDate>
+      <link>https://ypcode.io/posts/2016/12/introducing-spfx-modern-toolchain</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2016/12/introducing-spfx-modern-toolchain</guid>
+      <content url="https://ypcode.io/images/2016/12/modern-pages1.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>SPFx</category>
+      <category>SharePoint Framework</category>
+      <category>SharePoint</category>
+      <category>JavaScript</category>
+      <category>TypeScript</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Cross SharePoint platform Maintenance Tools using PnP PowerShell</title>
+      <description>Automate your maintenance tasks against SharePoint using PnP PowerShell script working with SharePoint On-Prem or Online</description>
+      <pubDate>Thu, 08 Dec 2016 15:48:37 </pubDate>
+      <link>https://ypcode.io/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2016/12/cross-sharepoint-platform-maintenance-tools-pnp-powershell</guid>
+      <content url="https://ypcode.io/images/2016/12/powershell.jpg?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>PnP</category>
+      <category>PowerShell</category>
+      <category>SharePoint</category>
+      <category>Maintenance</category>
+      <category>SharePoint 2013</category>
+      <category>SharePoint Online</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>SharePoint Online - Issues when adding Site Mailbox</title>
+      <description>Troubleshoot issues with Site Mailbox in SharePoint Online</description>
+      <pubDate>Fri, 02 Dec 2016 18:00:15 </pubDate>
+      <link>https://ypcode.io/posts/2016/12/spo-issues-adding-site-mailbox</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2016/12/spo-issues-adding-site-mailbox</guid>
+      <content url="https://ypcode.io/images/2016/12/sitemailboxappicon.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>SharePoint Online</category>
+      <category>Site Mailbox</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Easily extend SharePoint - "Open in a new tab" with JS &amp; PnP PowerShell</title>
+      <description>Check out how to extend the SharePoint UI by provisioning javascript customization with PnP PowerShell</description>
+      <pubDate>Wed, 30 Nov 2016 22:43:08 </pubDate>
+      <link>https://ypcode.io/posts/2016/11/easily-extend-sharepoint-open-newtab-pnp-js-powershell</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2016/11/easily-extend-sharepoint-open-newtab-pnp-js-powershell</guid>
+      <content url="https://ypcode.io/images/common/js.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JS</category>
+      <category>PnP</category>
+      <category>Remote Provisionning</category>
+      <category>SharePoint</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Browser Feature Detection : Detect and use!</title>
+      <description>See the purpose of detecting the available feature on the client's browser</description>
+      <pubDate>Sun, 17 Aug 2014 11:44:33 </pubDate>
+      <link>https://ypcode.io/posts/2014/08/browser-feature-detect-and-use</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2014/08/browser-feature-detect-and-use</guid>
+      <content url="https://ypcode.io/images/2014/08/browsers.jpg?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>browsers</category>
+      <category>HTML5</category>
+      <category>Web</category>
+      <category>Feature</category>
+      <category>HTML</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>TypeScript: Type your scripts!</title>
+      <description>See this cool new language to improve your productivity writing JavaScript applications</description>
+      <pubDate>Sun, 03 Aug 2014 19:00:40 </pubDate>
+      <link>https://ypcode.io/posts/2014/08/typescript-type-your-scripts</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2014/08/typescript-type-your-scripts</guid>
+      <content url="https://ypcode.io/images/2014/08/typescript.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>JavaScript</category>
+      <category>TypeScript</category>
+      <category>Productivity</category>
+      <category>Web Development</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>ASP.NET WebForms vs MVC</title>
+      <description>Let's compare ASP.NET WebForms and MVC and see what are my opinions about it</description>
+      <pubDate>Thu, 31 Jul 2014 22:43:43 </pubDate>
+      <link>https://ypcode.io/posts/2014/07/aspnet-webforms-vs-mvc</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2014/07/aspnet-webforms-vs-mvc</guid>
+      <content url="https://ypcode.io/images/2014/07/aspnet-logo-180.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>ASP.NET</category>
+      <category>Webforms</category>
+      <category>MVC</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Check out my new blog!</title>
+      <description>This is my new blog where I share my experiences and research mainly focused on Microsoft development technologies</description>
+      <pubDate>Tue, 29 Jul 2014 21:29:12 </pubDate>
+      <link>https://ypcode.io/posts/2014/07/check-out-my-new-blog</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2014/07/check-out-my-new-blog</guid>
+      <content url="https://ypcode.io/images/me.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>.NET</category>
+      <category>Author</category>
+      <category>C#</category>
+      <category>Dev</category>
+      <category>Development</category>
+      <category>Microsoft</category>
+      <category>Software</category>
+      <category>Web</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>About me</title>
+      <pubDate>Fri, 03 Jul 2020 00:00:00 </pubDate>
+      <link>https://ypcode.io/pages/about-me</link>
+      <guid isPermaLink="true">https://ypcode.io/pages/about-me</guid>
+      <content url="https://ypcode.io/images/common/me.png?r=202007241118" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>About</category>
+      <category>Yannick Plenevaux</category>
+      <category>Microsoft 365</category>
+      <category>Office Development MVP</category>
+      <category>Microsoft 365 Solutions Architect</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Projects &amp; Contributions</title>
+      <pubDate>Fri, 03 Jul 2020 00:00:00 </pubDate>
+      <link>https://ypcode.io/pages/projects-contrib</link>
+      <guid isPermaLink="true">https://ypcode.io/pages/projects-contrib</guid>
+      <content url="" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Contributions</category>
+      <category>Community</category>
+      <category>Open Source</category>
+      <category>PnP</category>
+      <category>Microsoft</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
+      <title>Speaking &amp; Events</title>
+      <pubDate>Fri, 03 Jul 2020 00:00:00 </pubDate>
+      <link>https://ypcode.io/pages/speaking</link>
+      <guid isPermaLink="true">https://ypcode.io/pages/speaking</guid>
+      <content url="" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>Other</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+  </channel>
+</rss>
