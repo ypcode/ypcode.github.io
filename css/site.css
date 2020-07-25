@@ -160,7 +160,7 @@ border-color: #444444;
   width: 80%;
   margin: auto;
   margin-top: 150px;
-  height: 20vh;
+  height: 22vh;
   padding: 2vh 0;
   vertical-align: middle;
   border: 0;
@@ -326,24 +326,6 @@ border-color: #444444;
 .content-item .content {
   width: 80%;
   margin: auto;
-}
-
-.content-item .content a::before {
-  content: "";
-  position: absolute;
-  width: 96%;
-  height: 1px;
-  bottom: 0;
-  left: 0;
-  background-color: #9e1e28;
-  visibility: hidden;
-  transform: scaleX(0);
-  transition: all 0.3s ease-in-out 0s;
-}
-
-.content-item .content a:hover::before {
-  visibility: visible;
-  transform: scaleX(1);
 }
 
 .content-item .content img {
