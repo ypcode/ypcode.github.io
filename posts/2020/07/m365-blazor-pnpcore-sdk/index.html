@@ -1,0 +1,727 @@
+﻿<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>YPcode</title>
+    <link rel="icon" href="/images/favicon.png" type="image/png" />
+    <link rel="canonical" href="https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk" />
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/site.css?v=202007310828" />
+    <meta name="generator" content="PVX WebContentGenerator" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/js/framework.js?v=202007310828"></script>
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism-tomorrow.min.css">
+</noscript>
+<link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+<noscript>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.css">
+</noscript>
+<style>
+pre[class*=language-] {    
+    margin-bottom: 1.5em;
+}
+</style>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-172372458-1');
+</script>
+
+<style>
+.social-links {
+    display: inline-flex;
+    width: 60%;
+    margin:auto;
+    justify-content: center;
+    color: #807070;
+}
+
+.social-links a {
+    margin-right: 15px;
+}
+
+.social-links a:hover {
+    color: #9e1e28;
+}
+
+    .social-links svg {
+        fill: currentColor;
+        height: 18px;
+    }
+</style>
+        <meta property="og:site_name" content="YPcode" />
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content="Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview" />
+            <meta property="og:description" content="Discover how to develop a client side Blazor app manipulating Microsoft 365 data using the preview version of the new PnP Core SDK" />
+        <meta property="og:url" content="https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk" />
+        <meta property="og:image" content="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_love.png" />
+        <meta property="article:publisher" content="https://www.facebook.com/yannick.plenevaux" />
+        <meta property="article:published_time" content="2020-07-31 00:00:00Z" />
+        <meta property="article:modified_time" content="2020-07-31 00:00:00Z" />
+                <meta property="article:tag" content=".NET" />
+                <meta property="article:tag" content=".NET Core" />
+                <meta property="article:tag" content="C#" />
+                <meta property="article:tag" content="Blazor" />
+                <meta property="article:tag" content="WebAssembly" />
+                <meta property="article:tag" content="PnP Core SDK" />
+        <meta name="twitter:title" content="Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview" />
+            <meta name="twitter:description" content="Discover how to develop a client side Blazor app manipulating Microsoft 365 data using the preview version of the new PnP Core SDK" />
+        <meta name="twitter:url" content="https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk" />
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:image" content="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_love.png" />
+            <meta name="twitter:label1" content="Written by" />
+            <meta name="twitter:data1" content="Yannick Plenevaux" />
+            <meta name="twitter:label2" content="Filed under" />
+            <meta name="twitter:data2" content=".NET, .NET Core, C#, Blazor, WebAssembly, PnP Core SDK" />
+        <meta name="twitter:site" content="@yp_code" />
+    <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.io/feed" />
+
+
+    <script>
+        var initialSiteContentHeight = null;
+        function toggleMenu() {
+            var menu = document.querySelector(".menu");
+            var siteContent = document.querySelector(".site-content");
+            if (menu && siteContent) {
+                if (menu.classList.contains("visible")) {
+                    menu.classList.remove("visible");
+                } else {
+                    menu.classList.add("visible");
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <div class="menu">
+        <span class="menu-hamburger-icon" onclick="toggleMenu();">
+            <svg xmlns="http://www.w3.org/2000/svg" 
+                x="0px" 
+                y="0px"
+                width="30" 
+                height="30"
+                viewBox="0 0 172 172"
+                style=" fill:#000000;">
+                    <g fill="none" fill-rule="nonzero" stroke="none" stroke-width="1" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="10" stroke-dasharray="" stroke-dashoffset="0" font-family="none" font-weight="none" font-size="none" text-anchor="none" style="mix-blend-mode: normal"><path d="M0,172v-172h172v172z" fill="none"></path><g fill="#ffffff"><path d="M0,25.8v17.2h172v-17.2zM0,77.4v17.2h172v-17.2zM0,129v17.2h172v-17.2z"></path></g></g>
+            </svg>
+        </span>
+        <a href="https://ypcode.io/">
+            <h1 class="main-site-title">YPcode</h1>
+            <hr class="sep main-site-title-sep"/>
+            <h2 class="main-site-description">Experiences and research on Microsoft 365, Azure and modern web development</h2>
+        </a>
+        <nav class="navigation">
+    <ul>
+<li class="nav-item">
+    <span class="link-icon icon-home" ></span><a class="nav-link" href="/" >Home</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/about-me/" >About me</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-about" ></span><a class="nav-link" href="/pages/projects-contrib/" >Projects &amp; Contributions</a>
+</li><li class="nav-item">
+    <span class="link-icon icon-speak" ></span><a class="nav-link" href="/pages/speaking/" >Speaking</a>
+</li>    </ul>
+</nav>
+        
+            <div class="main-site-author">
+                    <img class="main-site-author-picture" src="/images/common/me.png" />
+                    <h3 class="main-site-author-name">
+                        Yannick Plenevaux
+                    </h3>
+                        <h3 class="main-site-author-description">
+                                <span class="main-site-author-description-line">Microsoft 365 Solutions Architect</span>
+                                <span class="main-site-author-description-line">Office Development MVP</span>
+                        </h3>
+            </div>
+
+        <div class="menu-social-links">
+            <p class="social-links">
+
+    <a href="https://mvp.microsoft.com/en-us/PublicProfile/5003599?fullName=Yannick%20Plenevaux" target="_blank"
+        title="Microsoft MVP" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 50 50">
+            <defs>
+                <style>
+                    .a {
+                        fill: currentColor;
+                    }
+
+                    .b {
+                        fill: #1d1d1d;
+                    }
+                </style>
+            </defs>
+            <rect class="a" width="50" height="50"></rect>
+            <path class="b"
+                d="M17.42,26.16a15.14,15.14,0,0,0-.22,1.59l-.07.48h0a14.16,14.16,0,0,0-.33-2l-1.82-7.89h-3.5v13h2.07V24.43c0-1.18,0-2.39-.09-3.61h.08l.35,2.3,2,8.19h2.28L20,23c.18-.9.31-1.63.39-2.18h.05q-.09,2-.09,2.94v7.55h2.14v-13H19.13Zm18.36.72h1a3.81,3.81,0,0,0,3-1.24,4.54,4.54,0,0,0,1.14-3.17,4.23,4.23,0,0,0-1-3.08A3.81,3.81,0,0,0,37,18.34H33.29v13h2.49Zm0-6.37h.83a1.62,1.62,0,0,1,1.25.52,2.25,2.25,0,0,1,.48,1.57c0,1.42-.57,2.13-1.7,2.13h-.86Zm-9.24,10.8h2.67l3.31-13H30l-1.8,8.5c-.09.47-.15.92-.19,1.34l-.05.35h-.06a12,12,0,0,0-.2-1.65l-1.8-8.54H23.32ZM25.26,46.75,3.75,25.24,25.24,3.75,46.75,25.26Z"
+                transform="translate(-0.25 -0.25)"></path>
+        </svg>
+        </a>
+
+    <a href="https://twitter.com/yp_code" target="_blank" title="Twitter" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+                d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://github.com/ypcode" target="_blank" title="GitHub" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512">
+            <path
+                d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z">
+            </path>
+        </svg>
+    </a>
+
+    <a href="https://www.linkedin.com/in/yannickplenevaux" target="_blank" title="LinkedIn" rel="noopener">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M416 32H31.9C14.3 32 0 46.5 0 64.3v383.4C0 465.5 14.3 480 31.9 480H416c17.6 0 32-14.5 32-32.3V64.3c0-17.8-14.4-32.3-32-32.3zM135.4 416H69V202.2h66.5V416zm-33.2-243c-21.3 0-38.5-17.3-38.5-38.5S80.9 96 102.2 96c21.2 0 38.5 17.3 38.5 38.5 0 21.3-17.2 38.5-38.5 38.5zm282.1 243h-66.4V312c0-24.8-.5-56.7-34.5-56.7-34.6 0-39.9 27-39.9 54.9V416h-66.4V202.2h63.7v29.2h.9c8.9-16.8 30.6-34.5 62.9-34.5 67.2 0 79.7 44.3 79.7 101.9V416z">
+            </path>
+        </svg>
+    </a>
+
+
+    <a href="/feed.xml" target="_blank" title="RSS">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+            <path
+                d="M128.081 415.959c0 35.369-28.672 64.041-64.041 64.041S0 451.328 0 415.959s28.672-64.041 64.041-64.041 64.04 28.673 64.04 64.041zm175.66 47.25c-8.354-154.6-132.185-278.587-286.95-286.95C7.656 175.765 0 183.105 0 192.253v48.069c0 8.415 6.49 15.472 14.887 16.018 111.832 7.284 201.473 96.702 208.772 208.772.547 8.397 7.604 14.887 16.018 14.887h48.069c9.149.001 16.489-7.655 15.995-16.79zm144.249.288C439.596 229.677 251.465 40.445 16.503 32.01 7.473 31.686 0 38.981 0 48.016v48.068c0 8.625 6.835 15.645 15.453 15.999 191.179 7.839 344.627 161.316 352.465 352.465.353 8.618 7.373 15.453 15.999 15.453h48.068c9.034-.001 16.329-7.474 16.005-16.504z">
+            </path>
+        </svg>
+    </a>
+</p>
+        </div>
+    </div>
+   
+    <div class="site-content">
+        <main role="main" class="pb-3">
+            <div class="content-item post">
+    
+    <div class="content-item-title">
+        <span class="post-publishing-date">Jul 31, 2020</span>
+        <h1>
+            Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview
+            <hr/>
+        </h1>
+    </div>
+
+        <div class="content-item-featured-image-container">
+            <img class="content-item-featured-image" src="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_love.png" alt="Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview" />
+        </div>
+   
+    <div class="content">
+        <p>Hi Microsoft 365 devs !</p>
+<p>In this post, let's discover together how to develop a client side Blazor app manipulating Microsoft 365 data using the preview version of the new PnP Core SDK.</p>
+<h1 id="pnp-core-sdk">PnP Core SDK</h1>
+<p>If you follow a bit what's happening in the SharePoint and Microsoft 365 Universe, you probably have heard about the PnP initiative. A community driven open-source effort to share experiences and help folks with documentation, guidance, tools and libraries.</p>
+<p>A few months ago, <a href="https://twitter.com/O365Bert">Bert Jansen</a> and <a href="https://twitter.com/PaoloPia">Paolo Pialorsi</a> have started the development of a brand new library fully implemented in .NET Core that is designed to work against the broader Microsoft 365 suite (SharePoint Online and other products such as Microsoft Teams, Planner, etc...) in modern .NET apps.
+It is built as &quot;Graph First&quot;, it means, it will leverage the Microsoft Graph API whenever possible, when not, it will fall back to the SharePoint REST API to fill gaps when working against SharePoint Online.</p>
+<p>Being implemented fully in .NET Core means that it is fully compatible with all modern .NET applications, working cross platforms, for instance:</p>
+<ul>
+<li>Windows</li>
+<li>Linux</li>
+<li>Mac OS</li>
+<li>Asp.NET Core</li>
+<li>Azure Functions v3</li>
+<li>Blazor</li>
+<li>Xamarin</li>
+<li>...</li>
+</ul>
+<blockquote>
+<p>IMPORTANT
+This library is still currently in preview. It means it is not recommended for production usage. It can still have undiscovered bugs and will most likely have breaking changes in future releases. We encourage everyone of you to give it a try and provide feedback so we can improve it and try make it suitable for your scenarios and usages. This blog post aims to give you an overview of some current capabilities of this new SDK</p>
+</blockquote>
+<p>Bert and Paolo really achieved outstanding work building solid foundations of the library (those guys are really development wizards!).
+That makes it quite easy to add more and more features to the SDK. It also aims to be really easy from user code perpsective!</p>
+<p>I have humbly contributed since the very beginning of this project. Brilliant guys like <a href="https://twitter.com/pkbullock">Paul Bullock</a> and <a href="https://twitter.com/devjhorst">Jarbas Horst</a> joined the effort too, and we are looking for more contributors to make this library mature enough soon. If you are interested in helping us, please check out the repository <a href="https://github.com/pnp/pnpcore">here</a>!</p>
+<h1 id="blazor">Blazor</h1>
+<p>Blazor is a new technology introduced by Microsoft.
+It relies on .NET Core and allows to develop modern web applications in C#.
+By modern, I mean applications pretty much in line with the trends of the industry lead by technologies like React, Angular or Vue (and others...).
+Those technologies are mainly client side and are executed in the client browser. It means, they are built in JavaScript!
+It has the major advantage that applications are very dynamic and user friendly, they allowed developers to reach an almost full parity with native apps from a user experience perspective.</p>
+<p>Blazor exists in two flavors;</p>
+<ul>
+<li><strong>Blazor Server App</strong> that runs .NET code on the server and trigger real time changes to the DOM of the client web page, under the hood, it relies on SignalR to forward the real time changes between the server and client. It has been around for about 1 year.</li>
+<li><strong>Blazor WebAssembly</strong> that runs .NET code directly in the browser leveraging WebAssembly. A .NET CLR is implemented in WebAssembly and thus is able to run .NET code in DLLs sent to the client browser. It was released recently at Build in May 2020</li>
+</ul>
+<h2 id="writing-c-in-client-applications">Writing C# in client applications</h2>
+<p>Blazor is not the first technology that allows writing C# in client web applications.</p>
+<p>Remember Silverlight ? It was quite similar to Adobe Flash, and allowed running .NET code in browser applications using a plugin.
+Unfortunately, it was discontinued quite early, and I know that Microsoft developers have been frustrated by that change in the strategy.
+Definitely, I am convinced it was the right move! The need for an external plugin was not a viable way in the world of mobile, multi devices, and multi OS that had emerged.
+JavaScript and its myriad of framework have then become the only way to go to do web client side development.</p>
+<p>Today, however, a new standard is emerging: <a href="https://webassembly.org/">WebAssembly</a>.
+It is implemented in the recent major browsers and allows to execute some low level code directly in the browser environement without the need of any external plugin. It means that it is the portable way the current web industry deserves!
+It is one of the reasons, in my humble opinion, that might make Blazor a future-proof and long lasting technology! But well, only future will tell!</p>
+<h1 id="lets-give-it-a-try">Let's give it a try!</h1>
+<p>In this post, let's see together how we can build a Blazor WebAssembly app (fully running in the browser).
+In order to do so, we will need .NET Core v3.1. I will be using Visual Studio Code as my editor.</p>
+<blockquote>
+<p>NOTE:
+It can also be done with Visual Studio 2019 v16.6.3+, but, at the time of this writing, the wizard doesn't allow to enable authentication just yet, these steps would then be manual (<a href="https://docs.microsoft.com/en-us/aspnet/core/blazor/security/webassembly/standalone-with-azure-active-directory?view=aspnetcore-3.1">see the official guidance here</a>).</p>
+</blockquote>
+<p>Let's use VS Code and the .NET Core CLI in this post.
+You will also need the necessary privileges to be able to register a new AAD application.</p>
+<h2 id="register-an-azure-active-directory-app">Register an Azure Active Directory App</h2>
+<p>In order to authenticate to be able to work on the resources we will use (meaning Microsoft Graph and SharePoint Online), we need to register an application in Azure Active Directory.</p>
+<p>Let's go to the <a href="https://aad.portal.azure.com">AAD portal</a>.
+In the App Registrations section, click <em>New Application</em>.</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_NewAppRegistration.png" alt="New Application" /></p>
+<p>Enter the name of your app and a Redirect URI as <strong>https://localhost:5001/authentication/login-callback</strong> and click the <strong>Register</strong> button.</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_RegisterAnApp.png" alt="Register an app" /></p>
+<p>From the <em>Overview</em> tab that appears, copy the <em>Application (client) ID</em> and <em>Directory (tenant) ID</em> and keep them aside.</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_AppId_TenantId.png" alt="Copy App Id and Tenant Id" /></p>
+<p>From the <em>API Permissions</em> tab, Add the following permissions for Microsoft Graph and SharePoint Online:</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_AppPermissions_SelectAPIs.png" alt="Select APIs" /></p>
+<ul>
+<li><code>Microsoft Graph</code> &gt; <code>Delegated Permissions</code> &gt; <code>Sites.FullControl.All</code></li>
+</ul>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_AppPermissions_Graph_SitesFullControl.png" alt="MSGraph Sites.FullControl.All" /></p>
+<ul>
+<li><code>SharePoint</code> &gt; <code>Delegated Permissions</code> &gt; <code>AllSites.FullControl</code></li>
+</ul>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_AppPermissions_SPO_AllSitesFullControl.png" alt="SPO AllSites.FullControl" /></p>
+<p>Then, let's grant the permissions as an administrator</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_AppPermissions_AdminGranted.png" alt="Grant permissions as admin" /></p>
+<blockquote>
+<p>IMPORTANT
+For the sake of simplicity, here, we are granting high privileges permissions, in production scenarios, the recommended practice is to grant the least required privileges to the application, that will prevent information leakage and your application to do something it shouldn't if higly privileged users run it.</p>
+</blockquote>
+<p>Last thing to do here is to enable Implicit Grant access tokens. Indeed, we will develop a client side application that cannot store a secret! Implicit Grant flow is then required here.</p>
+<p>For the <em>Authentication</em> tab, tick the check boxes in the <em>Implicit Grant</em> section and save your changes.</p>
+<p><img src="/images/2020/07/blazor-pnpcore/AAD_Auth_ImplicitGrant.png" alt="Implicit Grant" /></p>
+<h2 id="create-a-new-blazor-webassembly-project">Create a new Blazor WebAssembly project</h2>
+<p>Open up a command prompt and type the following:
+(Replace the <code>{App Id}</code> by the Application Id and <code>{Tenant Id}</code> by the Directory Id copied earlier)</p>
+<pre><code class="language-bash">dotnet new blazorwasm -au SingleOrg -o blazor_pnpcore --client-id &quot;{App Id}&quot; --tenant-id &quot;{Tenant Id}&quot;
+</code></pre>
+<blockquote>
+<p>NOTE:
+Just to make sure, everything is OK, open up the solution folder in Visual Studio Code and hit F5.
+It will ask you the debug runtime you want to use, select <strong>Blazor WebAssembly Debug</strong>
+<img src="/images/2020/07/blazor-pnpcore/vscode_blazor_debug_config.png" alt="VSCode Blazor Debug" />
+That requires Google Chrome to be installed</p>
+<p>If it doesn't work at the first time, close the browser and hit F5 again in VS Code, that should do the trick
+Recently I encountered some issues with the Chrome Debugger and VS Code. (Cannot connect to debugger)
+If you encounter the same, to go further here, you can open the terminal and use the <code>dotnet run</code> command, then navigate to https://localhost:5001</p>
+</blockquote>
+<p>We can eventually clean up the following files, we will not need them:</p>
+<ul>
+<li>/Pages/Counter.razor</li>
+<li>/Pages/FetchData.razor</li>
+<li>/Shared/SurveyPrompt.razor</li>
+<li>/wwwroot/sample-data/</li>
+</ul>
+<p>And update the <strong>NavMenu.razor</strong> file accordingly.</p>
+<h3 id="install-the-pnp-core-sdk-dependency">Install the PnP Core SDK dependency</h3>
+<ul>
+<li>Install the PnP Core SDK Preview 2</li>
+</ul>
+<pre><code class="language-powershell">dotnet add package PnP.Core --version 0.1.2007.19-blazor-preview2
+</code></pre>
+<blockquote>
+<p>NOTE
+Currently, we have a custom build dedicated to Blazor because of some dependencies that are not compatible.
+We are definitely looking to have a universal package on the long term, but again, only future will tell if this is going to happen according to the dependencies constraints</p>
+</blockquote>
+<h4 id="implement-an-authentication-provider-wrapper-for-pnp-core-sdk">Implement an authentication provider wrapper for PnP Core SDK</h4>
+<p>The existing Blazor authentication library offers an authentication provider that allows to acquire an access token with a proper Azure AD configuration using Implicit Grant OAuth flow.
+We will need to configure PnP Core SDK to use that access token provided by MSAL.
+In a <strong>/Authentication</strong> folder, let's create a <strong>MsalWrappedTokenProvider</strong> class as follows</p>
+<pre><code class="language-csharp">using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using PnP.Core.Services;
+using System;
+using System.Threading.Tasks;
+
+namespace blazor_pnpcore.Authentication
+{
+    public class MsalWrappedTokenProvider : IOAuthAccessTokenProvider
+    {
+        private readonly IAccessTokenProvider _accessTokenProvider;
+
+        public MsalWrappedTokenProvider(IAccessTokenProvider accessTokenProvider)
+        {
+            _accessTokenProvider = accessTokenProvider;
+        }
+
+        private const string MicrosoftGraphScope = &quot;Sites.FullControl.All&quot;;
+        private const string SharePointOnlineScope = &quot;AllSites.FullControl&quot;;
+
+        private async Task&lt;string&gt; GetAccessTokenAsync(string[] scopes)
+        {
+            var tokenResult = await _accessTokenProvider.RequestAccessToken(new AccessTokenRequestOptions()
+            {
+                // The scopes must specify the needed permissions for the app to work
+                Scopes = scopes,
+            }).ConfigureAwait(false);
+
+            if (!tokenResult.TryGetToken(out AccessToken accessToken))
+            {
+                throw new Exception(&quot;An error occured while trying to acquire the access token...&quot;);
+            }
+
+            return accessToken.Value;
+        }
+
+
+        private string[] GetRelevantScopes(Uri resourceUri)
+        {
+            if (resourceUri.ToString() == &quot;https://graph.microsoft.com&quot;)
+            {
+                return new[] { $&quot;{resourceUri}/{MicrosoftGraphScope}&quot; };
+            }
+            else
+            {
+                string resource = $&quot;{resourceUri.Scheme}://{resourceUri.DnsSafeHost}&quot;;
+                return new[] { $&quot;{resource}/{SharePointOnlineScope}&quot; };
+            }
+        }
+
+        public async Task&lt;string&gt; GetAccessTokenAsync(Uri resourceUri)
+        {
+            return await GetAccessTokenAsync(GetRelevantScopes(resourceUri));
+        }
+    }
+}
+</code></pre>
+<p>As mentioned above, the PnP Core SDK can use either Microsoft Graph or SharePoint Rest API.
+It must then be able to request an access token for both resources. This class takes care of requesting the access token for these resources.</p>
+<h3 id="configure-the-services-of-our-application">Configure the services of our application</h3>
+<p>We have to tell our application to use a sepcific configuration to access SharePoint
+In the <strong>/wwwroot/appsettings.json</strong>, add the <code>SharePoint</code> section and add its <code>SiteUrl</code> property configured with the URL of your target site.</p>
+<pre><code class="language-json">{
+  &quot;SharePoint&quot;: {
+    &quot;SiteUrl&quot;: &quot;https://{tenant}.sharepoint.com/sites/{site}/&quot;
+  },
+  &quot;AzureAd&quot;: {
+      ...omitted for  brevity...
+  },
+  &quot;Logging&quot;: {
+      ...omitted for  brevity...
+  }
+}
+</code></pre>
+<p>In this file, replace the placeholders by the actual values</p>
+<table>
+<thead>
+<tr>
+<th>placeholder</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>tenant</strong></td>
+<td>the name of your tenant (e.g. <strong>contoso</strong> if your SharePoint URL is <a href="https://contoso.sharepoint.com">https://contoso.sharepoint.com</a>)</td>
+</tr>
+<tr>
+<td><strong>site</strong></td>
+<td>the URL segment for your selected target SharePoint site</td>
+</tr>
+</tbody>
+</table>
+<p>In the <strong>Program.cs</strong>, we will configure the services we want to use. Open that file and make it look like:</p>
+<pre><code class="language-csharp">using System;
+using System.Net.Http;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using System.Text;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using PnP.Core.Services;
+using blazor_pnpcore.Authentication;
+
+namespace blazor_pnpcore
+{
+    public class Program
+    {
+        public static async Task Main(string[] args)
+        {
+            var builder = WebAssemblyHostBuilder.CreateDefault(args);
+            builder.RootComponents.Add&lt;App&gt;(&quot;app&quot;);
+
+            builder.Services.AddScoped(sp =&gt; new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
+
+            var config = new ConfigurationBuilder().Build();
+
+            builder.Services.AddMsalAuthentication(options =&gt;
+            {
+                builder.Configuration.Bind(&quot;AzureAd&quot;, options.ProviderOptions.Authentication);
+            });
+
+            string pnpConfigName = &quot;BlazorAppSample&quot;;
+            string authConfigName = &quot;OAuthAccessToken&quot;;
+            builder.Services
+              .AddScoped&lt;IOAuthAccessTokenProvider, MsalWrappedTokenProvider&gt;()
+              .AddSingleton&lt;IConfiguration&gt;(config)
+              .AddAuthenticationProviderFactory(options =&gt; options.Configurations
+                .Add(new OAuthAccessTokenConfiguration()
+                {
+                    Name = authConfigName
+                }))
+              .AddPnPContextFactory(options =&gt; options.Configurations
+                .Add(new PnPContextFactoryOptionsConfiguration()
+                {
+                    Name = pnpConfigName,
+                    AuthenticationProviderName = authConfigName
+                }))
+              .AddScoped&lt;PnPContext&gt;(services =&gt; {
+                  // Get the configuration at runtime
+                  var config = services.GetService&lt;IConfiguration&gt;();
+                  var factory = services.GetService&lt;IPnPContextFactory&gt;();
+                  return factory.Create(new Uri(config.GetValue&lt;string&gt;(&quot;SharePoint:SiteUrl&quot;)), authConfigName);
+              });
+
+            await builder.Build().RunAsync();
+        }
+    }
+}
+
+</code></pre>
+<p>Let's add the required imports in order to keep our next components code more concise, open the <strong>_Imports.razor</strong> file and add the following lines to it:</p>
+<pre><code class="language-csharp">@using Microsoft.AspNetCore.Authorization
+@using PnP.Core.Services
+@using PnP.Core.Model.SharePoint
+</code></pre>
+<p>We have now set up the boilerplate, we can finally start building our component to work with Microsoft 365 Data :
+Let's implement our interesting code in the <strong>Index.razor</strong> component in the <strong>/Pages</strong> folder. Replace its content by</p>
+<pre><code class="language-csharp">@page &quot;/&quot;
+@* Let's make sure only authenticated users can access this component *@
+@attribute [Authorize]
+@* Let's inject the PnP Context for current user on the configured site *@
+@inject PnPContext pnpCtx
+
+&lt;h2&gt;SharePoint Site Info&lt;/h2&gt;
+@if (isLoadingWeb)
+{
+    &lt;p&gt;&lt;em&gt;Loading SharePoint site information...&lt;/em&gt;&lt;/p&gt;
+}
+else
+{
+    &lt;table&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Name&lt;/td&gt;
+            &lt;td&gt;@web.Title&lt;/td&gt;
+        &lt;/tr&gt;
+        &lt;tr&gt;
+            &lt;td&gt;Description&lt;/td&gt;
+            &lt;td&gt;@web.Description&lt;/td&gt;
+        &lt;/tr&gt;
+    &lt;/table&gt;
+}
+
+&lt;h2&gt;Visible lists in the site&lt;/h2&gt;
+@if (isLoadingLists)
+{
+    &lt;p&gt;&lt;em&gt;Loading SharePoint lists...&lt;/em&gt;&lt;/p&gt;
+}
+else
+{
+    &lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Name&lt;/th&gt;
+        &lt;th&gt;Id&lt;/th&gt;
+    &lt;/tr&gt;
+    @foreach (var list in lists) {
+        &lt;tr&gt;
+            &lt;td&gt;@list.Title&lt;/td&gt;
+            &lt;td&gt;@list.Id&lt;/td&gt;
+        &lt;/tr&gt;
+    }
+    &lt;/table&gt;
+}
+
+&lt;h2&gt;Document related Content Types in the site&lt;/h2&gt;
+@if (isLoadingContentTypes)
+{
+    &lt;p&gt;&lt;em&gt;Loading SharePoint Content Types...&lt;/em&gt;&lt;/p&gt;
+}
+else
+{
+    &lt;table&gt;
+    &lt;tr&gt;
+        &lt;th&gt;Name&lt;/th&gt;
+        &lt;th&gt;Id&lt;/th&gt;
+    &lt;/tr&gt;
+    @foreach (var contentType in contentTypes) {
+        &lt;tr&gt;
+            &lt;td&gt;@contentType.Name&lt;/td&gt;
+            &lt;td&gt;@contentType.Id&lt;/td&gt;
+        &lt;/tr&gt;
+    }
+    &lt;/table&gt;
+}
+
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadWeb();
+        await LoadVisibleLists();
+        await LoadContentTypes();
+    }
+
+    private IWeb web;
+    private bool isLoadingWeb = true;
+    private async Task LoadWeb()
+    {
+        // Load  onlythe Web properties we want to display
+        web = await pnpCtx.Web.GetAsync(p =&gt; p.Title, p =&gt; p.Description);
+        isLoadingWeb = false;
+    }
+
+    private List&lt;IList&gt; lists;
+    private bool isLoadingLists = true;
+    private async Task LoadVisibleLists()
+    {
+        // Write simple linq query
+        var listsQuery = from l in pnpCtx.Web.Lists
+                         where !l.Hidden
+                         select l;
+
+        // Get the result asynchronously
+        lists = await listsQuery.ToListAsync();
+        isLoadingLists = false;
+    }
+
+    private List&lt;IContentType&gt; contentTypes;
+    private bool isLoadingContentTypes = true;
+    private async Task LoadContentTypes()
+    {
+        // Write more complex linq queries to only fetch specific information
+        var ctQuery = from ct in pnpCtx.Web.ContentTypes.Include(c =&gt; c.Name, c =&gt; c.Id)
+                      where ct.Group == &quot;Document Content Types&quot;
+                      select ct;
+
+        // Get the result asynchronously
+        contentTypes = await ctQuery.ToListAsync();
+        isLoadingContentTypes = false;
+    }
+}
+</code></pre>
+<p>Let's run the application, hit F5 in Visual Studio Code if it works, otherwise execute the <code>dotnet run</code> command and browse https://localhost:5001/</p>
+<p>Your Blazor application gets started, and you should be prompted for your Microsoft 365 credentials.
+Once signed in, you are redirected to your app that displays some information about the SharePoint site you configured.</p>
+<blockquote>
+<p>IMPORTANT
+In Blazor WebAssembly, the same rules as JavaScript must be followed, a blocking or long running code will block the UI thread and make the application unusable.
+It is important to remember that only asynchronous calls must always be used in Blazor.</p>
+</blockquote>
+<h2 id="the-future-microsoft-365.net-sdk">THE future Microsoft 365 .NET SDK</h2>
+<p>As you can see this SDK makes it easy for .NET developers to work with SharePoint Online and Microsoft 365. The SDK is intended to cover more and more of the Microsoft 365 API landscape and is designed to be a real easy to use library. Some Microsoft Teams API are already covered in this library but, at this point, are not fully compatible with Blazor.</p>
+<p>I highly encourage you to play with this cool new library and provide feedback. It might also be a great opportunity for you to contribute to a project that, IMHO, will, at some point, become the new de-facto standard!
+Future will tell, but I am deeply convinced it will become <strong>HUGE</strong>!</p>
+<p>I hope you enjoyed this post and that it aroused your curisoity about the new PnP Core SDK!
+I will definitely keep talking and writing about it in the future!</p>
+<p>Cheers</p>
+<p>Yannick</p>
+
+    </div>
+
+    <div class="foot-random-posts">
+        <div class="random-posts-container">
+<h5>Other posts</h5>
+<div id="random-posts" class="posts d-flex flex-wrap align-content-stretch">
+</div>
+
+<script>
+    WCG.execute((db) => {
+
+        const renderCard = (placeholderSelector, item) => {
+            const placeholder = $(placeholderSelector);
+            $(`<div class="post-card card box-shadow">
+                <a href="${item.RelativeUrl}">
+                    <img class="post-featured-image card-img-top" src="${item.FeaturedImage}" alt="${item.FeaturedImageAlt}" />
+                </a>
+                <div class="post-caption card-body">
+                    <h5 class="post-title card-title">
+                        <a href="${item.RelativeUrl}">${item.Title}</a>
+                    </h5>
+                    <span class="post-publishing-date">${moment(item.PublishedOn).format("MMM DD, YYYY")}</span>
+                    <p class="post-summary card-text">
+                        ${item.Description||''}
+                    </p>
+                    <div class="post-keywords">
+                        ${item.Keywords.map(k => `<span class="post-keyword">#${k.replace(" ","")}</span>`).join(" ")}
+                    </div>
+                </div>
+            </div>
+            `).appendTo(placeholder);
+        };
+
+        const [firstPost, secondPost] = db.getRandomPosts(2);
+        renderCard("#random-posts", firstPost);
+        renderCard("#random-posts", secondPost);
+    });
+</script>
+</div>
+    </div>
+
+     <div class="post-comments">
+            <div id="disqus_thread"></div>
+<script>
+
+var disqus_config = function () {
+this.page.url = 'https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk';
+this.page.identifier = 'src\content\posts\2020-07-31-blazor-pnp-core.md';
+};
+
+(function() { // DON'T EDIT BELOW THIS LINE
+var d = document, s = d.createElement('script');
+s.src = 'https://ypcode-io.disqus.com/embed.js';
+s.setAttribute('data-timestamp', +new Date());
+(d.head || d.body).appendChild(s);
+})();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+    </div>
+</div>
+        </main>
+
+        <footer class="border-top footer">
+                &copy; Copyrights 2020 - YPcode - Yannick Plenevaux
+        </footer>
+    </div>
+
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
+<script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
+
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-aspnet.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-c.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-clike.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-csharp.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-css-extras.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-scss.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-markup.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-javascript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-json.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-jsx.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+
+
+
+</body>
+</html>

@@ -10,11 +10,26 @@
       <link>https://ypcode.io/</link>
     </image>
     <link href="https://ypcode.io/feed.xml" rel="self" type="application/rss+xml" xmlns="http://www.w3.org/2005/Atom" />
-    <pubDate>Sat, 25 Jul 2020 10:17:54 Z</pubDate>
-    <lastBuildDate>Sat, 25 Jul 2020 10:17:54 Z</lastBuildDate>
+    <pubDate>Fri, 31 Jul 2020 08:28:14 Z</pubDate>
+    <lastBuildDate>Fri, 31 Jul 2020 08:28:14 Z</lastBuildDate>
     <generator>PVX WCG AtomGenerator</generator>
     <analytics id="UA-172372458-1" engine="GoogleAnalytics" xmlns="http://webfeeds.org/rss/1.0" />
     <ttl>60</ttl>
+    <item>
+      <title>Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview</title>
+      <description>Discover how to develop a client side Blazor app manipulating Microsoft 365 data using the preview version of the new PnP Core SDK</description>
+      <pubDate>Fri, 31 Jul 2020 00:00:00 </pubDate>
+      <link>https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk</guid>
+      <content url="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_love.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>.NET</category>
+      <category>.NET Core</category>
+      <category>C#</category>
+      <category>Blazor</category>
+      <category>WebAssembly</category>
+      <category>PnP Core SDK</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
     <item>
       <title>Use the CSOM Library in your ASP.NET Core apps</title>
       <description>Recently the support for .NET Standard in the CSOM library was released. It opens up a variety of new possibilities for SharePoint developers. In this post, let's see how we can leverage the CSOM library in a ASP.NET Core web application.</description>
