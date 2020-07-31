@@ -10,8 +10,8 @@
       <link>https://ypcode.io/</link>
     </image>
     <link href="https://ypcode.io/feed.xml" rel="self" type="application/rss+xml" xmlns="http://www.w3.org/2005/Atom" />
-    <pubDate>Fri, 31 Jul 2020 08:28:14 Z</pubDate>
-    <lastBuildDate>Fri, 31 Jul 2020 08:28:14 Z</lastBuildDate>
+    <pubDate>Fri, 31 Jul 2020 08:32:52 Z</pubDate>
+    <lastBuildDate>Fri, 31 Jul 2020 08:32:52 Z</lastBuildDate>
     <generator>PVX WCG AtomGenerator</generator>
     <analytics id="UA-172372458-1" engine="GoogleAnalytics" xmlns="http://webfeeds.org/rss/1.0" />
     <ttl>60</ttl>
@@ -21,7 +21,7 @@
       <pubDate>Fri, 31 Jul 2020 00:00:00 </pubDate>
       <link>https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk</link>
       <guid isPermaLink="true">https://ypcode.io/posts/2020/07/m365-blazor-pnpcore-sdk</guid>
-      <content url="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_love.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <content url="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_luv.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
       <category>.NET</category>
       <category>.NET Core</category>
       <category>C#</category>
