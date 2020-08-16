@@ -8,11 +8,9 @@
     <link rel="icon" href="/images/favicon.png" type="image/png" />
     <link rel="canonical" href="https://ypcode.io/posts/2017/09/easy-ways-subscribe-to-sharepoint-list-webhook" />
     <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/site.css?v=202008160943" />
+    <link rel="stylesheet" href="/css/site.css?v=202008161017" />
     <meta name="generator" content="PVX WebContentGenerator" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
-    <script src="/lib/jquery/dist/jquery.min.js"></script>
-    <script src="/js/framework.js?v=202008160943"></script>
+
     <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
 <noscript>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/themes/prism.min.css">
@@ -31,15 +29,7 @@ pre[class*=language-] {
 }
 </style>
 
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'UA-172372458-1');
-</script>
 
 <style>
 .social-links {
@@ -92,21 +82,6 @@ pre[class*=language-] {
         <meta name="twitter:site" content="@yp_code" />
     <link rel="alternate" type="application/rss+xml" title="YPcode" href="https://ypcode.io/feed" />
 
-
-    <script>
-        var initialSiteContentHeight = null;
-        function toggleMenu() {
-            var menu = document.querySelector(".menu");
-            var siteContent = document.querySelector(".site-content");
-            if (menu && siteContent) {
-                if (menu.classList.contains("visible")) {
-                    menu.classList.remove("visible");
-                } else {
-                    menu.classList.add("visible");
-                }
-            }
-        }
-    </script>
 </head>
 <body>
     <div class="menu">
@@ -393,8 +368,25 @@ s.setAttribute('data-timestamp', +new Date());
         </footer>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/js/framework.js?v=202008161017"></script>
     <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/js/site.js"></script>
+     <script>
+        var initialSiteContentHeight = null;
+        function toggleMenu() {
+            var menu = document.querySelector(".menu");
+            var siteContent = document.querySelector(".site-content");
+            if (menu && siteContent) {
+                if (menu.classList.contains("visible")) {
+                    menu.classList.remove("visible");
+                } else {
+                    menu.classList.add("visible");
+                }
+            }
+        }
+    </script>
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/prism.min.js" ></script>
 <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/plugins/autolinker/prism-autolinker.js" ></script>
 
@@ -411,7 +403,15 @@ s.setAttribute('data-timestamp', +new Date());
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-powershell.js" ></script>
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-typescript.min.js" ></script>
         <script async src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.15.0/components/prism-bash.js" ></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-172372458-1"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
 
+  gtag('config', 'UA-172372458-1');
+</script>
 
 
 </body>
