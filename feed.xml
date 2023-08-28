@@ -10,8 +10,8 @@
       <link>https://ypcode.io/</link>
     </image>
     <link href="https://ypcode.io/feed.xml" rel="self" type="application/rss+xml" xmlns="http://www.w3.org/2005/Atom" />
-    <pubDate>Mon, 28 Aug 2023 08:00:13 Z</pubDate>
-    <lastBuildDate>Mon, 28 Aug 2023 08:00:13 Z</lastBuildDate>
+    <pubDate>Mon, 28 Aug 2023 08:06:28 Z</pubDate>
+    <lastBuildDate>Mon, 28 Aug 2023 08:06:28 Z</lastBuildDate>
     <generator>PVX WCG AtomGenerator</generator>
     <analytics id="UA-172372458-1" engine="GoogleAnalytics" xmlns="http://webfeeds.org/rss/1.0" />
     <ttl>60</ttl>
@@ -1016,6 +1016,19 @@
       <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
     </item>
     <item>
+      <title>About me</title>
+      <pubDate>Mon, 28 Aug 2023 00:00:00 </pubDate>
+      <link>https://ypcode.io/pages/about-me</link>
+      <guid isPermaLink="true">https://ypcode.io/pages/about-me</guid>
+      <content url="https://ypcode.io/images/common/me.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>About</category>
+      <category>Yannick Plenevaux</category>
+      <category>Microsoft 365</category>
+      <category>Office Development MVP</category>
+      <category>Microsoft 365 Solutions Architect</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
+    <item>
       <title>Speaking &amp; Events</title>
       <pubDate>Sat, 25 Jul 2020 12:00:00 </pubDate>
       <link>https://ypcode.io/pages/speaking</link>
@@ -1027,19 +1040,6 @@
       <category>Events</category>
       <category>Show</category>
       <category>Community</category>
-      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
-    </item>
-    <item>
-      <title>About me</title>
-      <pubDate>Fri, 03 Jul 2020 00:00:00 </pubDate>
-      <link>https://ypcode.io/pages/about-me</link>
-      <guid isPermaLink="true">https://ypcode.io/pages/about-me</guid>
-      <content url="https://ypcode.io/images/common/me.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
-      <category>About</category>
-      <category>Yannick Plenevaux</category>
-      <category>Microsoft 365</category>
-      <category>Office Development MVP</category>
-      <category>Microsoft 365 Solutions Architect</category>
       <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
     </item>
     <item>
