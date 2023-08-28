@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="utf-8"?>
 <rss xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" version="2">
   <channel>
     <title>YPcode</title>
@@ -10,11 +10,27 @@
       <link>https://ypcode.io/</link>
     </image>
     <link href="https://ypcode.io/feed.xml" rel="self" type="application/rss+xml" xmlns="http://www.w3.org/2005/Atom" />
-    <pubDate>Sun, 16 Aug 2020 10:17:24 Z</pubDate>
-    <lastBuildDate>Sun, 16 Aug 2020 10:17:24 Z</lastBuildDate>
+    <pubDate>Mon, 28 Aug 2023 07:43:47 Z</pubDate>
+    <lastBuildDate>Mon, 28 Aug 2023 07:43:47 Z</lastBuildDate>
     <generator>PVX WCG AtomGenerator</generator>
     <analytics id="UA-172372458-1" engine="GoogleAnalytics" xmlns="http://webfeeds.org/rss/1.0" />
     <ttl>60</ttl>
+    <item>
+      <title>Update all your existing SPFx WebPart instances with PnP PowerShell</title>
+      <description>Let's see how we can easily update or fix the configuration of all SPFx WebParts in place on your SharePoint Online tenant</description>
+      <pubDate>Wed, 21 Oct 2020 00:00:00 </pubDate>
+      <link>https://ypcode.io/posts/2020/10/update-spfx-webpart-instances</link>
+      <guid isPermaLink="true">https://ypcode.io/posts/2020/10/update-spfx-webpart-instances</guid>
+      <content url="https://ypcode.io/images/2020/07/blazor-pnpcore/blazor_pnp_luv.png" medium="image" xmlns="http://search.yahoo.com/mrss/" />
+      <category>PnP PowerShell</category>
+      <category>SPFx</category>
+      <category>WebPart configuration</category>
+      <category>Existing WebPart Instances</category>
+      <category>Migration</category>
+      <category>Bulk Update</category>
+      <category>Tenant-wide fix</category>
+      <creator xmlns="http://purl.org/dc/elements/1.1/">Yannick Plenevaux</creator>
+    </item>
     <item>
       <title>Build your Microsoft 365 client app in Blazor with the PnP Core SDK preview</title>
       <description>Discover how to develop a client side Blazor app manipulating Microsoft 365 data using the preview version of the new PnP Core SDK</description>
